@@ -15,14 +15,19 @@ def lock_tomb(name, key):
     return subprocess.run(['tomb', 'lock', name, '-k', key])
 
 
-@click.command()
+@click.group()
+def cli():
+    """Help"""
+
+
+@cli.command()
 @click.argument('name')
 @click.argument('size')
-@click.argument('key')
-def cli(name, size, key):
+@click.argument('key', required=False, default=None)
+def construct(name, size, key):
     construct = dig_tomb(name, size)
+    if key is None:
+        key = '{}.key' .format(name)
     fabricate = forge_tomb(key)
     if construct.returncode == 0 and fabricate.returncode == 0:
         lock_tomb(name, key)
-
-cli()
