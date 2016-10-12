@@ -1,0 +1,24 @@
+language: python
+python:
+  - "3.4_with_system_site_packages"
+sudo: required
+dist: trusty
+notifications:
+  email: false
+sudo: required
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install -y xvfb python3-pyqt5
+install:
+  - python setup.py install
+  - pip install coverage
+  - pip install coveralls
+  - pip install pytest
+  - pip install pytest-cov
+  - pip install pytest-mock
+  - pip install pytest-qt
+  - pip install pytest-xvfb
+script:
+  - py.test -v --cov=./
+after_success:
+  - coveralls
