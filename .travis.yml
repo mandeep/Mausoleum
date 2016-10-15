@@ -1,16 +1,13 @@
 language: python
-python:
-  - "3.4_with_system_site_packages"
+python: 3.5
 sudo: required
 dist: trusty
 notifications:
   email: false
 sudo: required
-before_install:
-  - sudo apt-get update
-  - sudo apt-get install -y xvfb python3-pyqt5
 install:
   - python setup.py install
+  - pip install pyqt5
   - pip install coverage
   - pip install coveralls
   - pip install pytest
