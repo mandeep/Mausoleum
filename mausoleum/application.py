@@ -5,7 +5,7 @@ import pkg_resources
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QApplication, QDesktopWidget, QDialog, QFileDialog,
-                             QFormLayout, QGroupBox, QHBoxLayout, QLineEdit,
+                             QFormLayout, QGroupBox, QHBoxLayout, QLabel, QLineEdit,
                              QPushButton, QTabWidget, QVBoxLayout, QWidget)
 
 from mausoleum import wrapper
@@ -81,8 +81,11 @@ class OpenTomb(QWidget):
         button_layout.addWidget(open_button, alignment=Qt.AlignCenter)
         button_layout.addWidget(close_button, alignment=Qt.AlignCenter)
 
+        self.success_message = QLabel()
+
         layout.addWidget(open_group)
         layout.addLayout(button_layout)
+        layout.addWidget(self.success_message, alignment=Qt.AlignCenter)
 
         self.setLayout(layout)
 
@@ -111,11 +114,15 @@ class OpenTomb(QWidget):
         key = str(self.key_path.text())
         password = self.key_password.text()
         sudo = self.sudo_password.text()
-        wrapper.open_tomb(name, key, password, sudo)
+        open_command = wrapper.open_tomb(name, key, password, sudo)
+        if open_command[0] is not None:
+            self.success_message.setText('Tomb Opened Successfully.')
 
     def close_selected_tomb(self):
         """Close the opened tomb."""
-        wrapper.close_tomb()
+        close_command = wrapper.close_tomb()
+        if close_command.returncode == 0:
+            self.success_message.setText('Tomb Closed Successfully.')
 
 
 class Mausoleum(QDialog):
