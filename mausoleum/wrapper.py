@@ -51,10 +51,21 @@ def open_tomb(name, key, password, sudo=None):
     password -- the password of the container's key
     sudo -- the sudo password of the current admin, default is None
     """
-    arguments = ['tomb', 'open', '--unsafe', '--tomb-pwd', password, name, '-k', key]
+    arguments = ['sudo', '--stdin', 'tomb', 'open', '--unsafe',
+                 '--tomb-pwd', password, name, '-k', key]
     if sudo is not None:
-        arguments.extend(['--sudo-pwd', sudo])
+        open_command = subprocess.Popen(arguments, stdin=subprocess.PIPE, universal_newlines=True)
+        return open_command.communicate(sudo + '\n')
     return subprocess.run(arguments)
+
+
+def close_tomb(name=None):
+    """Close an open tomb container.
+
+    Positional argument:
+    name -- the name of the container to close (if multiple tombs are open)
+    """
+    return subprocess.run(['tomb', 'close'])
 
 
 @click.group()
