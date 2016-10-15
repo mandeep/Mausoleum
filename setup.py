@@ -18,7 +18,8 @@ setup(
         ]
     },
     install_requires=[
-        'click'
+        'click',
+        'pyqt5'
     ],
     keywords='Mausoleum',
     classifiers=[
