@@ -4,28 +4,73 @@ import click
 
 
 def dig_tomb(name, size):
-    """Dig a new tomb container."""
+    """Dig a new tomb container.
+
+    Positional arguments:
+    name -- the name of the container, e.g. secret.tomb
+    size -- the size of the container in megabytes
+    """
     return subprocess.run(['tomb', 'dig', '-s', str(size), name])
 
 
-def forge_tomb(key, password):
-    """Forge a new key for a tomb container."""
-    return subprocess.run(['tomb', 'forge', '--unsafe', '--tomb-pwd', password, key])
+def forge_tomb(key, password, sudo=None):
+    """Forge a new key for a tomb container.
+
+    Positional arguments:
+    key -- the name of the container's key, e.g. secret.tomb.key
+    password -- the password to be used with the key
+    sudo -- the sudo password of the current admin, default is None
+    """
+    arguments = ['tomb', 'forge', '--unsafe', '--tomb-pwd', password, key]
+    if sudo is not None:
+        arguments.extend(['--sudo-pwd', sudo])
+    return subprocess.run(arguments)
 
 
-def lock_tomb(name, key, password):
-    """Lock a tomb container with the given key."""
-    return subprocess.run(['tomb', 'lock', '--unsafe', '--tomb-pwd', password, name, '-k', key])
+def lock_tomb(name, key, password, sudo=None):
+    """Lock a tomb container with the given key.
+
+    Positional arguments:
+    name -- the name of the container, e.g. secret.tomb
+    key -- the name of the container's key, e.g. secret.tomb.key
+    password -- the password of the container's key
+    sudo -- the sudo password of the current admin, default is None
+    """
+    arguments = ['tomb', 'lock', '--unsafe', '--tomb-pwd', password, name, '-k', key]
+    if sudo is not None:
+        arguments.extend(['--sudo-pwd', sudo])
+    return subprocess.run(arguments)
 
 
-def open_tomb(name, key, password):
-    """Open a tomb container with the given key."""
-    return subprocess.run(['tomb', 'open', '--unsafe', '--tomb-pwd', password, name, '-k', key])
+def open_tomb(name, key, password, sudo=None):
+    """Open a tomb container with the given key.
+
+    Positional arguments:
+    name -- the name of the container, e.g. secret.tomb
+    key -- the name of the container's key, e.g. secret.tomb.key
+    password -- the password of the container's key
+    sudo -- the sudo password of the current admin, default is None
+    """
+    arguments = ['tomb', 'open', '--unsafe', '--tomb-pwd', password, name, '-k', key]
+    if sudo is not None:
+        arguments.extend(['--sudo-pwd', sudo])
+    return subprocess.run(arguments)
 
 
 @click.group()
 def cli():
-    """Help"""
+    """Access Tomb's command line interface with Mausoleum.
+
+    Mausoleum includes multiple commands that wrap around Tomb's command line interface:
+    $  mausoleum construct [OPTIONS] [ARGUMENTS]
+    $  mausoleum enter [OPTIONS] [ARGUMENTS]
+
+    To create and open a new tomb container and key, run:
+    $  mausoleum construct --open secret.tomb 500
+
+    To open an existing tomb container, run:
+    $  mausoleum enter secret.tomb
+    """
 
 
 @cli.command()
@@ -35,6 +80,14 @@ def cli():
 @click.password_option()
 @click.option('--open', is_flag=True, help='Open a tomb after constructing it.')
 def construct(name, size, key, password, open):
+    """Dig, forge, and lock a new tomb container.
+
+    The default key name is the name of the tomb with .key appended as the suffix. If
+    you would like the key to use a different naming convention, it must be passed as an
+    argument.
+
+    To open the container after creation, use the --open flag.
+    """
     construct = dig_tomb(name, size)
     if key is None:
         key = '{}.key' .format(name)
@@ -50,6 +103,11 @@ def construct(name, size, key, password, open):
 @click.argument('key', required=False, default=None)
 @click.option('--password', prompt=True, hide_input=True, confirmation_prompt=False)
 def enter(name, key, password):
+    """Open an existing tomb container.
+
+    The default key name is the name of the tomb with .key as the suffix. If the
+    key uses a different naming convention, it must be passed as an argument.
+    """
     if key is None:
         key = '{}.key' .format(name)
     open_tomb(name, key, password)
