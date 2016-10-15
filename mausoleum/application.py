@@ -5,16 +5,44 @@ import pkg_resources
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QAction, QApplication, QDesktopWidget, QDialog, QFileDialog,
-                             QGroupBox, QHBoxLayout, QLabel, QMainWindow, QMenuBar, QStatusBar,
+                             QFormLayout,
+                             QGroupBox, QHBoxLayout, QLabel, QLineEdit, 
+                             QMainWindow, QMenuBar, QStatusBar, QTabWidget,
                              QToolBar, QVBoxLayout, QWidget)
 
 
-class Mausoleum(QMainWindow):
+class CreateTomb(QWidget):
+    """Creates the abstract widget to be used as a page."""
+
+    def __init__(self, parent=None):
+        """Initialize the create page's configuration and parameter groups."""
+        super(CreateTomb, self).__init__(parent)
+        self.layout = QVBoxLayout()
+
+        self.tomb_group = QGroupBox('Tomb Configuration')
+        self.tomb_name = QLineEdit()
+        self.key_name = QLineEdit()
+        self.key_password = QLineEdit()
+        self.key_password.setEchoMode(QLineEdit.Password)
+        self.tomb_layout = QFormLayout()
+        self.tomb_layout.addRow('Tomb Name:', self.tomb_name)
+        self.tomb_layout.addRow('Key Name:', self.key_name)
+        self.tomb_layout.addRow('Key Password:', self.key_password)
+        self.tomb_group.setLayout(self.tomb_layout)
+
+        self.parameters_group = QGroupBox('Parameters')
+
+        self.layout.addWidget(self.tomb_group)
+        self.layout.addWidget(self.parameters_group)
+
+        self.setLayout(self.layout)
+
+
+class Mausoleum(QDialog):
     """Creates the main window that stores all of the widgets necessary for the application."""
 
     def __init__(self, parent=None):
-        """Initializes the window size and title and instantiates the menu bar and status bar
-        if selected by the user."""
+        """Initialize the window size and title and instantiate the tab widget pages."""
         super(Mausoleum, self).__init__(parent)
         self.resize(600, 600)
         self.setWindowTitle('Mausoleum')
@@ -22,85 +50,15 @@ class Mausoleum(QMainWindow):
                                                       'ic_insert_drive_file_black_48dp_1x.png')
         self.setWindowIcon(QIcon(window_icon))
 
-        self.widget = QWidget()
-        self.layout = QHBoxLayout(self.widget)
+        create_page = CreateTomb()
 
-        self.menu_bar = self.menuBar()
-        self.about_dialog = AboutDialog()
-        
-        self.file_menu()
-        self.help_menu()
-        
-    def file_menu(self):
-        """Creates a file menu for the menu bar with an Open File item that opens a
-        file dialog."""
-        self.file_sub_menu = self.menu_bar.addMenu('File')
+        pages = QTabWidget()
+        pages.addTab(create_page, 'Create')
 
-        self.open_action = QAction('Open Tomb', self)
-        self.open_action.setStatusTip('Open a tomb')
-        self.open_action.setShortcut('CTRL+O')
-        self.open_action.triggered.connect(self.open_file)
+        dialog_layout = QHBoxLayout()
+        dialog_layout.addWidget(pages)
 
-        self.exit_action = QAction('Exit Application', self)
-        self.exit_action.setStatusTip('Exit the application.')
-        self.exit_action.setShortcut('CTRL+Q')
-        self.exit_action.triggered.connect(lambda: QApplication.quit())
-
-        self.file_sub_menu.addAction(self.open_action)
-        self.file_sub_menu.addAction(self.exit_action)
-
-    def help_menu(self):
-        """"""
-        self.help_sub_menu = self.menu_bar.addMenu('Help')
-
-        self.about_action = QAction('About', self)
-        self.about_action.setStatusTip('About the application.')
-        self.about_action.setShortcut('CTRL+H')
-        self.about_action.triggered.connect(lambda: self.about_dialog.exec_())
-
-        self.help_sub_menu.addAction(self.about_action)
-        
-    def open_file(self):
-        """Opens a QFileDialog to allow the user to open a file into the application. The template
-        creates the dialog and simply reads it with the context manager."""
-
-        filename, accepted = QFileDialog.getOpenFileName(self, 'Open File')
-
-        if accepted:
-            with open(filename) as file:
-                file.read()
-
-
-class AboutDialog(QDialog):
-    """Contains the necessary elements to show helpful text in a dialog."""
-
-    def __init__(self, parent=None):
-        """Displays a dialog that shows application information."""
-        super(AboutDialog, self).__init__(parent)
-
-        self.setWindowTitle('About')
-        help_icon = pkg_resources.resource_filename('mausoleum.images',
-                                                    'ic_help_black_48dp_1x.png')
-        self.setWindowIcon(QIcon(help_icon))
-        self.resize(300, 200)
-
-        author = QLabel('Author: Mandeep Bhutani')
-        author.setAlignment(Qt.AlignCenter)
-
-        icons = QLabel('Material design icons created by Google')
-        icons.setAlignment(Qt.AlignCenter)
-
-        github = QLabel('GitHub: mandeep')
-        github.setAlignment(Qt.AlignCenter)
-
-        self.layout = QVBoxLayout()
-        self.layout.setAlignment(Qt.AlignVCenter)
-
-        self.layout.addWidget(author)
-        self.layout.addWidget(icons)
-        self.layout.addWidget(github)
-
-        self.setLayout(self.layout)
+        self.setLayout(dialog_layout)
 
 
 def main():
