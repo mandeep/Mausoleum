@@ -23,8 +23,8 @@ def test_dig_tomb(name):
 
 
 def test_forge_tomb(key, password):
-    wrapper.forge_tomb(key, password)
+    wrapper.forge_tomb(key, password, debug=True)
 
 
 def test_lock_tomb(name, key, password):
-    wrapper.lock_tomb(name, key, password)
+    wrapper.lock_tomb(name, key, password, debug=True)
