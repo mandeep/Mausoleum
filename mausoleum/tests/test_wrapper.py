@@ -31,9 +31,9 @@ def test_lock_tomb(name, key, password):
     wrapper.lock_tomb(name, key, password, debug=True)
 
 
-def test_cli_enter(name, key, password):
+def test_cli_enter(name, password):
     runner = CliRunner()
-    result = runner.invoke(wrapper.cli, ['enter', name, key], input=password)
+    result = runner.invoke(wrapper.cli, ['enter', name], input=password)
     assert not result.exception
 
 
