@@ -28,3 +28,7 @@ def test_forge_tomb(key, password):
 
 def test_lock_tomb(name, key, password):
     wrapper.lock_tomb(name, key, password, debug=True)
+
+
+def test_open_tomb(name, key, password):
+    wrapper.open_tomb(name, key, password)
