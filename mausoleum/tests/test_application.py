@@ -26,5 +26,6 @@ def test_create_page(window, qtbot):
     window.create_page.tomb_name.setText('test1.tomb')
     window.create_page.key_name.setText('test1.tomb.key')
     window.create_page.key_password.setText('test_password')
+    window.create_button.urandom_checkbox.setChecked(True)
     button = window.create_page.create_button
     qtbot.mouseClick(button, Qt.LeftButton)
