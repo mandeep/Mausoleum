@@ -13,7 +13,7 @@ def dig_tomb(name, size):
     return subprocess.call(['tomb', 'dig', '-s', str(size), name])
 
 
-def forge_tomb(key, password, sudo=None):
+def forge_tomb(key, password, sudo=None, debug=False):
     """Forge a new key for a tomb container.
 
     Positional arguments:
@@ -21,17 +21,17 @@ def forge_tomb(key, password, sudo=None):
     password -- the password to be used with the key
     sudo -- the sudo password of the current admin, default is None
     """
-    arguments = ['tomb', 'forge', '--unsafe', '--tomb-pwd', password, key]
+    arguments = ['sudo', '--stdin', 'tomb', 'forge', '--unsafe', '--tomb-pwd', password, key]
+    if debug:
+        arguments.append('--ignore-swap')
     if sudo is not None:
-        arguments.insert('sudo')
-        arguments.insert('--stdin')
         forge_command = subprocess.Popen(arguments, stdin=subprocess.PIPE,
                                          stdout=subprocess.PIPE, universal_newlines=True)
         return forge_command.communicate(sudo + '\n')
     return subprocess.call(arguments)
 
 
-def lock_tomb(name, key, password, sudo=None):
+def lock_tomb(name, key, password, sudo=None, debug=False):
     """Lock a tomb container with the given key.
 
     Positional arguments:
@@ -42,6 +42,8 @@ def lock_tomb(name, key, password, sudo=None):
     """
     arguments = ['sudo', '--stdin', 'tomb', 'lock', '--unsafe', '--tomb-pwd',
                  password, name, '-k', key]
+    if debug:
+        arguments.append('--ignore-swap')
     if sudo is not None:
         lock_command = subprocess.Popen(arguments, stdin=subprocess.PIPE,
                                         stdout=subprocess.PIPE, universal_newlines=True)
@@ -49,7 +51,7 @@ def lock_tomb(name, key, password, sudo=None):
     return subprocess.call(arguments)
 
 
-def open_tomb(name, key, password, sudo=None):
+def open_tomb(name, key, password, sudo=None, debug=False):
     """Open a tomb container with the given key.
 
     Positional arguments:
