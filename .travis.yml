@@ -22,6 +22,6 @@ install:
   - pip3 install pytest-qt
   - pip3 install pytest-xvfb
 script:
-  - py.test -v --cov=./
+  - py.test -s -v --cov=./
 after_success:
   - coveralls
