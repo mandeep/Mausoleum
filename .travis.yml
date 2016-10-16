@@ -8,13 +8,12 @@ notifications:
 sudo: required
 before_install:
   - sudo apt-get update
-  - sudo apt-get install -y zsh sudo gnupg cryptsetup pinentry-curses gawk
+  - sudo apt-get install -y python3-pyqt5 zsh sudo gnupg cryptsetup pinentry-curses gawk
 install:
   - wget https://files.dyne.org/tomb/tomb-2.2.tar.gz
   - tar xvfz tomb-2.2.tar.gz
   - pushd tomb-2.2 && sudo make install && popd
   - python setup.py install
-  - pip3 install PyQt5
   - pip3 install coverage
   - pip3 install coveralls
   - pip3 install pytest
