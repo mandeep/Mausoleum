@@ -195,9 +195,9 @@ class CloseTomb(QWidget):
         close_group = QGroupBox('Close Tomb')
 
         close_layout = QHBoxLayout()
-        close_all_button = QPushButton('Close All Tombs')
-        close_all_button.setFixedWidth(200)
-        close_layout.addWidget(close_all_button, alignment=Qt.AlignCenter)
+        self.close_all_button = QPushButton('Close All Tombs')
+        self.close_all_button.setFixedWidth(200)
+        close_layout.addWidget(self.close_all_button, alignment=Qt.AlignCenter)
 
         close_group.setLayout(close_layout)
 
@@ -206,11 +206,7 @@ class CloseTomb(QWidget):
 
         self.setLayout(layout)
 
-        close_all_button.clicked.connect(self.close_all_tombs)
-
-    @staticmethod
-    def close_all_tombs():
-        wrapper.close_tombs()
+        self.close_all_button.clicked.connect(lambda: wrapper.close_tombs())
 
 
 class Mausoleum(QDialog):
