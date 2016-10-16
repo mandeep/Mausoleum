@@ -1,6 +1,4 @@
-===============================
-Mausoleum
-===============================
+.. image:: mausoleum/images/mausoleum.png
 
 |travis| |coveralls| |dependency| |codacy| |pypiversion| |pypistatus| |pythonversion| |pypiformat| |license|
 
