@@ -23,7 +23,7 @@ def forge_tomb(key, password, sudo=None, debug=False):
     """
     arguments = ['sudo', '--stdin', 'tomb', 'forge', '--unsafe', '--tomb-pwd', password, key]
     if debug:
-        arguments.append('--ignore-swap')
+        arguments.extend(['--ignore-swap', '--use-urandom'])
     if sudo is not None:
         forge_command = subprocess.Popen(arguments, stdin=subprocess.PIPE,
                                          stdout=subprocess.PIPE, universal_newlines=True)
