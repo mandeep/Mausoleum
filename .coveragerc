@@ -1,0 +1,4 @@
+[report]
+omit = 
+    setup.py
+    mausoleum/__main__.py
