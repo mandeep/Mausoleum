@@ -51,7 +51,7 @@ def lock_tomb(name, key, password, sudo=None, debug=False):
     return subprocess.call(arguments)
 
 
-def open_tomb(name, key, password, sudo=None, debug=False):
+def open_tomb(name, key, password, sudo=None):
     """Open a tomb container with the given key.
 
     Positional arguments:
