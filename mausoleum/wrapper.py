@@ -10,7 +10,7 @@ def dig_tomb(name, size):
     name -- the name of the container, e.g. secret.tomb
     size -- the size of the container in megabytes
     """
-    return subprocess.run(['tomb', 'dig', '-s', str(size), name])
+    return subprocess.Popen(['tomb', 'dig', '-s', str(size), name])
 
 
 def forge_tomb(key, password, sudo=None):
@@ -21,10 +21,12 @@ def forge_tomb(key, password, sudo=None):
     password -- the password to be used with the key
     sudo -- the sudo password of the current admin, default is None
     """
-    arguments = ['tomb', 'forge', '--unsafe', '--tomb-pwd', password, key]
+    arguments = ['sudo', '--stdin', 'tomb', 'forge', '--unsafe', '--tomb-pwd', password, key]
     if sudo is not None:
-        arguments.extend(['--sudo-pwd', sudo])
-    return subprocess.run(arguments)
+        forge_command = subprocess.Popen(arguments, stdin=subprocess.PIPE,
+                                         stdout=subprocess.PIPE, universal_newlines=True)
+        return forge_command.communicate(sudo + '\n')
+    return subprocess.Popen(arguments)
 
 
 def lock_tomb(name, key, password, sudo=None):
@@ -36,10 +38,13 @@ def lock_tomb(name, key, password, sudo=None):
     password -- the password of the container's key
     sudo -- the sudo password of the current admin, default is None
     """
-    arguments = ['tomb', 'lock', '--unsafe', '--tomb-pwd', password, name, '-k', key]
+    arguments = ['sudo', '--stdin', 'tomb', 'lock', '--unsafe', '--tomb-pwd',
+                 password, name, '-k', key]
     if sudo is not None:
-        arguments.extend(['--sudo-pwd', sudo])
-    return subprocess.run(arguments)
+        lock_command = subprocess.Popen(arguments, stdin=subprocess.PIPE,
+                                        stdout=subprocess.PIPE, universal_newlines=True)
+        return lock_command.communicate(sudo + '\n')
+    return subprocess.Popen(arguments)
 
 
 def open_tomb(name, key, password, sudo=None):
@@ -54,9 +59,10 @@ def open_tomb(name, key, password, sudo=None):
     arguments = ['sudo', '--stdin', 'tomb', 'open', '--unsafe',
                  '--tomb-pwd', password, name, '-k', key]
     if sudo is not None:
-        open_command = subprocess.Popen(arguments, stdin=subprocess.PIPE, universal_newlines=True)
+        open_command = subprocess.Popen(arguments, stdin=subprocess.PIPE,
+                                        stdout=subprocess.PIPE, universal_newlines=True)
         return open_command.communicate(sudo + '\n')
-    return subprocess.run(arguments)
+    return subprocess.Popen(arguments)
 
 
 def close_tomb(name=None):
@@ -65,7 +71,7 @@ def close_tomb(name=None):
     Positional argument:
     name -- the name of the container to close (if multiple tombs are open)
     """
-    return subprocess.run(['tomb', 'close'])
+    return subprocess.Popen(['tomb', 'close'])
 
 
 @click.group()
