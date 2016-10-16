@@ -198,7 +198,7 @@ class Mausoleum(QDialog):
         self.resize(600, 600)
         self.setWindowTitle('Mausoleum')
         window_icon = pkg_resources.resource_filename('mausoleum.images',
-                                                      'ic_insert_drive_file_black_48dp_1x.png')
+                                                      'ic_vpn_key_black_48dp_1x.png')
         self.setWindowIcon(QIcon(window_icon))
 
         create_page = CreateTomb()
