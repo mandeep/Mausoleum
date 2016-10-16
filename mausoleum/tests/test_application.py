@@ -1,9 +1,6 @@
 import pytest
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import (QAction, QApplication, QDialog, QDesktopWidget, QFileDialog,
-                             QGroupBox, QHBoxLayout, QLabel, QMainWindow, QMenuBar, QStatusBar,
-                             QToolBar)
 
 from mausoleum import application
 
@@ -26,6 +23,6 @@ def test_create_page(window, qtbot):
     window.create_page.tomb_name.setText('test1.tomb')
     window.create_page.key_name.setText('test1.tomb.key')
     window.create_page.key_password.setText('test_password')
-    window.create_button.urandom_checkbox.setChecked(True)
+    window.create_page.urandom_checkbox.setChecked(True)
     button = window.create_page.create_button
     qtbot.mouseClick(button, Qt.LeftButton)
