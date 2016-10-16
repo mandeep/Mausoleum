@@ -1,10 +1,12 @@
-.. image:: mausoleum/images/mausoleum.png
+.. image:: mausoleum.png
 
 |travis| |coveralls| |dependency| |codacy| |pypiversion| |pypistatus| |pythonversion| |pypiformat| |license|
 
 Mausoleum consists of a command line application and GUI application wrapped around Tomb
 (the Crypto Undertaker). Both applications were created with the intention of making
 it easier for users to interact with Tomb.
+
+.. image:: screenshot.png
 
 ************
 Installation
