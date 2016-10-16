@@ -7,6 +7,7 @@ Mausoleum consists of a command line application and GUI application wrapped aro
 it easier for users to interact with Tomb.
 
 .. image:: screenshot.png
+    :align: center
 
 ************
 Installation
