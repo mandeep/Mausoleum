@@ -221,14 +221,14 @@ class Mausoleum(QDialog):
                                                       'ic_vpn_key_black_48dp_1x.png')
         self.setWindowIcon(QIcon(window_icon))
 
-        create_page = CreateTomb()
-        open_page = OpenTomb()
-        close_page = CloseTomb()
+        self.create_page = CreateTomb()
+        self.open_page = OpenTomb()
+        self.close_page = CloseTomb()
 
         pages = QTabWidget()
-        pages.addTab(create_page, 'Create')
-        pages.addTab(open_page, 'Open')
-        pages.addTab(close_page, 'Close')
+        pages.addTab(self.create_page, 'Create')
+        pages.addTab(self.open_page, 'Open')
+        pages.addTab(self.close_page, 'Close')
 
         dialog_layout = QHBoxLayout()
         dialog_layout.addWidget(pages)
