@@ -10,7 +10,7 @@ def dig_tomb(name, size):
     name -- the name of the container, e.g. secret.tomb
     size -- the size of the container in megabytes
     """
-    return subprocess.Popen(['tomb', 'dig', '-s', str(size), name])
+    return subprocess.call(['tomb', 'dig', '-s', str(size), name])
 
 
 def forge_tomb(key, password, sudo=None):
@@ -26,7 +26,7 @@ def forge_tomb(key, password, sudo=None):
         forge_command = subprocess.Popen(arguments, stdin=subprocess.PIPE,
                                          stdout=subprocess.PIPE, universal_newlines=True)
         return forge_command.communicate(sudo + '\n')
-    return subprocess.Popen(arguments)
+    return subprocess.call(arguments)
 
 
 def lock_tomb(name, key, password, sudo=None):
@@ -44,7 +44,7 @@ def lock_tomb(name, key, password, sudo=None):
         lock_command = subprocess.Popen(arguments, stdin=subprocess.PIPE,
                                         stdout=subprocess.PIPE, universal_newlines=True)
         return lock_command.communicate(sudo + '\n')
-    return subprocess.Popen(arguments)
+    return subprocess.call(arguments)
 
 
 def open_tomb(name, key, password, sudo=None):
@@ -62,7 +62,7 @@ def open_tomb(name, key, password, sudo=None):
         open_command = subprocess.Popen(arguments, stdin=subprocess.PIPE,
                                         stdout=subprocess.PIPE, universal_newlines=True)
         return open_command.communicate(sudo + '\n')
-    return subprocess.Popen(arguments)
+    return subprocess.call(arguments)
 
 
 def close_tomb(name=None):
@@ -71,7 +71,7 @@ def close_tomb(name=None):
     Positional argument:
     name -- the name of the container to close (if multiple tombs are open)
     """
-    return subprocess.Popen(['tomb', 'close'])
+    return subprocess.call(['tomb', 'close'])
 
 
 @click.group()
@@ -105,14 +105,15 @@ def construct(name, size, key, password, open):
 
     To open the container after creation, use the --open flag.
     """
-    construct = dig_tomb(name, size)
+    construction = dig_tomb(name, size)
     if key is None:
         key = '{}.key' .format(name)
-    fabricate = forge_tomb(key, password)
-    if construct.returncode == 0 and fabricate.returncode == 0:
-        lock_tomb(name, key, password)
-        if open:
-            open_tomb(name, key, password)
+    if construction == 0:
+        fabrication = forge_tomb(key, password)
+        if fabrication == 0:
+            lock_tomb(name, key, password)
+            if open:
+                open_tomb(name, key, password)
 
 
 @cli.command()
