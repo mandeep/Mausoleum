@@ -53,10 +53,12 @@ class CreateTomb(QWidget):
         self.size_box.setFixedWidth(100)
 
         self.open_checkbox = QCheckBox()
+        self.urandom_checkbox = QCheckBox()
 
         parameters_layout = QFormLayout()
         parameters_layout.addRow('Size (MB):', self.size_box)
         parameters_layout.addRow('Open Upon Creation:', self.open_checkbox)
+        parameters_layout.addRow('urandom Key Generation:', self.urandom_checkbox)
 
         parameters_group.setLayout(parameters_layout)
 
@@ -89,7 +91,10 @@ class CreateTomb(QWidget):
         size = self.size_box.value()
 
         dig_command = wrapper.dig_tomb(name, size)
-        forge_command = wrapper.forge_tomb(key, password, sudo)
+        if self.urandom_checkbox.isChecked():
+            forge_command = wrapper.forge_tomb(key, password, sudo, debug=True)
+        else:
+            forge_command = wrapper.forge_tomb(key, password, sudo)
         lock_command = wrapper.lock_tomb(name, key, password, sudo)
         if (dig_command == 0 and forge_command[0] is not None and
                 lock_command[0] is not None):
