@@ -138,12 +138,11 @@ class OpenTomb(QWidget):
         open_layout.addRow('Sudo Password:', self.sudo_password)
         open_group.setLayout(open_layout)
 
-        open_button = QPushButton('Open Tomb')
-        open_button.setFixedWidth(200)
-        close_button = QPushButton('Close Tomb')
-        close_button.setFixedWidth(200)
+        self.open_button = QPushButton('Open Tomb')
+        self.open_button.setFixedWidth(200)
+
         button_layout = QHBoxLayout()
-        button_layout.addWidget(open_button, alignment=Qt.AlignCenter)
+        button_layout.addWidget(self.open_button, alignment=Qt.AlignCenter)
         button_layout.setContentsMargins(25, 25, 25, 25)
 
         self.success_message = QLabel()
@@ -157,7 +156,7 @@ class OpenTomb(QWidget):
 
         tomb_path_button.clicked.connect(self.select_tomb_path)
         key_path_button.clicked.connect(self.select_key_path)
-        open_button.clicked.connect(self.open_selected_tomb)
+        self.open_button.clicked.connect(self.open_selected_tomb)
 
     def select_tomb_path(self):
         """Select the path of the tomb to open."""
@@ -230,13 +229,13 @@ class Mausoleum(QDialog):
         self.open_page = OpenTomb()
         self.close_page = CloseTomb()
 
-        pages = QTabWidget()
-        pages.addTab(self.create_page, 'Create')
-        pages.addTab(self.open_page, 'Open')
-        pages.addTab(self.close_page, 'Close')
+        self.pages = QTabWidget()
+        self.pages.addTab(self.create_page, 'Create')
+        self.pages.addTab(self.open_page, 'Open')
+        self.pages.addTab(self.close_page, 'Close')
 
         dialog_layout = QHBoxLayout()
-        dialog_layout.addWidget(pages)
+        dialog_layout.addWidget(self.pages)
 
         self.setLayout(dialog_layout)
 
