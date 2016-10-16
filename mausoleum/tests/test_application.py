@@ -50,3 +50,9 @@ def test_open_page(window, qtbot, name, key, password):
     window.open_page.key_password.setText(password)
     button = window.open_page.open_button
     qtbot.mouseClick(button, Qt.LeftButton)
+
+
+def test_close_page(window, qtbot):
+    window.pages.setCurrentIndex(2)
+    button = window.close_page.close_all_button
+    qtbot.mouseClick(button, Qt.LeftButton)
