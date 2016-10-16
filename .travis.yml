@@ -5,11 +5,10 @@ dist: trusty
 notifications:
   email: false
 sudo: required
-before_install:
+install:
   - wget https://files.dyne.org/tomb/tomb-2.2.tar.gz
   - tar xvfz tomb-2.2.tar.gz
   - pushd tomb-2.2 && sudo make install && popd
-install:
   - python setup.py install
   - pip3 install PyQt5
   - pip3 install coverage
