@@ -4,7 +4,7 @@ import pkg_resources
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import (QApplication, QDesktopWidget, QDialog, QFileDialog,
+from PyQt5.QtWidgets import (QApplication, QCheckBox, QDesktopWidget, QDialog, QFileDialog,
                              QFormLayout, QGroupBox, QHBoxLayout, QLabel, QLineEdit,
                              QPushButton, QSpinBox, QTabWidget, QVBoxLayout, QWidget)
 
@@ -52,8 +52,11 @@ class CreateTomb(QWidget):
         self.size_box.setMinimum(10)
         self.size_box.setFixedWidth(100)
 
+        self.open_checkbox = QCheckBox()
+
         parameters_layout = QFormLayout()
         parameters_layout.addRow('Size (MB):', self.size_box)
+        parameters_layout.addRow('Open Upon Creation:', self.open_checkbox)
 
         parameters_group.setLayout(parameters_layout)
 
@@ -88,9 +91,11 @@ class CreateTomb(QWidget):
         dig_command = wrapper.dig_tomb(name, size)
         forge_command = wrapper.forge_tomb(key, password, sudo)
         lock_command = wrapper.lock_tomb(name, key, password, sudo)
-        if (dig_command.returncode == 0 and forge_command[0] is not None and
+        if (dig_command == 0 and forge_command[0] is not None and
                 lock_command[0] is not None):
             self.success_message.setText('Tomb Created Successfully.')
+            if self.open_checkbox.isChecked():
+                wrapper.open_tomb(name, key, password, sudo)
 
 
 class OpenTomb(QWidget):
@@ -185,8 +190,23 @@ class CloseTomb(QWidget):
 
         close_group = QGroupBox('Close Tomb')
 
+        close_layout = QHBoxLayout()
+        close_all_button = QPushButton('Close All Tombs')
+        close_all_button.setFixedWidth(200)
+        close_layout.addWidget(close_all_button, alignment=Qt.AlignCenter)
+
+        close_group.setLayout(close_layout)
+
         layout.addWidget(close_group)
+        layout.addStretch(1)
+
         self.setLayout(layout)
+
+        close_all_button.clicked.connect(self.close_all_tombs)
+
+    @staticmethod
+    def close_all_tombs():
+        wrapper.close_tombs()
 
 
 class Mausoleum(QDialog):
