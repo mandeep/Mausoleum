@@ -35,3 +35,7 @@ def test_cli_enter(name, key, password):
     runner = CliRunner()
     result = runner.invoke(wrapper.cli, ['enter', name, key], input=password)
     assert not result.exception
+
+
+def test_close_tomb():
+    wrapper.close_tomb()
