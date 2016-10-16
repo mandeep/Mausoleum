@@ -5,16 +5,21 @@ dist: trusty
 notifications:
   email: false
 sudo: required
+before_install:
+  - wget https://files.dyne.org/tomb/tomb-2.2.tar.gz
+  - tar xvfz tomb-2.2.tar.gz
+  - cd tomb-2.2
+  - sudo make install
 install:
   - python setup.py install
-  - pip install pyqt5
-  - pip install coverage
-  - pip install coveralls
-  - pip install pytest
-  - pip install pytest-cov
-  - pip install pytest-mock
-  - pip install pytest-qt
-  - pip install pytest-xvfb
+  - pip3 install PyQt5
+  - pip3 install coverage
+  - pip3 install coveralls
+  - pip3 install pytest
+  - pip3 install pytest-cov
+  - pip3 install pytest-mock
+  - pip3 install pytest-qt
+  - pip3 install pytest-xvfb
 script:
   - py.test -v --cov=./
 after_success:
