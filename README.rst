@@ -2,6 +2,31 @@
 
 |travis| |coveralls| |dependency| |codacy| |pypiversion| |pypistatus| |pythonversion| |pypiformat| |license|
 
+Mausoleum consists of a command line application and GUI application wrapped around Tomb
+(the Crypto Undertaker). Both applications were created with the intention of making
+it easier for users to interact with Tomb.
+
+************
+Installation
+************
+
+As Mausoleum is purely a wrapper of Tomb, it requires Tomb to be installed locally. For Tomb installation
+details, please see: https://www.dyne.org/software/tomb/. The Mausoleum GUI application requires PyQt5
+to be installed locally. For PyQt5 installation instructions, please visit: https://www.riverbankcomputing.com/software/pyqt/download5.
+
+With your environment set, the following command may be used to install Mausoleum::
+
+    $  pip install mausoleum
+
+If you would rather install from source, run::
+
+    $  git clone https://github.com/mandeep/Mausoleum.git
+    $  cd Mausoleum
+    $  python setup.py install
+
+
+
+
 .. |travis| image:: https://img.shields.io/travis/mandeep/Mausoleum.svg 
     :target: https://travis-ci.org/mandeep/Mausoleum
 .. |coveralls| image:: https://img.shields.io/coveralls/mandeep/Mausoleum.svg 
