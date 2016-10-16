@@ -24,7 +24,13 @@ If you would rather install from source, run::
     $  cd Mausoleum
     $  python setup.py install
 
+*****
+Usage
+*****
 
+To run the GUI application, simply run the following command in a terminal::
+
+    $  mausoleum-gui
 
 
 .. |travis| image:: https://img.shields.io/travis/mandeep/Mausoleum.svg 
