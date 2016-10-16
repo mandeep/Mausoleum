@@ -6,7 +6,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QApplication, QDesktopWidget, QDialog, QFileDialog,
                              QFormLayout, QGroupBox, QHBoxLayout, QLabel, QLineEdit,
-                             QPushButton, QTabWidget, QVBoxLayout, QWidget)
+                             QPushButton, QSpinBox, QTabWidget, QVBoxLayout, QWidget)
 
 from mausoleum import wrapper
 
@@ -19,23 +19,78 @@ class CreateTomb(QWidget):
         super(CreateTomb, self).__init__(parent)
         layout = QVBoxLayout()
 
-        tomb_group = QGroupBox('Tomb Configuration')
-        tomb_name = QLineEdit()
-        key_name = QLineEdit()
-        key_password = QLineEdit()
-        key_password.setEchoMode(QLineEdit.Password)
+        tomb_group = QGroupBox('Create Tomb')
+
+        self.tomb_name = QLineEdit()
+        tomb_name_button = QPushButton('Select Path')
+        tomb_name_layout = QHBoxLayout()
+        tomb_name_layout.addWidget(self.tomb_name)
+        tomb_name_layout.addWidget(tomb_name_button)
+
+        self.key_name = QLineEdit()
+        key_name_button = QPushButton('Select Path')
+        key_name_layout = QHBoxLayout()
+        key_name_layout.addWidget(self.key_name)
+        key_name_layout.addWidget(key_name_button)
+
+        self.key_password = QLineEdit()
+        self.key_password.setEchoMode(QLineEdit.Password)
+        self.sudo_password = QLineEdit()
+        self.sudo_password.setEchoMode(QLineEdit.Password)
+
         tomb_layout = QFormLayout()
-        tomb_layout.addRow('Tomb Name:', tomb_name)
-        tomb_layout.addRow('Key Name:', key_name)
-        tomb_layout.addRow('Key Password:', key_password)
+        tomb_layout.addRow('Tomb Name:', self.tomb_name)
+        tomb_layout.addRow('Key Name:', self.key_name)
+        tomb_layout.addRow('Key Password:', self.key_password)
+        tomb_layout.addRow('Sudo Password:', self.sudo_password)
         tomb_group.setLayout(tomb_layout)
 
         parameters_group = QGroupBox('Parameters')
 
+        self.size_box = QSpinBox()
+        self.size_box.setMaximum(999999)
+        self.size_box.setMinimum(10)
+        self.size_box.setFixedWidth(100)
+
+        parameters_layout = QFormLayout()
+        parameters_layout.addRow('Size (MB):', self.size_box)
+
+        parameters_group.setLayout(parameters_layout)
+
+        self.create_button = QPushButton('Create Tomb')
+        self.create_button.setFixedWidth(200)
+
+        self.success_message = QLabel()
+
         layout.addWidget(tomb_group)
         layout.addWidget(parameters_group)
+        layout.addWidget(self.create_button, alignment=Qt.AlignCenter)
+        layout.addWidget(self.success_message, alignment=Qt.AlignCenter)
+        layout.addStretch(1)
 
         self.setLayout(layout)
+
+        self.tomb_name.textChanged.connect(self.fill_key_name)
+        self.create_button.clicked.connect(self.create_defined_tomb)
+
+    def fill_key_name(self):
+        """Fill the key name text box according to the text of the tomb name text box."""
+        self.key_name.setText(self.tomb_name.text() + '.key')
+
+    def create_defined_tomb(self):
+        """Create the defined tomb when Create Tomb is clicked."""
+        name = self.tomb_name.text()
+        key = self.key_name.text()
+        password = self.key_password.text()
+        sudo = self.sudo_password.text()
+        size = self.size_box.value()
+
+        dig_command = wrapper.dig_tomb(name, size)
+        forge_command = wrapper.forge_tomb(key, password, sudo)
+        lock_command = wrapper.lock_tomb(name, key, password, sudo)
+        if (dig_command.returncode == 0 and forge_command[0] is not None and
+                lock_command[0] is not None):
+            self.success_message.setText('Tomb Created Successfully.')
 
 
 class OpenTomb(QWidget):
@@ -79,20 +134,20 @@ class OpenTomb(QWidget):
         close_button.setFixedWidth(200)
         button_layout = QHBoxLayout()
         button_layout.addWidget(open_button, alignment=Qt.AlignCenter)
-        button_layout.addWidget(close_button, alignment=Qt.AlignCenter)
+        button_layout.setContentsMargins(25, 25, 25, 25)
 
         self.success_message = QLabel()
 
         layout.addWidget(open_group)
         layout.addLayout(button_layout)
         layout.addWidget(self.success_message, alignment=Qt.AlignCenter)
+        layout.addStretch(1)
 
         self.setLayout(layout)
 
         tomb_path_button.clicked.connect(self.select_tomb_path)
         key_path_button.clicked.connect(self.select_key_path)
         open_button.clicked.connect(self.open_selected_tomb)
-        close_button.clicked.connect(self.close_selected_tomb)
 
     def select_tomb_path(self):
         """Select the path of the tomb to open."""
@@ -111,18 +166,27 @@ class OpenTomb(QWidget):
     def open_selected_tomb(self):
         """Open the selected tomb with the selected key, key password, and sudo password."""
         name = self.tomb_path.text()
-        key = str(self.key_path.text())
+        key = self.key_path.text()
         password = self.key_password.text()
         sudo = self.sudo_password.text()
         open_command = wrapper.open_tomb(name, key, password, sudo)
         if open_command[0] is not None:
             self.success_message.setText('Tomb Opened Successfully.')
 
-    def close_selected_tomb(self):
-        """Close the opened tomb."""
-        close_command = wrapper.close_tomb()
-        if close_command.returncode == 0:
-            self.success_message.setText('Tomb Closed Successfully.')
+
+class CloseTomb(QWidget):
+    """Creates the abstract widget to be used as a close page."""
+
+    def __init__(self, parent=None):
+        """Initialize the close page's configuration group."""
+        super(CloseTomb, self).__init__(parent)
+
+        layout = QVBoxLayout()
+
+        close_group = QGroupBox('Close Tomb')
+
+        layout.addWidget(close_group)
+        self.setLayout(layout)
 
 
 class Mausoleum(QDialog):
@@ -139,10 +203,12 @@ class Mausoleum(QDialog):
 
         create_page = CreateTomb()
         open_page = OpenTomb()
+        close_page = CloseTomb()
 
         pages = QTabWidget()
         pages.addTab(create_page, 'Create')
         pages.addTab(open_page, 'Open')
+        pages.addTab(close_page, 'Close')
 
         dialog_layout = QHBoxLayout()
         dialog_layout.addWidget(pages)
