@@ -4,9 +4,10 @@ from setuptools import setup
 setup(
     name='Mausoleum',
     version='0.0.1',
-    description="A Python wrapper for Tomb",
-    author="Mandeep",
+    description='A Python wrapper and GUI application for Tomb',
+    author='Mandeep',
     author_email='info@mandeep.xyz',
+    license='GPLv3+',
     url='https://github.com/mandeep/Mausoleum',
     packages=['mausoleum', 'mausoleum.images',
               'mausoleum.tests'],
@@ -22,6 +23,9 @@ setup(
     ],
     keywords='Mausoleum',
     classifiers=[
+        'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
+        'Development Status :: 3 - Alpha',
+        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
     ]
 )
