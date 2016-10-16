@@ -21,8 +21,10 @@ def forge_tomb(key, password, sudo=None):
     password -- the password to be used with the key
     sudo -- the sudo password of the current admin, default is None
     """
-    arguments = ['sudo', '--stdin', 'tomb', 'forge', '--unsafe', '--tomb-pwd', password, key]
+    arguments = ['tomb', 'forge', '--unsafe', '--tomb-pwd', password, key]
     if sudo is not None:
+        arguments.insert('sudo')
+        arguments.insert('--stdin')
         forge_command = subprocess.Popen(arguments, stdin=subprocess.PIPE,
                                          stdout=subprocess.PIPE, universal_newlines=True)
         return forge_command.communicate(sudo + '\n')
