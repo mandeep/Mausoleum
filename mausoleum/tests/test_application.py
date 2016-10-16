@@ -15,14 +15,38 @@ def window(qtbot):
     return new_window
 
 
+@pytest.fixture
+def name():
+    return 'test1.tomb'
+
+
+@pytest.fixture
+def key():
+    return 'test1.tomb.key'
+
+
+@pytest.fixture
+def password():
+    return 'test_password'
+
+
 def test_window_title(window):
     assert window.windowTitle() == 'Mausoleum'
 
 
-def test_create_page(window, qtbot):
-    window.create_page.tomb_name.setText('test1.tomb')
-    window.create_page.key_name.setText('test1.tomb.key')
-    window.create_page.key_password.setText('test_password')
+def test_create_page(window, qtbot, name, key, password):
+    window.create_page.tomb_name.setText(name)
+    window.create_page.key_name.setText(key)
+    window.create_page.key_password.setText(password)
     window.create_page.urandom_checkbox.setChecked(True)
     button = window.create_page.create_button
+    qtbot.mouseClick(button, Qt.LeftButton)
+
+
+def test_open_page(window, qtbot, name, key, password):
+    window.pages.setCurrentIndex(1)
+    window.open_page.tomb_path.setText(name)
+    window.open_page.key_path.setText(key)
+    window.open_page.key_password.setText(password)
+    button = window.open_page.open_button
     qtbot.mouseClick(button, Qt.LeftButton)
