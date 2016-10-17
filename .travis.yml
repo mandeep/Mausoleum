@@ -1,27 +1,47 @@
-language: python
-python:
-  - "3.4_with_system_site_packages"
-sudo: required
+after_success:
+- coveralls
+before_install:
+- sudo apt-get update
+- sudo apt-get install -y python3-pyqt5 zsh sudo gnupg cryptsetup pinentry-curses
+  gawk
+deploy:
+  true:
+    branch: master
+  user: mandeepb
+  password:
+  secure: !!binary |
+    UlBpcEZ6bTVyQllCbEw4WlVXZjlUMTlwOVBpS09NODFEK3Y5TFNQWmRJbG9tVUxPMzZhellVdFNB
+    MHF4VnFiWWJiWVVyVTZCYlBBdjlGNmxMdkMxQXNrK3FTRXhkRW9zUkxmc0NTajE5T0NidTNrbFVX
+    aVNBajEvTkhQOFVnY0Rua05OTlBjMTJSWktkTTZJL3lISFlob01pbGtOenJzdEdMTmFlZmgwMG9Y
+    ekR1aUkxNzJqZzJteVoxcWdOaDVxWXpwSEd5N216U1dhczdoYnZ1ZmlVbVliNk1hWktURzU2ZDls
+    UUVnT0ViejRXaDNCaDlJZUJwMWRBTzBhRTdnNllVMmsxL203WHE5Ti9Fa2JYME1ESmd1YVFNYnhM
+    R1RSbUVxbGlRYXBjank3MHBGeXVkN2dJcm1Hdnd5MUx3YUo4dDQvTjBpcHNOcGEyK2ZUL2JJTWFG
+    Z3AxVm01OFZUVE1EeG9Ha1prV05lbm1ZOVN1UlJTbit3QWtHUlhRYjFSbHA5TCswOEdIOURBNlFy
+    QlMwTHpkN0I2bmx2cGlXZ0lyWCtFZmp2NTB1Qm9JYnd3SXhkdmFmSGFXdmNOUDEwLy9hSExPdUdB
+    aWhYUGRZcXhrcWtyTkRtdWl2WFBxSlNrcWJJMm9HVDJQcy85UVJDZFRHamlYdWl2MkpSeFNYN1k5
+    aEFtc2MwUnNiRHRWQy9vcWNndzJXNnNsOTJ0TU1zTE90VzZGUExHRFphTWVVaTdIOU12Q2JVUVVE
+    VmxZOEVnWEFjOWVHbTZvUi9IMHUrMjEwdDVRdTFBdFhPNFhJcldad2JQWHN6cXBaUFlrZ3pXRkEx
+    Y2djT2pXdDlSMXl0MkJ6UkIyc0VOVlVDTk1UaFE2WkhTbHl0Mzh3UkRKa1BnbmhjdWhmd1RNdnc9
+  provider: pypi
+  distributions: sdist bdist_wheel
 dist: trusty
+install:
+- wget https://files.dyne.org/tomb/tomb-2.2.tar.gz
+- tar xvfz tomb-2.2.tar.gz
+- pushd tomb-2.2 && sudo make install && popd
+- python setup.py install
+- pip3 install coverage
+- pip3 install coveralls
+- pip3 install pytest
+- pip3 install pytest-cov
+- pip3 install pytest-mock
+- pip3 install pytest-qt
+- pip3 install pytest-xvfb
+language: python
 notifications:
   email: false
-sudo: required
-before_install:
-  - sudo apt-get update
-  - sudo apt-get install -y python3-pyqt5 zsh sudo gnupg cryptsetup pinentry-curses gawk
-install:
-  - wget https://files.dyne.org/tomb/tomb-2.2.tar.gz
-  - tar xvfz tomb-2.2.tar.gz
-  - pushd tomb-2.2 && sudo make install && popd
-  - python setup.py install
-  - pip3 install coverage
-  - pip3 install coveralls
-  - pip3 install pytest
-  - pip3 install pytest-cov
-  - pip3 install pytest-mock
-  - pip3 install pytest-qt
-  - pip3 install pytest-xvfb
+python:
+- 3.4_with_system_site_packages
 script:
-  - py.test -s -v --cov=./
-after_success:
-  - coveralls
+- py.test -s -v --cov=./
+sudo: required
