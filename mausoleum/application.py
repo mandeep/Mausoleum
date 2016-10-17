@@ -47,18 +47,48 @@ class CreateTomb(QWidget):
 
         parameters_group = QGroupBox('Parameters')
 
+        size_box_layout = QHBoxLayout()
+        size_box_label = QLabel('Size (MB):')
         self.size_box = QSpinBox()
         self.size_box.setMaximum(999999)
         self.size_box.setMinimum(10)
         self.size_box.setFixedWidth(100)
+        size_box_layout.addWidget(size_box_label)
+        size_box_layout.addWidget(self.size_box)
+        size_box_layout.setSpacing(0)
 
+        kdf_box_layout = QHBoxLayout()
+        kdf_box_label = QLabel('KDF Iterations:')
+        self.kdf_box = QSpinBox()
+        self.kdf_box.setFixedWidth(100)
+        kdf_box_layout.addWidget(kdf_box_label)
+        kdf_box_layout.addWidget(self.kdf_box)
+
+        spinbox_layout = QVBoxLayout()
+        spinbox_layout.addLayout(size_box_layout)
+        spinbox_layout.addLayout(kdf_box_layout)
+        spinbox_layout.setAlignment(Qt.AlignLeft)
+
+        open_checkbox_layout = QHBoxLayout()
+        open_checkbox_label = QLabel('Open Upon Creation:')
         self.open_checkbox = QCheckBox()
-        self.urandom_checkbox = QCheckBox()
+        open_checkbox_layout.addWidget(open_checkbox_label)
+        open_checkbox_layout.addWidget(self.open_checkbox)
 
-        parameters_layout = QFormLayout()
-        parameters_layout.addRow('Size (MB):', self.size_box)
-        parameters_layout.addRow('Open Upon Creation:', self.open_checkbox)
-        parameters_layout.addRow('Random Integer Key:', self.urandom_checkbox)
+        random_checkbox_layout = QHBoxLayout()
+        random_checkbox_label = QLabel('Random Integer Key:')
+        self.random_checkbox = QCheckBox()
+        random_checkbox_layout.addWidget(random_checkbox_label)
+        random_checkbox_layout.addWidget(self.random_checkbox)
+
+        checkbox_layout = QVBoxLayout()
+        checkbox_layout.addLayout(open_checkbox_layout)
+        checkbox_layout.addLayout(random_checkbox_layout)
+        checkbox_layout.setAlignment(Qt.AlignLeft)
+
+        parameters_layout = QHBoxLayout()
+        parameters_layout.addLayout(spinbox_layout)
+        parameters_layout.addLayout(checkbox_layout)
 
         parameters_group.setLayout(parameters_layout)
 
@@ -194,10 +224,13 @@ class CloseTomb(QWidget):
 
         close_group = QGroupBox('Close Tomb')
 
-        close_layout = QHBoxLayout()
+        close_layout = QVBoxLayout()
         self.close_all_button = QPushButton('Close All Tombs')
         self.close_all_button.setFixedWidth(200)
+        self.force_close_button = QPushButton('Force Close Tombs')
+        self.force_close_button.setFixedWidth(200)
         close_layout.addWidget(self.close_all_button, alignment=Qt.AlignCenter)
+        close_layout.addWidget(self.force_close_button, alignment=Qt.AlignCenter)
 
         close_group.setLayout(close_layout)
 
@@ -207,6 +240,7 @@ class CloseTomb(QWidget):
         self.setLayout(layout)
 
         self.close_all_button.clicked.connect(lambda: wrapper.close_tombs())
+        self.force_close_button.clicked.connect(lambda: wrapper.slam_tombs())
 
 
 class Mausoleum(QDialog):
