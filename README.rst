@@ -13,7 +13,7 @@ it easier for users to interact with Tomb.
 Installation
 ************
 
-As Mausoleum is purely a wrapper of Tomb, it requires Tomb to be installed locally. For Tomb installation
+As Mausoleum is purely a wrapper for Tomb, it requires Tomb to be installed locally. For Tomb installation
 details, please see: https://www.dyne.org/software/tomb/. The Mausoleum GUI application requires PyQt5
 to be installed locally. For PyQt5 installation instructions, please visit: https://www.riverbankcomputing.com/software/pyqt/download5.
 
@@ -35,10 +35,10 @@ To run the GUI application, simply run the following command in a terminal::
 
     $  mausoleum-gui
 
-The command will open a new window that includes tabs that group Tomb functions in separate
-tabs. The create tab receives information needed to create a new tomb container, the open
+The command will open a new window that includes tabs that group Tomb functions into separate
+tabs. The 'Create' tab receives information needed to create a new tomb container, the 'Open'
 tab allows the user to fill in information regarding the opening of an existing tomb container,
-and the close tab lets the user close opened tombs.
+and the 'Close' tab lets the user close opened tombs.
 
 ************************
 Command Line Application
@@ -69,6 +69,25 @@ Example of creating a new tomb container and opening it thereafter::
 Example of opening an existing tomb::
 
     $  mausoleum enter secret.tomb
+    Password:
+
+*******
+Wrapper
+*******
+
+Mausoleum may be used as an imported wrapper as well::
+
+    import mausoleum.wrapper
+
+
+    def batch_tomb_creation(names, size, password):
+        """Take a list of names and batch create tomb containers."""
+
+        for name in names:
+            key = '{}.key' .format(name)
+            mausoleum.wrapper.dig_tomb(name, size)
+            mausoleum.wrapper.forge_tomb(key, password)
+            mausoleum.wrapper.lock_tomb(name, key, password)
 
 .. |travis| image:: https://img.shields.io/travis/mandeep/Mausoleum.svg 
     :target: https://travis-ci.org/mandeep/Mausoleum
