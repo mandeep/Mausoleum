@@ -75,12 +75,12 @@ Example of opening an existing tomb::
 Wrapper
 *******
 
-Mausoleum may be used as an imported wrapper as well::
+Mausoleum may be imported as a module as seen in the following example::
 
     import mausoleum.wrapper
 
 
-    def batch_tomb_creation(names, size, password):
+    def batch_create_tombs(names, size, password):
         """Take a list of names and batch create tomb containers."""
 
         for name in names:
