@@ -58,7 +58,7 @@ class CreateTomb(QWidget):
         parameters_layout = QFormLayout()
         parameters_layout.addRow('Size (MB):', self.size_box)
         parameters_layout.addRow('Open Upon Creation:', self.open_checkbox)
-        parameters_layout.addRow('urandom Key Generation:', self.urandom_checkbox)
+        parameters_layout.addRow('Random Integer Key:', self.urandom_checkbox)
 
         parameters_group.setLayout(parameters_layout)
 
