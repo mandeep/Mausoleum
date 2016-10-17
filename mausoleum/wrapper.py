@@ -83,6 +83,11 @@ def close_tombs():
     return subprocess.call(['tomb', 'close', 'all'])
 
 
+def slam_tombs():
+    """Force close all open tombs."""
+    return subprocess.call(['tomb', 'slam'])
+
+
 @click.group()
 def cli():
     """Access Tomb's command line interface with Mausoleum.
