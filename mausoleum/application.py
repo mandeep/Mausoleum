@@ -121,7 +121,7 @@ class CreateTomb(QWidget):
         size = self.size_box.value()
 
         dig_command = wrapper.dig_tomb(name, size)
-        if self.urandom_checkbox.isChecked():
+        if self.random_checkbox.isChecked():
             forge_command = wrapper.forge_tomb(key, password, sudo, debug=True)
         else:
             forge_command = wrapper.forge_tomb(key, password, sudo)
