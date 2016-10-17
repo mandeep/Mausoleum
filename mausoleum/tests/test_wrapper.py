@@ -44,3 +44,8 @@ def test_close_tomb():
 def test_close_all_tombs(name, key, password):
     wrapper.open_tomb(name, key, password)
     wrapper.close_tombs()
+
+
+def test_tomb_slam(name, key, password):
+    wrapper.open_tomb(name, key, password)
+    wrapper.slam_tombs()
