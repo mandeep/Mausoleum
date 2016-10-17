@@ -27,14 +27,48 @@ If you would rather install from source, run::
     $  cd Mausoleum
     $  python setup.py install
 
-*****
-Usage
-*****
+***************
+GUI Application
+***************
 
 To run the GUI application, simply run the following command in a terminal::
 
     $  mausoleum-gui
 
+The command will open a new window that includes tabs that group Tomb functions in separate
+tabs. The create tab receives information needed to create a new tomb container, the open
+tab allows the user to fill in information regarding the opening of an existing tomb container,
+and the close tab lets the user close opened tombs.
+
+************************
+Command Line Application
+************************
+
+With Mausoleum installed, the command line application can be invoked with the following commands and arguments::
+
+    usage: mausoleum [options] command [arguments]
+
+    commands:
+        construct               Dig, forge, and lock a new tomb container 
+        enter                   Open an existing tomb container
+
+    positional arguments:
+        name                    Name of the new or existing tomb container
+        size                    The size in megabytes for the new tomb container
+        key                     Name of the new or existing tomb key file
+
+    optional arguments:
+        --open                  Used when wanting to open a tomb after creation
+
+Example of creating a new tomb container and opening it thereafter::
+
+    $  mausoleum construct --open secret.tomb 100
+    Password:
+    Confirm password:
+
+Example of opening an existing tomb::
+
+    $  mausoleum enter secret.tomb
 
 .. |travis| image:: https://img.shields.io/travis/mandeep/Mausoleum.svg 
     :target: https://travis-ci.org/mandeep/Mausoleum
