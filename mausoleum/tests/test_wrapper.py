@@ -55,7 +55,7 @@ def test_resize_tomb(name, key, password):
     wrapper.resize_tomb(name, 10, key, password)
 
 
-def test_resize_cli(name, key, password):
+def test_resize_cli(name, password):
     runner = CliRunner()
-    result = runner.invoke(wrapper.cli, ['alter', name, '30', key], input=password)
+    result = runner.invoke(wrapper.cli, ['alter', '--open', name, '30'], input=password)
     assert not result.exception
