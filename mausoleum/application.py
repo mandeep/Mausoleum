@@ -35,6 +35,8 @@ class CreateTomb(QWidget):
 
         self.key_password = QLineEdit()
         self.key_password.setEchoMode(QLineEdit.Password)
+        self.confirm_password = QLineEdit()
+        self.confirm_password.setEchoMode(QLineEdit.Password)
         self.sudo_password = QLineEdit()
         self.sudo_password.setEchoMode(QLineEdit.Password)
 
@@ -42,6 +44,7 @@ class CreateTomb(QWidget):
         tomb_layout.addRow('Tomb Name:', self.tomb_name)
         tomb_layout.addRow('Key Name:', self.key_name)
         tomb_layout.addRow('Key Password:', self.key_password)
+        tomb_layout.addRow('Confirm Password:', self.confirm_password)
         tomb_layout.addRow('Sudo Password:', self.sudo_password)
         tomb_group.setLayout(tomb_layout)
 
@@ -95,12 +98,12 @@ class CreateTomb(QWidget):
         self.create_button = QPushButton('Create Tomb')
         self.create_button.setFixedWidth(200)
 
-        self.success_message = QLabel()
+        self.message = QLabel()
 
         layout.addWidget(tomb_group)
         layout.addWidget(parameters_group)
         layout.addWidget(self.create_button, alignment=Qt.AlignCenter)
-        layout.addWidget(self.success_message, alignment=Qt.AlignCenter)
+        layout.addWidget(self.message, alignment=Qt.AlignCenter)
         layout.addStretch(1)
 
         self.setLayout(layout)
@@ -119,24 +122,28 @@ class CreateTomb(QWidget):
         place passwords are stored is in QLineEdit. QLineEdit will clear the passwords,
         however we must make sure that the application is not stored in swap.
         """
-        name = self.tomb_name.text()
-        key = self.key_name.text()
-        size = self.size_box.value()
-
-        dig_command = wrapper.dig_tomb(name, size)
-        if self.random_checkbox.isChecked():
-            forge_command = wrapper.forge_tomb(key, self.key_password.text(),
-                                               self.sudo_password.text(), debug=True)
+        if self.key_password != self.confirm_password:
+            self.message.setText('Key Passwords Do Not Match.')
         else:
-            forge_command = wrapper.forge_tomb(key, self.key_password.text(),
-                                               self.sudo_password.text())
-        lock_command = wrapper.lock_tomb(name, key, self.key_password.text(),
-                                         self.sudo_password.text())
-        if (dig_command == 0 and forge_command[0] is not None and
-                lock_command[0] is not None):
-            self.success_message.setText('Tomb Created Successfully.')
-            if self.open_checkbox.isChecked():
-                wrapper.open_tomb(name, key, self.key_password.text(), self.sudo_password.text())
+            name = self.tomb_name.text()
+            key = self.key_name.text()
+            size = self.size_box.value()
+
+            dig_command = wrapper.dig_tomb(name, size)
+            if self.random_checkbox.isChecked():
+                forge_command = wrapper.forge_tomb(key, self.key_password.text(),
+                                                   self.sudo_password.text(), debug=True)
+            else:
+                forge_command = wrapper.forge_tomb(key, self.key_password.text(),
+                                                   self.sudo_password.text())
+            lock_command = wrapper.lock_tomb(name, key, self.key_password.text(),
+                                             self.sudo_password.text())
+            if (dig_command == 0 and forge_command[0] is not None and
+                    lock_command[0] is not None):
+                self.message.setText('Tomb Created Successfully.')
+                if self.open_checkbox.isChecked():
+                    wrapper.open_tomb(name, key, self.key_password.text(),
+                                      self.sudo_password.text())
 
 
 class OpenTomb(QWidget):
@@ -181,11 +188,11 @@ class OpenTomb(QWidget):
         button_layout.addWidget(self.open_button, alignment=Qt.AlignCenter)
         button_layout.setContentsMargins(25, 25, 25, 25)
 
-        self.success_message = QLabel()
+        self.message = QLabel()
 
         layout.addWidget(open_group)
         layout.addLayout(button_layout)
-        layout.addWidget(self.success_message, alignment=Qt.AlignCenter)
+        layout.addWidget(self.message, alignment=Qt.AlignCenter)
         layout.addStretch(1)
 
         self.setLayout(layout)
@@ -220,7 +227,7 @@ class OpenTomb(QWidget):
         open_command = wrapper.open_tomb(name, key, self.key_password.text(),
                                          self.sudo_password.text())
         if open_command[0] is not None:
-            self.success_message.setText('Tomb Opened Successfully.')
+            self.message.setText('Tomb Opened Successfully.')
 
 
 class CloseTomb(QWidget):
