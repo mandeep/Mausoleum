@@ -46,6 +46,16 @@ def test_close_all_tombs(name, key, password):
     wrapper.close_tombs()
 
 
-def test_tomb_slam(name, key, password):
+def resize_tomb(name, key, password):
     wrapper.open_tomb(name, key, password)
+    wrapper.resize_tomb(name, 10, key, password)
+
+
+def test_tomb_slam(name, key, password):
     wrapper.slam_tombs()
+
+
+def test_resize_cli(name, key, password):
+    runner = CliRunner()
+    result = runner.invoke(wrapper.cli, ['rebuild', name, 30], input=password)
+    assert not result.exception
