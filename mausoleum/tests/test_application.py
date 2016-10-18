@@ -38,10 +38,11 @@ def test_create_page(window, qtbot, name, key, password):
     window.create_page.tomb_name.setText(name)
     window.create_page.key_name.setText(key)
     window.create_page.key_password.setText(password)
-    window.create_page.confirm_password.setText(window.create_page.key_password.text())
+    window.create_page.confirm_password.setText(password)
     window.create_page.random_checkbox.setChecked(True)
     button = window.create_page.create_button
     qtbot.mouseClick(button, Qt.LeftButton)
+    assert window.create_page.message.text() == 'Tomb Created Successfully.'
 
 
 def test_open_page(window, qtbot, name, key, password):
@@ -51,6 +52,7 @@ def test_open_page(window, qtbot, name, key, password):
     window.open_page.key_password.setText(password)
     button = window.open_page.open_button
     qtbot.mouseClick(button, Qt.LeftButton)
+    assert window.open_page.message.text() == 'Tomb Opened Successfully.'
 
 
 def test_close_page(window, qtbot):
