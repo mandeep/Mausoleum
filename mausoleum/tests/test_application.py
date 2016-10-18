@@ -35,8 +35,10 @@ def test_window_title(window):
 
 
 def test_create_page_failure(window, qtbot):
+    button = window.create_page.create_button
     window.create_page.key_password.setText('1')
     window.create_page.confirm_password.setText('2')
+    qtbot.mouseClick(button, Qt.LeftButton)
     assert window.create_page.message.text() == 'Key Passwords Do Not Match.'
 
 
