@@ -34,6 +34,12 @@ def test_window_title(window):
     assert window.windowTitle() == 'Mausoleum'
 
 
+def test_create_page_failure(window, qtbot):
+    window.create_page.key_password.setText('1')
+    window.create_page.confirm_password.setText('2')
+    assert window.create_page.message.text() == 'Key Passwords Do Not Match.'
+
+
 def test_create_page(window, qtbot, name, key, password):
     window.create_page.tomb_name.setText(name)
     window.create_page.key_name.setText(key)
