@@ -57,5 +57,5 @@ def test_resize_tomb(name, key, password):
 
 def test_resize_cli(name, key, password):
     runner = CliRunner()
-    result = runner.invoke(wrapper.cli, ['rebuild', name, '30', key], input=password)
+    result = runner.invoke(wrapper.cli, ['alter', name, '30', key], input=password)
     assert not result.exception
