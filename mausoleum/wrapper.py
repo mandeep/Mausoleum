@@ -19,7 +19,10 @@ def forge_tomb(key, password, sudo=None, debug=False):
     Positional arguments:
     key -- the name of the container's key, e.g. secret.tomb.key
     password -- the password to be used with the key
+
+    Keyword arguments:
     sudo -- the sudo password of the current admin, default is None
+    debug -- used to test key generation
     """
     arguments = ['sudo', '--stdin', 'tomb', 'forge', '--unsafe', '--tomb-pwd', password, key]
     if debug:
@@ -38,7 +41,10 @@ def lock_tomb(name, key, password, sudo=None, debug=False):
     name -- the name of the container, e.g. secret.tomb
     key -- the name of the container's key, e.g. secret.tomb.key
     password -- the password of the container's key
+
+    Keyword arguments:
     sudo -- the sudo password of the current admin, default is None
+    debug -- used to ignore the swap partition
     """
     arguments = ['sudo', '--stdin', 'tomb', 'lock', '--unsafe', '--tomb-pwd',
                  password, name, '-k', key]
@@ -58,6 +64,8 @@ def open_tomb(name, key, password, sudo=None):
     name -- the name of the container, e.g. secret.tomb
     key -- the name of the container's key, e.g. secret.tomb.key
     password -- the password of the container's key
+
+    Keyword arguments:
     sudo -- the sudo password of the current admin, default is None
     """
     arguments = ['sudo', '--stdin', 'tomb', 'open', '--unsafe',
@@ -67,6 +75,19 @@ def open_tomb(name, key, password, sudo=None):
                                         stdout=subprocess.PIPE, universal_newlines=True)
         return open_command.communicate(sudo + '\n')
     return subprocess.call(arguments)
+
+
+def resize_tomb(name, size, key, password):
+    """Resize a tomb container to the given size.
+
+    Positional arguments:
+    name -- the name of the container, e.g. secret.tomb
+    size -- the size of the container in megabytes
+    key -- the name of the container's key, e.g. secret.tomb.key
+    password -- the password of the container's key
+    """
+    return subprocess.call(['tomb', 'resize', name, '-s', str(size), '-k', key, '--unsafe',
+                            '--tomb-pwd', password])
 
 
 def close_tomb(name=None):
@@ -86,12 +107,6 @@ def close_tombs():
 def slam_tombs():
     """Force close all open tombs."""
     return subprocess.call(['tomb', 'slam'])
-
-
-def resize_tomb(name, size, key, password):
-    """Resize a tomb container to the given size."""
-    return subprocess.call(['tomb', 'resize', name, '-s', str(size), '-k', key, '--unsafe',
-                            '--tomb-pwd', password])
 
 
 @click.group()
