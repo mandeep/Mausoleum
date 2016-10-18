@@ -64,7 +64,7 @@ Example of creating a new tomb container and opening it thereafter::
 
     $  mausoleum construct --open secret.tomb 100
     Password:
-    Confirm password:
+    Repeat for confirmation:
 
 Example of opening an existing tomb::
 
