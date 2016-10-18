@@ -88,6 +88,12 @@ def slam_tombs():
     return subprocess.call(['tomb', 'slam'])
 
 
+def resize_tomb(name, size, key, password):
+    """Resize a tomb container to the given size."""
+    return subprocess.call(['tomb', 'resize', name, '-s', str(size), '-k', key, '--unsafe',
+                            '--tomb-pwd', password])
+
+
 @click.group()
 def cli():
     """Access Tomb's command line interface with Mausoleum.
@@ -143,3 +149,24 @@ def enter(name, key, password):
     if key is None:
         key = '{}.key' .format(name)
     open_tomb(name, key, password)
+
+
+@cli.command()
+@click.argument('name')
+@click.argument('size')
+@click.argument('key', required=False, default=None)
+@click.option('--password', prompt=True, hide_input=True, confirmation_prompt=False)
+@click.option('--open', is_flag=True, help='Open the tomb after resizing it.')
+def rebuild(name, size, key, password, open):
+    """Resize an existing tomb container.
+
+    The default key name is the name of the tomb with .key as the suffix. If the
+    key uses a different naming convention, it must be passed as an argument.
+
+    To open the container after resizing, use the --open flag.
+    """
+    if key is None:
+        key = '{}.key' .format(name)
+    resize_tomb(name, size, key, password)
+    if open:
+        open_tomb(name, key, password)
