@@ -167,6 +167,6 @@ def rebuild(name, size, key, password, open):
     """
     if key is None:
         key = '{}.key' .format(name)
-    resize_tomb(name, size, key, password)
+    resize_tomb(name, str(size), key, password)
     if open:
         open_tomb(name, key, password)
