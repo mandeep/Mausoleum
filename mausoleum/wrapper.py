@@ -157,7 +157,7 @@ def enter(name, key, password):
 @click.argument('key', required=False, default=None)
 @click.option('--password', prompt=True, hide_input=True, confirmation_prompt=False)
 @click.option('--open', is_flag=True, help='Open the tomb after resizing it.')
-def rebuild(name, size, key, password, open):
+def alter(name, size, key, password, open):
     """Resize an existing tomb container.
 
     The default key name is the name of the tomb with .key as the suffix. If the
