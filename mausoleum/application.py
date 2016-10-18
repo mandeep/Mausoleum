@@ -113,24 +113,30 @@ class CreateTomb(QWidget):
         self.key_name.setText(self.tomb_name.text() + '.key')
 
     def create_defined_tomb(self):
-        """Create the defined tomb when Create Tomb is clicked."""
+        """Create the defined tomb when Create Tomb is clicked.
+
+        The key's password and sudo password are not stored as strings so that the only
+        place passwords are stored is in QLineEdit. QLineEdit will clear the passwords,
+        however we must make sure that the application is not stored in swap.
+        """
         name = self.tomb_name.text()
         key = self.key_name.text()
-        password = self.key_password.text()
-        sudo = self.sudo_password.text()
         size = self.size_box.value()
 
         dig_command = wrapper.dig_tomb(name, size)
         if self.random_checkbox.isChecked():
-            forge_command = wrapper.forge_tomb(key, password, sudo, debug=True)
+            forge_command = wrapper.forge_tomb(key, self.key_password.text(),
+                                               self.sudo_password.text(), debug=True)
         else:
-            forge_command = wrapper.forge_tomb(key, password, sudo)
-        lock_command = wrapper.lock_tomb(name, key, password, sudo)
+            forge_command = wrapper.forge_tomb(key, self.key_password.text(),
+                                               self.sudo_password.text())
+        lock_command = wrapper.lock_tomb(name, key, self.key_password.text(),
+                                         self.sudo_password.text())
         if (dig_command == 0 and forge_command[0] is not None and
                 lock_command[0] is not None):
             self.success_message.setText('Tomb Created Successfully.')
             if self.open_checkbox.isChecked():
-                wrapper.open_tomb(name, key, password, sudo)
+                wrapper.open_tomb(name, key, self.key_password.text(), self.sudo_password.text())
 
 
 class OpenTomb(QWidget):
@@ -203,12 +209,16 @@ class OpenTomb(QWidget):
             self.key_path.setText(filename)
 
     def open_selected_tomb(self):
-        """Open the selected tomb with the selected key, key password, and sudo password."""
+        """Open the selected tomb with the selected key, key password, and sudo password.
+
+        The key's password and sudo password are not stored as strings so that the only
+        place passwords are stored is in QLineEdit. QLineEdit will clear the passwords,
+        however we must make sure that the application is not stored in swap.
+        """
         name = self.tomb_path.text()
         key = self.key_path.text()
-        password = self.key_password.text()
-        sudo = self.sudo_password.text()
-        open_command = wrapper.open_tomb(name, key, password, sudo)
+        open_command = wrapper.open_tomb(name, key, self.key_password.text(),
+                                         self.sudo_password.text())
         if open_command[0] is not None:
             self.success_message.setText('Tomb Opened Successfully.')
 
