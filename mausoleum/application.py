@@ -122,9 +122,7 @@ class CreateTomb(QWidget):
         place passwords are stored is in QLineEdit. QLineEdit will clear the passwords,
         however we must make sure that the application is not stored in swap.
         """
-        if self.key_password != self.confirm_password:
-            self.message.setText('Key Passwords Do Not Match.')
-        else:
+        if self.key_password.text() == self.confirm_password.text():
             name = self.tomb_name.text()
             key = self.key_name.text()
             size = self.size_box.value()
@@ -144,6 +142,8 @@ class CreateTomb(QWidget):
                 if self.open_checkbox.isChecked():
                     wrapper.open_tomb(name, key, self.key_password.text(),
                                       self.sudo_password.text())
+        else:
+            self.message.setText('Key Passwords Do Not Match.')
 
 
 class OpenTomb(QWidget):
