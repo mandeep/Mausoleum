@@ -38,7 +38,7 @@ def test_create_page(window, qtbot, name, key, password):
     window.create_page.tomb_name.setText(name)
     window.create_page.key_name.setText(key)
     window.create_page.key_password.setText(password)
-    window.create_page.confirm_password.setText(password)
+    window.create_page.confirm_password.setText(window.create_page.key_password.text())
     window.create_page.random_checkbox.setChecked(True)
     button = window.create_page.create_button
     qtbot.mouseClick(button, Qt.LeftButton)
