@@ -75,7 +75,9 @@ Example of opening an existing tomb::
 Wrapper
 *******
 
-Mausoleum may be imported as a module as seen in the following example::
+Mausoleum may be imported as a module as seen in the following example:
+
+.. code:: python
 
     import mausoleum.wrapper
 
