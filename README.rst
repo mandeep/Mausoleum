@@ -36,8 +36,8 @@ To run the GUI application, simply run the following command in a terminal::
     $  mausoleum-gui
 
 The command will open a new window that includes tabs that group Tomb functions into separate
-tabs. The 'Create' tab receives information needed to create a new tomb container, the 'Open'
-tab allows the user to fill in information regarding the opening of an existing tomb container,
+tabs. The 'Create' tab receives information needed to create a new tomb, the 'Open'
+tab allows the user to fill in information regarding the opening of an existing tomb,
 and the 'Close' tab lets the user close opened tombs.
 
 ************************
@@ -49,18 +49,19 @@ With Mausoleum installed, the command line application can be invoked with the f
     usage: mausoleum [options] command [arguments]
 
     commands:
-        construct               Dig, forge, and lock a new tomb container 
-        enter                   Open an existing tomb container
+        construct               Dig, forge, and lock a new tomb 
+        enter                   Open an existing tomb
+        alter                   Resize an existing tomb
 
     positional arguments:
-        name                    Name of the new or existing tomb container
-        size                    The size in megabytes for the new tomb container
+        name                    Name of the new or existing tomb
+        size                    The size in megabytes for the new tomb
         key                     Name of the new or existing tomb key file
 
     optional arguments:
         --open                  Used when wanting to open a tomb after creation
 
-Example of creating a new tomb container and opening it thereafter::
+Example of creating a new tomb and opening it thereafter::
 
     $  mausoleum construct --open secret.tomb 100
     Password:
@@ -83,7 +84,7 @@ Mausoleum may be imported as a module as seen in the following example:
 
 
     def batch_create_tombs(names, size, password):
-        """Take a list of names and batch create tomb containers."""
+        """Take a list of names and batch create tombs."""
 
         for name in names:
             key = '{}.key' .format(name)
