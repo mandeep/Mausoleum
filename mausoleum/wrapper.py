@@ -90,6 +90,17 @@ def resize_tomb(name, size, key, password):
                             '--tomb-pwd', password])
 
 
+def list_tombs():
+    """Create a list of all open tombs."""
+    try:
+        tomb_output = subprocess.check_output(['tomb', 'list', '--no-color'],
+                                              stderr=subprocess.STDOUT,
+                                              universal_newlines=True).split('\n')
+        return [line.replace('tomb  .  ', '') for line in tomb_output if 'open on' in line]
+    except subprocess.CalledProcessError:
+        return []
+
+
 def close_tomb(name=None):
     """Close an open tomb container.
 
@@ -114,14 +125,18 @@ def cli():
     """Access Tomb's command line interface with Mausoleum.
 
     Mausoleum includes multiple commands that wrap around Tomb's command line interface:
-    $  mausoleum construct [OPTIONS] [ARGUMENTS]
-    $  mausoleum enter [OPTIONS] [ARGUMENTS]
+    $  mausoleum construct [OPTIONS] NAME SIZE [KEY]
+    $  mausoleum enter [OPTIONS] NAME [KEY]
+    $  mausoleum alter [OPTIONS] NAME SIZE [KEY]
 
-    To create and open a new tomb container and key, run:
+    To create and open a new 500MB tomb container and key, run:
     $  mausoleum construct --open secret.tomb 500
 
     To open an existing tomb container, run:
     $  mausoleum enter secret.tomb
+
+    To resize an existing tomb container to 20MB, run:
+    $  mausoleum alter secret.tomb 20
     """
 
 
