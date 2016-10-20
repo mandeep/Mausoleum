@@ -38,7 +38,7 @@ def test_cli_enter(name, password):
 
 
 def test_list_tombs():
-    assert '[test]' in wrapper.list_tombs()
+    assert '[test]' in wrapper.list_tombs()[0]
 
 
 def test_close_tomb():
