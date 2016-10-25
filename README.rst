@@ -59,7 +59,7 @@ With Mausoleum installed, the command line application can be invoked with the f
         key                     Name of the new or existing tomb key file
 
     optional arguments:
-        --open                  Used when wanting to open a tomb after creation
+        --open                  Used when wanting to open a tomb after creation or resizing
 
 Example of creating a new tomb and opening it thereafter::
 
