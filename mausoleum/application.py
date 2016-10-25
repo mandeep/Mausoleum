@@ -2,10 +2,10 @@ import sys
 
 import pkg_resources
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QApplication, QCheckBox, QDesktopWidget, QDialog, QFileDialog,
-                             QFormLayout, QGroupBox, QHBoxLayout, QLabel, QLineEdit,
+                             QFormLayout, QGroupBox, QHBoxLayout, QLabel, QLineEdit, QListWidget,
                              QPushButton, QSpinBox, QTabWidget, QVBoxLayout, QWidget)
 
 from mausoleum import wrapper
@@ -135,12 +135,6 @@ class CreateTomb(QWidget):
             if (dig_command == 0 and forge_command[0] is not None and
                     lock_command[0] is not None):
                 self.message.setText('Tomb Created Successfully')
-                self.tomb_name.clear()
-                self.key_name.clear()
-                self.size_box.setValue(10)
-                self.sudo_password.clear()
-                self.key_password.clear()
-                self.confirm_password.clear()
                 if self.open_checkbox.isChecked():
                     wrapper.open_tomb(self.tomb_name.text(), self.key_name.text(),
                                       self.key_password.text(), self.sudo_password.text())
@@ -266,6 +260,39 @@ class CloseTomb(QWidget):
         self.force_close_button.clicked.connect(lambda: wrapper.slam_tombs())
 
 
+class ListTomb(QWidget):
+    """Creates the abstract widget to be used as a list page."""
+
+    def __init__(self, parent=None):
+        """Initialize the list page's configuration group."""
+        super(ListTomb, self).__init__(parent)
+
+        layout = QVBoxLayout()
+
+        list_group = QGroupBox('Active Tombs')
+
+        list_layout = QVBoxLayout()
+        self.tomb_list = QListWidget()
+
+        self.update_list_button = QPushButton('Update')
+        self.update_list_button.setFixedWidth(200)
+
+        list_layout.addWidget(self.tomb_list)
+        list_layout.addWidget(self.update_list_button, alignment=Qt.AlignCenter)
+
+        list_group.setLayout(list_layout)
+        layout.addWidget(list_group)
+        self.setLayout(layout)
+
+        self.update_list_button.clicked.connect(self.update_list_items)
+
+    def update_list_items(self):
+        """Clear the list and add any active tombs."""
+        self.tomb_list.clear()
+        for line in wrapper.list_tombs():
+            self.tomb_list.addItem(line)
+
+
 class Mausoleum(QDialog):
     """Creates the main window that stores all of the widgets necessary for the application."""
 
@@ -281,16 +308,27 @@ class Mausoleum(QDialog):
         self.create_page = CreateTomb()
         self.open_page = OpenTomb()
         self.close_page = CloseTomb()
+        self.list_page = ListTomb()
 
         self.pages = QTabWidget()
         self.pages.addTab(self.create_page, 'Create')
         self.pages.addTab(self.open_page, 'Open')
         self.pages.addTab(self.close_page, 'Close')
+        self.pages.addTab(self.list_page, 'List')
 
         dialog_layout = QHBoxLayout()
         dialog_layout.addWidget(self.pages)
 
         self.setLayout(dialog_layout)
+
+        self.create_page.create_button.clicked.connect(self.auto_update_list_items)
+        self.open_page.open_button.clicked.connect(self.auto_update_list_items)
+        self.close_page.close_all_button.clicked.connect(self.auto_update_list_items)
+        self.close_page.force_close_button.clicked.connect(self.auto_update_list_items)
+
+    def auto_update_list_items(self):
+        """Update the list of active tombs whenever a tomb is opened or closed."""
+        QTimer.singleShot(3000, self.list_page.update_list_items)
 
 
 def main():
