@@ -331,20 +331,39 @@ class Mausoleum(QDialog):
         QTimer.singleShot(3000, self.list_page.update_list_items)
 
 
-def main():
-    application = QApplication(sys.argv)
+
+def check_for_tomb():
+    """Check if the tomb executable is in the path of the user running Mausoleum"""
     if shutil.which('tomb') == None:
         msg_box = QMessageBox()
         msg_box.setIcon(QMessageBox.Critical)
-        msg_box.setText("Tomb is not installed or \n not in path")
+        window_icon = pkg_resources.resource_filename('mausoleum.images','ic_vpn_key_black_48dp_1x.png')
+        msg_box.setWindowIcon(QIcon(window_icon))
+        msg_box.setText("""<center><b>Tomb is not installed or not in path<b><center>""")
+        msg_box.setInformativeText("""
+                        The executable for Tomb was not found or it's not in your path.<p>
+                        Please be sure that
+                        <ul>
+                            <li>Tomb is installed in your system
+                            <li>the executable is in your path
+                        </ul>
+                        The application will exit.
+                        """)
         msg_box.setWindowTitle("Mausoleum Error")
         msg_box.exec_()
-        return
+        return False
+    return True
 
-    window = Mausoleum()
-    desktop = QDesktopWidget().availableGeometry()
-    width = (desktop.width() - window.width()) / 2
-    height = (desktop.height() - window.height()) / 2
-    window.show()
-    window.move(width, height)
-    sys.exit(application.exec_())
+
+def main():
+    application = QApplication(sys.argv)
+    if check_for_tomb() == False:
+        application.exit(-1)
+    else:
+        window = Mausoleum()
+        desktop = QDesktopWidget().availableGeometry()
+        width = (desktop.width() - window.width()) / 2
+        height = (desktop.height() - window.height()) / 2
+        window.show()
+        window.move(width, height)
+        sys.exit(application.exec_())
