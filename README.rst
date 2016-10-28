@@ -61,6 +61,9 @@ With Mausoleum installed, the command line application can be invoked with the f
     optional arguments:
         --open                  Used when wanting to open a tomb after creation or resizing
 
+If a key is not supplied as a command line argument, the application will search for a key with
+the name of the tomb with .key as the suffix.
+
 Example of creating a new tomb and opening it thereafter::
 
     $  mausoleum construct --open secret.tomb 100
