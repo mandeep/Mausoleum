@@ -1,12 +1,12 @@
 import sys
-
+import shutil
 import pkg_resources
 
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QApplication, QCheckBox, QDesktopWidget, QDialog, QFileDialog,
                              QFormLayout, QGroupBox, QHBoxLayout, QLabel, QLineEdit, QListWidget,
-                             QPushButton, QSpinBox, QTabWidget, QVBoxLayout, QWidget)
+                             QPushButton, QSpinBox, QTabWidget, QVBoxLayout, QWidget, QMessageBox)
 
 from mausoleum import wrapper
 
@@ -333,6 +333,14 @@ class Mausoleum(QDialog):
 
 def main():
     application = QApplication(sys.argv)
+    if shutil.which('tomb') == None:
+        msg_box = QMessageBox()
+        msg_box.setIcon(QMessageBox.Critical)
+        msg_box.setText("Tomb is not installed or \n not in path")
+        msg_box.setWindowTitle("Mausoleum Error")
+        msg_box.exec_()
+        return
+
     window = Mausoleum()
     desktop = QDesktopWidget().availableGeometry()
     width = (desktop.width() - window.width()) / 2
