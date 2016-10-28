@@ -2,7 +2,7 @@ after_success:
 - coveralls
 before_install:
 - sudo apt-get update
-- sudo apt-get install -y python3-pyqt5 zsh sudo gnupg cryptsetup pinentry-curses
+- sudo apt-get install -y python3-pyqt5 zsh gnupg cryptsetup pinentry-curses
   gawk
 deploy:
   true:
