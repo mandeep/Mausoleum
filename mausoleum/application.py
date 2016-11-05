@@ -234,6 +234,8 @@ class OpenTomb(QWidget):
             self.key_path.clear()
             self.key_password.clear()
             self.sudo_password.clear()
+        else:
+            self.message.setText('Tomb Opening Unsuccessful')
 
 
 class CloseTomb(QWidget):
