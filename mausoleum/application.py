@@ -142,8 +142,6 @@ class CreateTomb(QWidget):
                                                      self.sudo_password.text())
                     if open_command[0] is not None:
                         self.message.setText('Tomb Opened Successfully')
-            else:
-                self.message.setText('Tomb Creation Unsuccessful')
         else:
             self.message.setText('Key Passwords Do Not Match')
             self.key_password.clear()
@@ -234,8 +232,6 @@ class OpenTomb(QWidget):
             self.key_path.clear()
             self.key_password.clear()
             self.sudo_password.clear()
-        else:
-            self.message.setText('Tomb Opening Unsuccessful')
 
 
 class CloseTomb(QWidget):
