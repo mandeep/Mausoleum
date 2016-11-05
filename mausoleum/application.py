@@ -321,12 +321,12 @@ class Mausoleum(QDialog):
 
         self.setLayout(dialog_layout)
 
-        self.create_page.create_button.clicked.connect(self.auto_update_list_items)
-        self.open_page.open_button.clicked.connect(self.auto_update_list_items)
-        self.close_page.close_all_button.clicked.connect(self.auto_update_list_items)
-        self.close_page.force_close_button.clicked.connect(self.auto_update_list_items)
+        self.create_page.create_button.clicked.connect(self.update_list_items)
+        self.open_page.open_button.clicked.connect(self.update_list_items)
+        self.close_page.close_all_button.clicked.connect(self.update_list_items)
+        self.close_page.force_close_button.clicked.connect(self.update_list_items)
 
-    def auto_update_list_items(self):
+    def update_list_items(self):
         """Update the list of active tombs whenever a tomb is opened or closed."""
         QTimer.singleShot(3000, self.list_page.update_list_items)
 
