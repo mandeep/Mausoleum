@@ -4,7 +4,7 @@ from setuptools import setup
 setup(
     name='mausoleum',
     version='0.2.6',
-    description='A Python wrapper and GUI application for Tomb',
+    description='A Python GUI, CLI, and wrapper for Tomb',
     author='Mandeep',
     author_email='info@mandeep.xyz',
     license='GPLv3+',
