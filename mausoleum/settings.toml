@@ -6,3 +6,4 @@ version = "0.2.5"
 [configuration]
 
 system_tray = false
+path = ''
