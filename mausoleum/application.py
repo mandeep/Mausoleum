@@ -136,8 +136,14 @@ class CreateTomb(QWidget):
                     lock_command[0] is not None):
                 self.message.setText('Tomb Created Successfully')
                 if self.open_checkbox.isChecked():
-                    wrapper.open_tomb(self.tomb_name.text(), self.key_name.text(),
-                                      self.key_password.text(), self.sudo_password.text())
+                    open_command = wrapper.open_tomb(self.tomb_name.text(),
+                                                     self.key_name.text(),
+                                                     self.key_password.text(),
+                                                     self.sudo_password.text())
+                    if open_command[0] is not None:
+                        self.message.setText('Tomb Opened Successfully')
+            else:
+                self.message.setText('Tomb Creation Unsuccessful')
         else:
             self.message.setText('Key Passwords Do Not Match')
             self.key_password.clear()
