@@ -45,6 +45,10 @@ def test_close_tomb():
     wrapper.close_tomb()
 
 
+def test_open_tomb_unsuccessfully(name, key):
+    wrapper.open_tomb(name, key, 'WRONG_PASSWORD')
+
+
 def test_list_tombs_closed():
     assert wrapper.list_tombs() == []
 
