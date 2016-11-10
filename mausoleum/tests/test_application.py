@@ -54,7 +54,7 @@ def test_create_page(window, qtbot, name, key, password):
     assert window.create_page.message.text() == 'Tomb Opened Successfully'
 
 
-def test_close_page(window, qtbot):
+def test_close_page_close(window, qtbot):
     window.pages.setCurrentIndex(2)
     button = window.close_page.close_all_button
     qtbot.mouseClick(button, Qt.LeftButton)
@@ -68,3 +68,9 @@ def test_open_page(window, qtbot, name, key, password):
     button = window.open_page.open_button
     qtbot.mouseClick(button, Qt.LeftButton)
     assert window.open_page.message.text() == 'Tomb Opened Successfully'
+
+
+def test_close_page_force_close(window, qtbot):
+    window.pages.setCurrentIndex(2)
+    button = window.close_page.force_close_button
+    qtbot.mouseClick(button, Qt.LeftButton)
