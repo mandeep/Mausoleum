@@ -95,6 +95,13 @@ Mausoleum may be imported as a module as seen in the following example:
             mausoleum.wrapper.forge_tomb(key, password)
             mausoleum.wrapper.lock_tomb(name, key, password)
 
+*************
+Contributions
+*************
+
+All contributions are welcome! Feel free to submit a pull request for trivial
+changes. For other changes, please open an issue on the repository's issue tracker.
+
 .. |travis| image:: https://img.shields.io/travis/mandeep/Mausoleum.svg 
     :target: https://travis-ci.org/mandeep/Mausoleum
 .. |coveralls| image:: https://img.shields.io/coveralls/mandeep/Mausoleum.svg 
