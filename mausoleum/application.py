@@ -372,7 +372,7 @@ class ConfigTomb(QWidget):
 
         self.set_tomb_path(self.config)
 
-    def select_tomb_path(self, config):
+    def select_tomb_install_path(self, config):
         """Select Tomb's installation path."""
         tomb_install_path = QFileDialog.getExistingDirectory(
                             self, 'Select Tomb Installation Path')
