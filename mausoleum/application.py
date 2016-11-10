@@ -1,12 +1,15 @@
+import os
+import pkg_resources
+import shutil
 import sys
 
-import pkg_resources
-
+from appdirs import AppDirs
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QApplication, QCheckBox, QDesktopWidget, QDialog, QFileDialog,
                              QFormLayout, QGroupBox, QHBoxLayout, QLabel, QLineEdit, QListWidget,
                              QPushButton, QSpinBox, QTabWidget, QVBoxLayout, QWidget)
+import pytoml
 
 from mausoleum import wrapper
 
@@ -297,6 +300,79 @@ class ListTomb(QWidget):
             self.tomb_list.addItem(line)
 
 
+class ConfigTomb(QWidget):
+    """Creates the abstract widget to be used as a config page."""
+
+    def __init__(self, parent=None):
+        """Initialize the config page's configuration group."""
+        super(ConfigTomb, self).__init__(parent)
+
+        config_directory = AppDirs('mausoleum', 'Mandeep').user_config_dir
+
+        if not os.path.exists(config_directory):
+            os.makedirs(config_directory)
+
+        settings = pkg_resources.resource_filename(__name__, 'settings.toml')
+        with open(settings) as default_config:
+            default_config = default_config.read()
+
+        self.user_config_file = os.path.join(config_directory, 'settings.toml')
+        if not os.path.isfile(self.user_config_file):
+            with open(self.user_config_file, 'a') as new_config_file:
+                new_config_file.write(default_config)
+
+        with open(self.user_config_file) as conffile:
+            self.config = pytoml.load(conffile)
+
+        config_box = QGroupBox("Configure Mausoleum")
+
+        self.tomb_path_label = QLabel('Tomb Path', self)
+        self.tomb_path_line = QLineEdit()
+        self.tomb_path_line.setReadOnly(True)
+        self.tomb_path_button = QPushButton('Select Path')
+
+        self.tomb_path_button.clicked.connect(lambda: self.select_tomb_path(self.config))
+
+        tomb_path_layout = QVBoxLayout()
+
+        tomb_path_config_layout = QHBoxLayout()
+        tomb_path_config_layout.addWidget(self.tomb_path_label)
+        tomb_path_config_layout.addWidget(self.tomb_path_line)
+        tomb_path_config_layout.addWidget(self.tomb_path_button)
+
+        tomb_path_layout.addLayout(tomb_path_config_layout)
+
+        config_box.setLayout(tomb_path_layout)
+
+        main_layout = QVBoxLayout()
+        main_layout.addWidget(config_box)
+        main_layout.addStretch(1)
+        self.setLayout(main_layout)
+
+        self.set_tomb_path(self.config)
+
+    def select_tomb_path(self, config):
+        """Select Tomb's installation path."""
+        tomb_install_path = QFileDialog.getExistingDirectory(
+                            self, 'Select Tomb Installation Path')
+
+        if tomb_install_path:
+            self.tomb_path_line.setText(tomb_install_path)
+
+            config['configuration']['path'] = tomb_install_path
+
+            with open(self.user_config_file, 'w') as conffile:
+                pytoml.dump(conffile, config)
+
+    def set_tomb_path(self, config):
+        """Set Tomb's current installation path."""
+        current_tomb_path = config['configuration']['path']
+        if os.path.isdir(current_tomb_path):
+            self.tomb_path_line.setText(current_tomb_path)
+        else:
+            self.tomb_path_line.setText(shutil.which('tomb'))
+
+
 class Mausoleum(QDialog):
     """Creates the main window that stores all of the widgets necessary for the application."""
 
@@ -313,12 +389,14 @@ class Mausoleum(QDialog):
         self.open_page = OpenTomb()
         self.close_page = CloseTomb()
         self.list_page = ListTomb()
+        self.config_page = ConfigTomb()
 
         self.pages = QTabWidget()
         self.pages.addTab(self.create_page, 'Create')
         self.pages.addTab(self.open_page, 'Open')
         self.pages.addTab(self.close_page, 'Close')
         self.pages.addTab(self.list_page, 'List')
+        self.pages.addTab(self.config_page, 'Config')
 
         dialog_layout = QHBoxLayout()
         dialog_layout.addWidget(self.pages)
