@@ -106,6 +106,10 @@ class CreateTomb(QWidget):
 
         self.message = QLabel()
 
+        if shutil.which('tomb') is None:
+            self.message.setText('Warning: Tomb Installation Not Found; '
+                                 'Set Tomb Path On Config Tab')
+
         layout.addWidget(tomb_group)
         layout.addWidget(parameters_group)
         layout.addWidget(self.create_button, alignment=Qt.AlignCenter)
