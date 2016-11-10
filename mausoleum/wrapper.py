@@ -3,17 +3,20 @@ import subprocess
 import click
 
 
-def dig_tomb(name, size):
+def dig_tomb(name, size, path='tomb'):
     """Dig a new tomb container.
 
     Positional arguments:
     name -- the name of the container, e.g. secret.tomb
     size -- the size of the container in megabytes
+
+    Keyword arguments:
+    path -- the path to the tomb executable
     """
-    return subprocess.call(['tomb', 'dig', '-s', str(size), name])
+    return subprocess.call([path, 'dig', '-s', str(size), name])
 
 
-def forge_tomb(key, password, sudo=None, debug=False):
+def forge_tomb(key, password, path='tomb', sudo=None, debug=False):
     """Forge a new key for a tomb container.
 
     Positional arguments:
@@ -21,10 +24,11 @@ def forge_tomb(key, password, sudo=None, debug=False):
     password -- the password to be used with the key
 
     Keyword arguments:
+    path -- the path to the tomb executable
     sudo -- the sudo password of the current admin, default is None
     debug -- used to test key generation
     """
-    arguments = ['sudo', '--stdin', 'tomb', 'forge', '--unsafe', '--tomb-pwd', password, key]
+    arguments = ['sudo', '--stdin', path, 'forge', '--unsafe', '--tomb-pwd', password, key]
     if debug:
         arguments.extend(['--ignore-swap', '--use-urandom'])
     if sudo is not None:
@@ -34,7 +38,7 @@ def forge_tomb(key, password, sudo=None, debug=False):
     return subprocess.call(arguments)
 
 
-def lock_tomb(name, key, password, sudo=None, debug=False):
+def lock_tomb(name, key, password, path='tomb', sudo=None, debug=False):
     """Lock a tomb container with the given key.
 
     Positional arguments:
@@ -43,10 +47,11 @@ def lock_tomb(name, key, password, sudo=None, debug=False):
     password -- the password of the container's key
 
     Keyword arguments:
+    path -- the path to the tomb executable
     sudo -- the sudo password of the current admin, default is None
     debug -- used to ignore the swap partition
     """
-    arguments = ['sudo', '--stdin', 'tomb', 'lock', '--unsafe', '--tomb-pwd',
+    arguments = ['sudo', '--stdin', path, 'lock', '--unsafe', '--tomb-pwd',
                  password, name, '-k', key]
     if debug:
         arguments.append('--ignore-swap')
@@ -57,7 +62,7 @@ def lock_tomb(name, key, password, sudo=None, debug=False):
     return subprocess.call(arguments)
 
 
-def open_tomb(name, key, password, sudo=None):
+def open_tomb(name, key, password, path='tomb', sudo=None):
     """Open a tomb container with the given key.
 
     Positional arguments:
@@ -68,7 +73,7 @@ def open_tomb(name, key, password, sudo=None):
     Keyword arguments:
     sudo -- the sudo password of the current admin, default is None
     """
-    arguments = ['sudo', '--stdin', 'tomb', 'open', '--unsafe',
+    arguments = ['sudo', '--stdin', path, 'open', '--unsafe',
                  '--tomb-pwd', password, name, '-k', key]
     if sudo is not None:
         open_command = subprocess.Popen(arguments, stdin=subprocess.PIPE,
@@ -77,7 +82,7 @@ def open_tomb(name, key, password, sudo=None):
     return subprocess.call(arguments)
 
 
-def resize_tomb(name, size, key, password):
+def resize_tomb(name, size, key, password, path='tomb'):
     """Resize a tomb container to the given size.
 
     Positional arguments:
@@ -85,15 +90,22 @@ def resize_tomb(name, size, key, password):
     size -- the size of the container in megabytes
     key -- the name of the container's key, e.g. secret.tomb.key
     password -- the password of the container's key
+
+    Keyword arguments:
+    path -- the path to the tomb executable
     """
-    return subprocess.call(['tomb', 'resize', name, '-s', str(size), '-k', key, '--unsafe',
+    return subprocess.call([path, 'resize', name, '-s', str(size), '-k', key, '--unsafe',
                             '--tomb-pwd', password])
 
 
-def list_tombs():
-    """Create a list of all open tombs."""
+def list_tombs(path='tomb'):
+    """Create a list of all open tombs.
+
+    Keyword argument:
+    path -- the path to the tomb executable
+    """
     try:
-        tomb_output = subprocess.check_output(['tomb', 'list', '--no-color'],
+        tomb_output = subprocess.check_output([path, 'list', '--no-color'],
                                               stderr=subprocess.STDOUT,
                                               universal_newlines=True).split('\n')
         return [line.replace('tomb  .  ', '') for line in tomb_output if 'open on' in line]
@@ -101,23 +113,32 @@ def list_tombs():
         return []
 
 
-def close_tomb(name=None):
+def close_tomb(path='tomb', name=''):
     """Close an open tomb container.
 
-    Positional argument:
+    Keyword arguments:
+    path -- the path to the tomb executable
     name -- the name of the container to close (if multiple tombs are open)
     """
-    return subprocess.call(['tomb', 'close'])
+    return subprocess.call([path, 'close', name])
 
 
-def close_tombs():
-    """Close all open tombs."""
-    return subprocess.call(['tomb', 'close', 'all'])
+def close_tombs(path='tomb'):
+    """Close all open tombs.
+
+    Keyword argument:
+    path -- the path to the tomb executable
+    """
+    return subprocess.call([path, 'close', 'all'])
 
 
-def slam_tombs():
-    """Force close all open tombs."""
-    return subprocess.call(['tomb', 'slam'])
+def slam_tombs(path='tomb'):
+    """Force close all open tombs.
+
+    Keyword argument:
+    path -- the path to the tomb executable
+    """
+    return subprocess.call([path, 'slam'])
 
 
 @click.group()
