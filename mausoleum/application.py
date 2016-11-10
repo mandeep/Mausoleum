@@ -352,7 +352,7 @@ class ConfigTomb(QWidget):
         self.tomb_path_line.setReadOnly(True)
         self.tomb_path_button = QPushButton('Select Path')
 
-        self.tomb_path_button.clicked.connect(lambda: self.select_tomb_path(self.config))
+        self.tomb_path_button.clicked.connect(lambda: self.select_tomb_install_path(self.config))
 
         tomb_path_layout = QVBoxLayout()
 
