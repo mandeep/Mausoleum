@@ -19,10 +19,9 @@ setup(
         ]
     },
     install_requires=[
-        'appdirs',
-        'click',
-        'pkg_resources',
-        'pytoml',
+        'appdirs==1.4.0',
+        'click==6.6',
+        'pytoml==0.1.10',
     ],
     keywords='Mausoleum',
     classifiers=[
