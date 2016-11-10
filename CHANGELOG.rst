@@ -16,6 +16,17 @@ Additions
 -  Operations on keys
 -  Ability to minimize to system tray
 
+0.3.2 - 2016-11-10
+==================
+
+GUI
+---
+
+Fixes
+~~~~~~
+
+-  Settings.toml file now recognized
+
 0.3.1 - 2016-11-10
 ==================
 
