@@ -11,7 +11,7 @@ setup(
     url='https://github.com/mandeep/Mausoleum',
     packages=['mausoleum', 'mausoleum.images',
               'mausoleum.tests'],
-    package_data={'mausoleum.images': ['*.png']},
+    package_data={'mausoleum.images': ['*.png'], 'mausoleum': ['*.toml']},
     entry_points={
         'console_scripts': [
             'mausoleum-gui=mausoleum.application:main',
