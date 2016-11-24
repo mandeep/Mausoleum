@@ -16,6 +16,17 @@ Additions
 -  Operations on keys
 -  Ability to minimize to system tray
 
+0.3.3 - 2016-11-23
+==================
+
+Wrapper
+-------
+
+Added
+~~~~~
+
+-  New function construct_tomb that digs, forges, and locks a new tomb container
+
 0.3.2 - 2016-11-10
 ==================
 
