@@ -62,7 +62,7 @@ def lock_tomb(name, key, password, path='tomb', sudo=None, debug=False):
     return subprocess.call(arguments)
 
 
-def construct_tomb(name, size, key, password):
+def construct_tomb(name, size, key, password, debug=False):
     """Dig, forge, and lock a tomb container with the given key.
 
     Positional arguments:
@@ -74,7 +74,10 @@ def construct_tomb(name, size, key, password):
     if key is None:
         key = '{}.key' .format(name)
     if construction == 0:
-        fabrication = forge_tomb(key, password)
+        if debug:
+            fabrication = forge_tomb(key, password, debug=True)
+        else:
+            fabrication = forge_tomb(key, password)
         if fabrication == 0:
             lock_tomb(name, key, password)
 

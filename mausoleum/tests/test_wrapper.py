@@ -37,6 +37,11 @@ def test_lock_tomb(name, key, password):
     wrapper.lock_tomb(name, key, password, debug=True)
 
 
+def test_construct_tomb(name, key, password,):
+    """Test constructing a new tomb container."""
+    wrapper.construct_tomb('test2.tomb', 20, 'test2.tomb.key', password, debug=True)
+
+
 def test_cli_enter(name, password):
     """Test the enter CLI command."""
     runner = CliRunner()
