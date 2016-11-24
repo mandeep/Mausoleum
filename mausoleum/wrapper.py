@@ -62,6 +62,23 @@ def lock_tomb(name, key, password, path='tomb', sudo=None, debug=False):
     return subprocess.call(arguments)
 
 
+def construct_tomb(name, size, key, password):
+    """Dig, forge, and lock a tomb container with the given key.
+
+    Positional arguments:
+    name -- the name of the container, e.g. secret.tomb
+    key -- the name of the container's key, e.g. secret.tomb.key
+    password -- the password of the container's key
+    """
+    construction = dig_tomb(name, size)
+    if key is None:
+        key = '{}.key' .format(name)
+    if construction == 0:
+        fabrication = forge_tomb(key, password)
+        if fabrication == 0:
+            lock_tomb(name, key, password)
+
+
 def open_tomb(name, key, password, path='tomb', sudo=None):
     """Open a tomb container with the given key.
 
@@ -176,15 +193,9 @@ def construct(name, size, key, password, open):
 
     To open the container after creation, use the --open flag.
     """
-    construction = dig_tomb(name, size)
-    if key is None:
-        key = '{}.key' .format(name)
-    if construction == 0:
-        fabrication = forge_tomb(key, password)
-        if fabrication == 0:
-            lock_tomb(name, key, password)
-            if open:
-                open_tomb(name, key, password)
+    construct_tomb(name, size, key, password)
+    if open:
+        open_tomb(name, key, password)
 
 
 @cli.command()
