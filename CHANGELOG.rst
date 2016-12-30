@@ -16,6 +16,25 @@ Additions
 -  Operations on keys
 -  Ability to minimize to system tray
 
+0.4.0 - 2016-12-30
+==================
+
+Wrapper
+-------
+
+Added
+~~~~~
+
+-  Read only keyword argument to use with open_tomb function
+
+GUI
+---
+
+Added
+~~~~~
+
+-  Ability to open Tombs in read only mode
+
 0.3.3 - 2016-11-23
 ==================
 
