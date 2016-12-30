@@ -91,10 +91,14 @@ def open_tomb(name, key, password, path='tomb', sudo=None):
     password -- the password of the container's key
 
     Keyword arguments:
+    path -- the path to the tomb executable
+    read_only -- mount the tomb as read only
     sudo -- the sudo password of the current admin, default is None
     """
     arguments = ['sudo', '--stdin', path, 'open', '--unsafe',
                  '--tomb-pwd', password, name, '-k', key]
+    # if read_only:
+    #     arguments.extend(['-o', 'ro'])
     if sudo is not None:
         open_command = subprocess.Popen(arguments, stdin=subprocess.PIPE,
                                         stdout=subprocess.PIPE, universal_newlines=True)
