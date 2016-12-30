@@ -82,7 +82,7 @@ def construct_tomb(name, size, key, password, debug=False):
             lock_tomb(name, key, password)
 
 
-def open_tomb(name, key, password, path='tomb', sudo=None):
+def open_tomb(name, key, password, path='tomb', sudo=None, read_only=False):
     """Open a tomb container with the given key.
 
     Positional arguments:
@@ -92,13 +92,13 @@ def open_tomb(name, key, password, path='tomb', sudo=None):
 
     Keyword arguments:
     path -- the path to the tomb executable
-    read_only -- mount the tomb as read only
     sudo -- the sudo password of the current admin, default is None
+    read_only -- mount the tomb as read only
     """
     arguments = ['sudo', '--stdin', path, 'open', '--unsafe',
                  '--tomb-pwd', password, name, '-k', key]
-    # if read_only:
-    #     arguments.extend(['-o', 'ro'])
+    if read_only:
+        arguments.extend(['-o', 'ro'])
     if sudo is not None:
         open_command = subprocess.Popen(arguments, stdin=subprocess.PIPE,
                                         stdout=subprocess.PIPE, universal_newlines=True)

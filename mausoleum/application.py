@@ -133,34 +133,35 @@ class CreateTomb(QWidget):
         however we must make sure that the application is not stored in swap.
         """
         if self.key_password.text() == self.confirm_password.text():
+
             dig_command = wrapper.dig_tomb(self.tomb_name.text(), self.size_box.value())
-            if self.random_checkbox.isChecked():
-                forge_command = wrapper.forge_tomb(self.key_name.text(),
-                                                   self.key_password.text(),
-                                                   self.path,
-                                                   self.sudo_password.text(),
-                                                   debug=True)
-            else:
-                forge_command = wrapper.forge_tomb(self.key_name.text(),
-                                                   self.key_password.text(),
-                                                   self.path,
-                                                   self.sudo_password.text())
+
+            forge_command = wrapper.forge_tomb(self.key_name.text(),
+                                               self.key_password.text(),
+                                               self.path,
+                                               self.sudo_password.text(),
+                                               debug=self.random_checkbox.isChecked())
+
             lock_command = wrapper.lock_tomb(self.tomb_name.text(),
                                              self.key_name.text(),
                                              self.key_password.text(),
                                              self.path,
                                              self.sudo_password.text())
+
             if (dig_command == 0 and forge_command[0] is not None and
                     lock_command[0] is not None):
                 self.message.setText('Tomb Created Successfully')
+
                 if self.open_checkbox.isChecked():
                     open_command = wrapper.open_tomb(self.tomb_name.text(),
                                                      self.key_name.text(),
                                                      self.key_password.text(),
                                                      self.path,
                                                      self.sudo_password.text())
+
                     if open_command[0] is not None:
                         self.message.setText('Tomb Opened Successfully')
+
         else:
             self.message.setText('Key Passwords Do Not Match')
             self.key_password.clear()
@@ -268,7 +269,8 @@ class OpenTomb(QWidget):
                                          self.key_path.text(),
                                          self.key_password.text(),
                                          self.path,
-                                         self.sudo_password.text())
+                                         self.sudo_password.text(),
+                                         read_only=self.read_only_checkbox.isChecked())
         if open_command[0] is not None:
             self.message.setText('Tomb Opened Successfully')
             self.tomb_path.clear()
