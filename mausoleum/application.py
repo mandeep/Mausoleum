@@ -213,7 +213,26 @@ class OpenTomb(QWidget):
 
         self.message = QLabel()
 
+        parameters_group = QGroupBox('Mount Options')
+
+        read_only_layout = QHBoxLayout()
+        read_only_label = QLabel('Read Only:')
+        self.read_only_checkbox = QCheckBox()
+        read_only_layout.addWidget(read_only_label)
+        read_only_layout.addWidget(self.read_only_checkbox)
+
+        checkbox_layout = QVBoxLayout()
+        checkbox_layout.addLayout(read_only_layout)
+        checkbox_layout.setAlignment(Qt.AlignLeft)
+
+        parameters_layout = QHBoxLayout()
+
+        parameters_layout.addLayout(checkbox_layout)
+
+        parameters_group.setLayout(parameters_layout)
+
         layout.addWidget(open_group)
+        layout.addWidget(parameters_group)
         layout.addLayout(button_layout)
         layout.addWidget(self.message, alignment=Qt.AlignCenter)
         layout.addStretch(1)
