@@ -246,11 +246,20 @@ class OpenTomb(QWidget):
         self.open_button.clicked.connect(self.open_selected_tomb)
 
     def select_tomb_path(self):
-        """Select the path of the tomb to open."""
+        """Select the path of the tomb to open.
+
+        If the tomb's key is in the same directory as the tomb and follows the
+        pattern of file.tomb.key, then the key's path is filled in its text box.
+        """
         filename, ok = QFileDialog.getOpenFileName(self, 'Tomb Container')
 
         if ok:
             self.tomb_path.setText(filename)
+
+            key = "{}.key" .format(self.tomb_path.text())
+
+            if os.path.isfile(key):
+                self.key_path.setText(key)
 
     def select_key_path(self):
         """Select the path of the key to open."""
@@ -459,7 +468,7 @@ class Mausoleum(QDialog):
 
     def update_list_items(self):
         """Update the list of active tombs whenever a tomb is opened or closed."""
-        QTimer.singleShot(3000, self.list_page.update_list_items)
+        QTimer.singleShot(2000, self.list_page.update_list_items)
 
 
 def main():
