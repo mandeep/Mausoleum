@@ -16,7 +16,7 @@ def dig_tomb(name, size, path='tomb'):
     return subprocess.call([path, 'dig', '-s', str(size), name])
 
 
-def forge_tomb(key, password, path='tomb', sudo=None, debug=False, kdf=0):
+def forge_tomb(key, password, path='tomb', kdf=0, sudo=None, debug=False):
     """Forge a new key for a tomb container.
 
     Positional arguments:
@@ -25,6 +25,7 @@ def forge_tomb(key, password, path='tomb', sudo=None, debug=False, kdf=0):
 
     Keyword arguments:
     path -- the path to the tomb executable
+    kdf -- number of KDF iterations to perform, default is 0
     sudo -- the sudo password of the current admin, default is None
     debug -- used to test key generation
     """
@@ -84,7 +85,7 @@ def construct_tomb(name, size, key, password, debug=False):
             lock_tomb(name, key, password)
 
 
-def open_tomb(name, key, password, path='tomb', sudo=None, read_only=False):
+def open_tomb(name, key, password, path='tomb', read_only=False, sudo=None):
     """Open a tomb container with the given key.
 
     Positional arguments:
@@ -94,8 +95,8 @@ def open_tomb(name, key, password, path='tomb', sudo=None, read_only=False):
 
     Keyword arguments:
     path -- the path to the tomb executable
-    sudo -- the sudo password of the current admin, default is None
     read_only -- mount the tomb as read only
+    sudo -- the sudo password of the current admin, default is None
     """
     arguments = ['sudo', '--stdin', path, 'open', '--unsafe',
                  '--tomb-pwd', password, name, '-k', key]

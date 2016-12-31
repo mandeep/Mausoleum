@@ -139,15 +139,15 @@ class CreateTomb(QWidget):
             forge_command = wrapper.forge_tomb(self.key_name.text(),
                                                self.key_password.text(),
                                                self.path,
-                                               self.sudo_password.text(),
-                                               debug=self.random_checkbox.isChecked(),
-                                               kdf=self.kdf_box.value())
+                                               kdf=self.kdf_box.value(),
+                                               sudo=self.sudo_password.text(),
+                                               debug=self.random_checkbox.isChecked())
 
             lock_command = wrapper.lock_tomb(self.tomb_name.text(),
                                              self.key_name.text(),
                                              self.key_password.text(),
                                              self.path,
-                                             self.sudo_password.text())
+                                             sudo=self.sudo_password.text())
 
             if (dig_command == 0 and forge_command[0] is not None and
                     lock_command[0] is not None):
@@ -158,7 +158,7 @@ class CreateTomb(QWidget):
                                                      self.key_name.text(),
                                                      self.key_password.text(),
                                                      self.path,
-                                                     self.sudo_password.text())
+                                                     sudo=self.sudo_password.text())
 
                     if open_command[0] is not None:
                         self.message.setText('Tomb Opened Successfully')
@@ -270,8 +270,8 @@ class OpenTomb(QWidget):
                                          self.key_path.text(),
                                          self.key_password.text(),
                                          self.path,
-                                         self.sudo_password.text(),
-                                         read_only=self.read_only_checkbox.isChecked())
+                                         read_only=self.read_only_checkbox.isChecked(),
+                                         sudo=self.sudo_password.text())
         if open_command[0] is not None:
             self.message.setText('Tomb Opened Successfully')
             self.tomb_path.clear()

@@ -16,6 +16,25 @@ Additions
 -  Operations on keys
 -  Ability to minimize to system tray
 
+0.4.1 - 2016-12-31
+==================
+
+Wrapper
+-------
+
+Added
+~~~~~
+
+-  KDF iterations in forge_tomb function
+
+GUI
+---
+
+Fixed
+~~~~~
+
+-  KDF iterations now working
+
 0.4.0 - 2016-12-30
 ==================
 
