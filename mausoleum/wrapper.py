@@ -30,14 +30,18 @@ def forge_tomb(key, password, path='tomb', kdf=0, sudo=None, debug=False):
     debug -- used to test key generation
     """
     arguments = ['sudo', '--stdin', path, 'forge', '--unsafe', '--tomb-pwd', password, key]
+
     if debug:
         arguments.extend(['--ignore-swap', '--use-urandom'])
+
     if kdf > 0:
         arguments.extend(['--kdf', str(kdf)])
+
     if sudo is not None:
         forge_command = subprocess.Popen(arguments, stdin=subprocess.PIPE,
                                          stdout=subprocess.PIPE, universal_newlines=True)
         return forge_command.communicate(sudo + '\n')
+
     return subprocess.call(arguments)
 
 
@@ -56,12 +60,15 @@ def lock_tomb(name, key, password, path='tomb', sudo=None, debug=False):
     """
     arguments = ['sudo', '--stdin', path, 'lock', '--unsafe', '--tomb-pwd',
                  password, name, '-k', key]
+
     if debug:
         arguments.append('--ignore-swap')
+
     if sudo is not None:
         lock_command = subprocess.Popen(arguments, stdin=subprocess.PIPE,
                                         stdout=subprocess.PIPE, universal_newlines=True)
         return lock_command.communicate(sudo + '\n')
+
     return subprocess.call(arguments)
 
 
@@ -74,13 +81,18 @@ def construct_tomb(name, size, key, password, debug=False):
     password -- the password of the container's key
     """
     construction = dig_tomb(name, size)
+
     if key is None:
         key = '{}.key' .format(name)
+
     if construction == 0:
+
         if debug:
             fabrication = forge_tomb(key, password, debug=True)
+
         else:
             fabrication = forge_tomb(key, password)
+
         if fabrication == 0:
             lock_tomb(name, key, password)
 
@@ -102,10 +114,12 @@ def open_tomb(name, key, password, path='tomb', read_only=False, sudo=None):
                  '--tomb-pwd', password, name, '-k', key]
     if read_only:
         arguments.extend(['-o', 'ro'])
+
     if sudo is not None:
         open_command = subprocess.Popen(arguments, stdin=subprocess.PIPE,
                                         stdout=subprocess.PIPE, universal_newlines=True)
         return open_command.communicate(sudo + '\n')
+
     return subprocess.call(arguments)
 
 
@@ -204,6 +218,7 @@ def construct(name, size, key, password, open):
     To open the container after creation, use the --open flag.
     """
     construct_tomb(name, size, key, password)
+
     if open:
         open_tomb(name, key, password)
 
@@ -220,6 +235,7 @@ def enter(name, key, password):
     """
     if key is None:
         key = '{}.key' .format(name)
+
     open_tomb(name, key, password)
 
 
@@ -239,6 +255,8 @@ def alter(name, size, key, password, open):
     """
     if key is None:
         key = '{}.key' .format(name)
+
     resize_tomb(name, str(size), key, password)
+
     if open:
         open_tomb(name, key, password)
