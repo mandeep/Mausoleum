@@ -16,7 +16,7 @@ def dig_tomb(name, size, path='tomb'):
     return subprocess.call([path, 'dig', '-s', str(size), name])
 
 
-def forge_tomb(key, password, path='tomb', sudo=None, debug=False):
+def forge_tomb(key, password, path='tomb', sudo=None, debug=False, kdf=0):
     """Forge a new key for a tomb container.
 
     Positional arguments:
@@ -31,6 +31,8 @@ def forge_tomb(key, password, path='tomb', sudo=None, debug=False):
     arguments = ['sudo', '--stdin', path, 'forge', '--unsafe', '--tomb-pwd', password, key]
     if debug:
         arguments.extend(['--ignore-swap', '--use-urandom'])
+    if kdf > 0:
+        arguments.extend(['--kdf', str(kdf)])
     if sudo is not None:
         forge_command = subprocess.Popen(arguments, stdin=subprocess.PIPE,
                                          stdout=subprocess.PIPE, universal_newlines=True)
