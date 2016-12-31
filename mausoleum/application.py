@@ -140,7 +140,8 @@ class CreateTomb(QWidget):
                                                self.key_password.text(),
                                                self.path,
                                                self.sudo_password.text(),
-                                               debug=self.random_checkbox.isChecked())
+                                               debug=self.random_checkbox.isChecked(),
+                                               kdf=self.kdf_box.value())
 
             lock_command = wrapper.lock_tomb(self.tomb_name.text(),
                                              self.key_name.text(),
