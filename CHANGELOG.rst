@@ -16,7 +16,19 @@ Additions
 -  Operations on keys
 -  Ability to minimize to system tray
 
-0.4.1 - 2016-12-31
+0.4.2 - 2016-12-31
+==================
+
+GUI
+---
+
+Added
+~~~~~
+
+-  Key path automatically filled if found when opening tomb
+
+
+0.4.1 - 2016-12-30
 ==================
 
 Wrapper
