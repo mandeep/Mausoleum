@@ -16,6 +16,17 @@ Additions
 -  Operations on keys
 -  Ability to minimize to system tray
 
+0.5.0 - 2017-02-16
+==================
+
+GUI
+---
+
+Added
+~~~~~
+
+-  Ability to resize tombs 
+
 0.4.2 - 2016-12-31
 ==================
 

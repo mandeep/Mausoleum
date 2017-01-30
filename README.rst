@@ -38,8 +38,9 @@ To run the GUI application, simply run the following command in a terminal::
 The command will open a new window that includes tabs that group Tomb functions into separate
 tabs. The 'Create' tab receives information needed to create a new tomb, the 'Open'
 tab allows the user to fill in information regarding the opening of an existing tomb,
-and the 'Close' tab lets the user close opened tombs, the 'List' tab displays all active tombs,
-and the 'Config' tab allows the user to make configuration changes to the GUI.
+the 'Close' tab lets the user close opened tombs, the 'Resize' tab gives the user the ability
+to resize an existing tomb, the 'List' tab displays all active tombs, and the 'Config' tab
+allows the user to make configuration changes to the GUI.
 
 ************************
 Command Line Application

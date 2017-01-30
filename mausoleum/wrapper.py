@@ -123,7 +123,7 @@ def open_tomb(name, key, password, path='tomb', read_only=False, sudo=None):
     return subprocess.call(arguments)
 
 
-def resize_tomb(name, size, key, password, path='tomb'):
+def resize_tomb(name, size, key, password, path='tomb', sudo=None):
     """Resize a tomb container to the given size.
 
     Positional arguments:
@@ -134,9 +134,17 @@ def resize_tomb(name, size, key, password, path='tomb'):
 
     Keyword arguments:
     path -- the path to the tomb executable
+    sudo -- the sudo password of the current admin, default is None
     """
-    return subprocess.call([path, 'resize', name, '-s', str(size), '-k', key, '--unsafe',
-                            '--tomb-pwd', password])
+    arguments = ['sudo', '--stdin', path, 'resize', name, '-s', str(size),
+                 '-k', key, '--unsafe', '--tomb-pwd', password]
+
+    if sudo is not None:
+        resize_command = subprocess.Popen(arguments, stdin=subprocess.PIPE,
+                                          stdout=subprocess.PIPE, universal_newlines=True)
+        return resize_command.communicate(sudo + '\n')
+
+    return subprocess.call(arguments)
 
 
 def list_tombs(path='tomb'):

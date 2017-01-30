@@ -321,6 +321,151 @@ class CloseTomb(QWidget):
         self.force_close_button.clicked.connect(lambda: wrapper.slam_tombs(self.path))
 
 
+class ResizeTomb(QWidget):
+    """Creates the abstract widget to be used as a resize page."""
+
+    def __init__(self, path, parent=None):
+        """Initialize the resize page's configuration group."""
+        super(ResizeTomb, self).__init__(parent)
+
+        self.path = path
+
+        layout = QVBoxLayout()
+
+        resize_group = QGroupBox('Resize Tomb')
+
+        self.tomb_path = QLineEdit()
+        tomb_path_button = QPushButton('Select Path')
+        tomb_path_layout = QHBoxLayout()
+        tomb_path_layout.addWidget(self.tomb_path)
+        tomb_path_layout.addWidget(tomb_path_button)
+
+        self.key_path = QLineEdit()
+        key_path_button = QPushButton('Select Path')
+        key_path_layout = QHBoxLayout()
+        key_path_layout.addWidget(self.key_path)
+        key_path_layout.addWidget(key_path_button)
+
+        self.key_password = QLineEdit()
+        self.key_password.setEchoMode(QLineEdit.Password)
+        self.sudo_password = QLineEdit()
+        self.sudo_password.setEchoMode(QLineEdit.Password)
+
+        resize_layout = QFormLayout()
+        resize_layout.addRow('Tomb Path:', tomb_path_layout)
+        resize_layout.addRow('Key Path:', key_path_layout)
+        resize_layout.addRow('Key Password:', self.key_password)
+        resize_layout.addRow('Sudo Password:', self.sudo_password)
+        resize_group.setLayout(resize_layout)
+
+        self.resize_button = QPushButton('Resize Tomb')
+        self.resize_button.setFixedWidth(200)
+
+        button_layout = QHBoxLayout()
+        button_layout.addWidget(self.resize_button, alignment=Qt.AlignCenter)
+        button_layout.setContentsMargins(25, 25, 25, 25)
+
+        self.message = QLabel()
+
+        parameters_group = QGroupBox('Parameters')
+
+        size_box_layout = QHBoxLayout()
+        size_box_label = QLabel('Size (MB):')
+        self.size_box = QSpinBox()
+        self.size_box.setMaximum(999999)
+        self.size_box.setMinimum(10)
+        self.size_box.setFixedWidth(100)
+        size_box_layout.addWidget(size_box_label)
+        size_box_layout.addWidget(self.size_box)
+        size_box_layout.setSpacing(0)
+
+        spinbox_layout = QVBoxLayout()
+        spinbox_layout.addLayout(size_box_layout)
+        spinbox_layout.setAlignment(Qt.AlignLeft)
+
+        open_checkbox_layout = QHBoxLayout()
+        open_checkbox_label = QLabel('Open Upon Resize:')
+        self.open_checkbox = QCheckBox()
+        open_checkbox_layout.addWidget(open_checkbox_label)
+        open_checkbox_layout.addWidget(self.open_checkbox)
+
+        checkbox_layout = QVBoxLayout()
+        checkbox_layout.addLayout(open_checkbox_layout)
+        checkbox_layout.setAlignment(Qt.AlignLeft)
+
+        parameters_layout = QHBoxLayout()
+        parameters_layout.addLayout(spinbox_layout)
+        parameters_layout.addLayout(checkbox_layout)
+
+        parameters_group.setLayout(parameters_layout)
+
+        layout.addWidget(resize_group)
+        layout.addWidget(parameters_group)
+        layout.addLayout(button_layout)
+        layout.addWidget(self.message, alignment=Qt.AlignCenter)
+        layout.addStretch(1)
+
+        self.setLayout(layout)
+
+        tomb_path_button.clicked.connect(self.select_tomb_path)
+        key_path_button.clicked.connect(self.select_key_path)
+        self.resize_button.clicked.connect(self.resize_selected_tomb)
+
+    def select_tomb_path(self):
+        """Select the path of the tomb to open.
+
+        If the tomb's key is in the same directory as the tomb and follows the
+        pattern of file.tomb.key, then the key's path is filled in its text box.
+        """
+        filename, ok = QFileDialog.getOpenFileName(self, 'Tomb Container')
+
+        if ok:
+            self.tomb_path.setText(filename)
+
+            key = "{}.key" .format(self.tomb_path.text())
+
+            if os.path.isfile(key):
+                self.key_path.setText(key)
+
+    def select_key_path(self):
+        """Select the path of the key to open."""
+        filename, ok = QFileDialog.getOpenFileName(self, 'Tomb Container')
+
+        if ok:
+            self.key_path.setText(filename)
+
+    def resize_selected_tomb(self):
+        """Resize the selected tomb with the selected key, key password, and sudo password.
+
+        The key's password and sudo password are not stored as strings so that the only
+        place passwords are stored is in QLineEdit. QLineEdit will clear the passwords,
+        however we must make sure that the application is not stored in swap.
+        """
+        resize_command = wrapper.resize_tomb(self.tomb_path.text(),
+                                             self.size_box.value(),
+                                             self.key_path.text(),
+                                             self.key_password.text(),
+                                             self.path,
+                                             sudo=self.sudo_password.text())
+        if resize_command[0] is not None:
+            self.message.setText('Tomb Resized Successfully')
+
+            if self.open_checkbox.isChecked():
+                    open_command = wrapper.open_tomb(self.tomb_path.text(),
+                                                     self.key_path.text(),
+                                                     self.key_password.text(),
+                                                     self.path,
+                                                     sudo=self.sudo_password.text())
+
+                    if open_command[0] is not None:
+                        self.message.setText('Tomb Opened Successfully')
+
+            self.tomb_path.clear()
+            self.key_path.clear()
+            self.key_password.clear()
+            self.sudo_password.clear()
+
+
 class ListTomb(QWidget):
     """Creates the abstract widget to be used as a list page."""
 
@@ -446,6 +591,7 @@ class Mausoleum(QDialog):
         self.create_page = CreateTomb(self.tomb_current_path)
         self.open_page = OpenTomb(self.tomb_current_path)
         self.close_page = CloseTomb(self.tomb_current_path)
+        self.resize_page = ResizeTomb(self.tomb_current_path)
         self.list_page = ListTomb(self.tomb_current_path)
         self.config_page = ConfigTomb()
 
@@ -453,6 +599,7 @@ class Mausoleum(QDialog):
         self.pages.addTab(self.create_page, 'Create')
         self.pages.addTab(self.open_page, 'Open')
         self.pages.addTab(self.close_page, 'Close')
+        self.pages.addTab(self.resize_page, 'Resize')
         self.pages.addTab(self.list_page, 'List')
         self.pages.addTab(self.config_page, 'Config')
 
@@ -465,6 +612,7 @@ class Mausoleum(QDialog):
         self.open_page.open_button.clicked.connect(self.update_list_items)
         self.close_page.close_all_button.clicked.connect(self.update_list_items)
         self.close_page.force_close_button.clicked.connect(self.update_list_items)
+        self.resize_page.resize_button.clicked.connect(self.update_list_items)
 
     def update_list_items(self):
         """Update the list of active tombs whenever a tomb is opened or closed."""

@@ -86,3 +86,12 @@ def test_close_page_force_close(window, qtbot):
     window.pages.setCurrentIndex(2)
     button = window.close_page.force_close_button
     qtbot.mouseClick(button, Qt.LeftButton)
+
+
+def test_resize_page(window, qtbot, name, key, password):
+    """Test tomb resizing on the Resize tab."""
+    window.pages.setCurrentIndex(3)
+    window.resize_page.tomb_path.setText(name)
+    window.resize_page.key_path.setText(key)
+    window.resize_page.key_password.setText(password)
+    window.resize_page.size_box.setValue(50)
