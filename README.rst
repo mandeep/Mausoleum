@@ -77,6 +77,12 @@ Example of opening an existing tomb::
     $  mausoleum enter secret.tomb
     Password:
 
+Example of resizing an existing tomb::
+
+    $  mausoleum alter secret.tomb 200
+    Password:
+
+
 *******
 Wrapper
 *******
@@ -93,9 +99,7 @@ Mausoleum may be imported as a module as seen in the following example:
 
         for name in names:
             key = '{}.key' .format(name)
-            mausoleum.wrapper.dig_tomb(name, size)
-            mausoleum.wrapper.forge_tomb(key, password)
-            mausoleum.wrapper.lock_tomb(name, key, password)
+            mausoleum.wrapper.construct_tomb(name, size, key, password)
 
 *************
 Contributions
