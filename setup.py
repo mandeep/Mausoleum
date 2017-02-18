@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='mausoleum',
-    version='0.5.1',
+    version='0.6.0',
     description='A Python GUI, CLI, and wrapper for Tomb',
     author='Mandeep',
     author_email='info@mandeep.xyz',
@@ -11,7 +11,7 @@ setup(
     url='https://github.com/mandeep/Mausoleum',
     packages=['mausoleum', 'mausoleum.images',
               'mausoleum.tests'],
-    package_data={'mausoleum.images': ['*.png'], 'mausoleum': ['*.toml']},
+    package_data={'mausoleum.images': ['*.png'], 'mausoleum': ['*.toml'], 'mausoleum.tests': ['*.jpg']},
     entry_points={
         'console_scripts': [
             'mausoleum-gui=mausoleum.application:main',

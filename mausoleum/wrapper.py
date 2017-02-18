@@ -29,7 +29,7 @@ def forge_tomb(key, password, path='tomb', kdf=0, sudo=None, debug=False):
     sudo -- the sudo password of the current admin, default is None
     debug -- used to test key generation
     """
-    arguments = ['sudo', '--stdin', path, 'forge', '--unsafe', '--tomb-pwd', password, key]
+    arguments = ['sudo', '--stdin', path, 'forge', '--unsafe', '--tomb-pwd', password, '-k', key]
 
     if debug:
         arguments.extend(['--ignore-swap', '--use-urandom'])
@@ -188,6 +188,47 @@ def slam_tombs(path='tomb'):
     path -- the path to the tomb executable
     """
     return subprocess.call([path, 'slam'])
+
+
+def engrave_tomb(key, path='tomb'):
+    """Transform a tomb key into a QR code.
+
+    Positional argument:
+    key -- the name of the container's key, e.g. secret.tomb.key
+
+    Keyword arguments:
+    path -- the path to the tomb executable
+    """
+    return subprocess.call([path, 'engrave', '-k', key])
+
+
+def bury_tomb(image, key, password, path='tomb'):
+    """Transform a tomb key into a QR code.
+
+    Positional argument:
+    image -- the path to the image that will hide the tomb key
+    key -- the name of the container's key, e.g. secret.tomb.key
+    password -- the password of the container's key
+
+    Keyword arguments:
+    path -- the path to the tomb executable
+    """
+    return subprocess.call(['sudo', '--stdin', path, 'bury', image,
+                            '-k', key, '--unsafe', '--tomb-pwd', password])
+
+
+def exhume_tomb(image, password, path='tomb'):
+    """Exhume a tomb key from the given image file and print the key to stdout.
+
+    Positional argument:
+    image -- the path to the image that contains the tomb key
+    password -- the password of the container's key
+
+    Keyword arguments:
+    path -- the path to the tomb executable
+    """
+    return subprocess.call(['sudo', '--stdin', path, 'exhume', image,
+                            '--unsafe', '--tomb-pwd', password])
 
 
 @click.group()

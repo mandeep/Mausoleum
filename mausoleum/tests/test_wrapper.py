@@ -1,3 +1,5 @@
+import pkg_resources
+
 from click.testing import CliRunner
 import pytest
 
@@ -20,6 +22,13 @@ def key():
 def password():
     """Use SUPER_SECURE_PASSWORD as the tomb password to pass to test functions."""
     return 'SUPER_SECURE_PASSWORD'
+
+
+@pytest.fixture
+def image_file():
+    """Pass a JPEG file resource as an argument to the unit tests."""
+    file = pkg_resources.resource_filename('mausoleum.tests', 'test.jpg')
+    return file
 
 
 def test_dig_tomb(name):
@@ -72,9 +81,24 @@ def test_tomb_slam(name, key, password):
     wrapper.slam_tombs()
 
 
+def test_engrave_tomb(key):
+    """Test engrave a tomb inside a QR code."""
+    wrapper.engrave_tomb(key)
+
+
+def test_bury_tomb(image_file, key, password):
+    """Test bury tomb key inside a JPEG image."""
+    wrapper.bury_tomb(image_file, key, password)
+
+
 def test_resize_tomb(name, key, password):
     """Test resizing the created tomb to 20mb."""
     wrapper.resize_tomb(name, 20, key, password)
+
+
+def test_exhume_tomb(image_file, password):
+    """Test exhuming a key from an image file."""
+    wrapper.exhume_tomb(image_file, password)
 
 
 def test_resize_cli(name, password):

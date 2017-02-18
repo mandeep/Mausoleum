@@ -2,7 +2,7 @@ after_success:
 - coveralls
 before_install:
 - sudo apt-get update
-- sudo apt-get install -y python3-pyqt5 zsh gnupg cryptsetup pinentry-curses
+- sudo apt-get install -y python3-pyqt5 zsh gnupg cryptsetup pinentry-curses steghide qrencode
   gawk
 deploy:
   true:
@@ -14,9 +14,9 @@ deploy:
   distributions: sdist bdist_wheel
 dist: trusty
 install:
-- wget https://files.dyne.org/tomb/Tomb-2.3.tar.gz
-- tar xvfz Tomb-2.3.tar.gz
-- pushd Tomb-2.3 && sudo make install && popd
+- wget https://files.dyne.org/tomb/old-releases/Tomb-2.2.tar.gz
+- tar xvfz Tomb-2.2.tar.gz
+- pushd tomb-2.2 && sudo make install && popd
 - python setup.py install
 - pip3 install coverage
 - pip3 install coveralls
