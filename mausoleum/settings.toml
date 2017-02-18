@@ -1,7 +1,7 @@
 [application]
 
 name = "Mausoleum"
-version = "0.4.2"
+version = "0.6.1"
 
 [configuration]
 
