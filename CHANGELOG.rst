@@ -13,8 +13,29 @@ GUI
 Additions
 ~~~~~~~~~
 
--  Operations on keys
 -  Ability to minimize to system tray
+
+0.6.0 - 2017-02-18
+==================
+
+Wrapper
+-------
+
+Added
+~~~~~
+
+-  Ability to engrave tomb key inside QR code
+-  Ability to bury tomb key inside an existing image file
+-  Ability to exhume tomb key from an existing image file
+
+0.5.1 - 2017-02-17
+==================
+
+Changed
+~~~~~~~
+
+-  New GUI screenshot
+-  Updated README with information regarding resizing of tombs
 
 0.5.0 - 2017-02-16
 ==================
