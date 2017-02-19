@@ -86,11 +86,6 @@ def test_resize_tomb(name, key, password):
     wrapper.resize_tomb(name, 20, key, password)
 
 
-def test_exhume_tomb(image_file, password):
-    """Test exhuming a key from an image file."""
-    wrapper.exhume_tomb(image_file, password)
-
-
 def test_resize_cli(name, password):
     """Test the resize CLI command."""
     runner = CliRunner()
@@ -108,7 +103,7 @@ def test_cli_mold(key):
 def test_cli_etch(image_file, key, password):
     """Test the etch CLI command which uses the bury function."""
     runner = CliRunner()
-    result = runner.invoke(wrapper.cli, ['bury', image_file, key], input=password)
+    result = runner.invoke(wrapper.cli, ['etch', image_file, key], input=password)
     assert not result.exception
 
 
