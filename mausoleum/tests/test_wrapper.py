@@ -81,28 +81,34 @@ def test_tomb_slam(name, key, password):
     wrapper.slam_tombs()
 
 
-def test_engrave_tomb(key):
-    """Test engrave a tomb inside a QR code."""
-    wrapper.engrave_tomb(key)
-
-
-def test_bury_tomb(image_file, key, password):
-    """Test bury tomb key inside a JPEG image."""
-    wrapper.bury_tomb(image_file, key, password)
-
-
 def test_resize_tomb(name, key, password):
     """Test resizing the created tomb to 20mb."""
     wrapper.resize_tomb(name, 20, key, password)
-
-
-def test_exhume_tomb(image_file, password):
-    """Test exhuming a key from an image file."""
-    wrapper.exhume_tomb(image_file, password)
 
 
 def test_resize_cli(name, password):
     """Test the resize CLI command."""
     runner = CliRunner()
     result = runner.invoke(wrapper.cli, ['alter', '--open', name, '30'], input=password)
+    assert not result.exception
+
+
+def test_cli_mold(key):
+    """Test the mold CLI command which uses the engrave function."""
+    runner = CliRunner()
+    result = runner.invoke(wrapper.cli, ['mold', key])
+    assert not result.exception
+
+
+def test_cli_etch(image_file, key, password):
+    """Test the etch CLI command which uses the bury function."""
+    runner = CliRunner()
+    result = runner.invoke(wrapper.cli, ['etch', image_file, key], input=password)
+    assert not result.exception
+
+
+def test_cli_resurrect(image_file, password):
+    """Test the resurrect CLI command which uses the exhume function."""
+    runner = CliRunner()
+    result = runner.invoke(wrapper.cli, ['resurrect', image_file], input=password)
     assert not result.exception

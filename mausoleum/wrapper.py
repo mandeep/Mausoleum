@@ -203,7 +203,7 @@ def engrave_tomb(key, path='tomb'):
 
 
 def bury_tomb(image, key, password, path='tomb'):
-    """Transform a tomb key into a QR code.
+    """Embed a tomb key into an existing JPEG image.
 
     Positional argument:
     image -- the path to the image that will hide the tomb key
@@ -309,3 +309,33 @@ def alter(name, size, key, password, open):
 
     if open:
         open_tomb(name, key, password)
+
+
+@cli.command()
+@click.argument('key')
+def mold(key):
+    """Embed an existing tomb key into a QR code.
+
+    Requires the QREncode package.
+    """
+    engrave_tomb(key)
+
+
+@cli.command()
+@click.argument('image')
+@click.argument('key')
+@click.option('--password', prompt=True, hide_input=True, confirmation_prompt=False)
+def etch(image, key, password):
+    """Embed an existing tomb key into an existing JPEG image.
+
+    Requires the Steghide package.
+    """
+    bury_tomb(image, key, password)
+
+
+@cli.command()
+@click.argument('image')
+@click.option('--password', prompt=True, hide_input=True, confirmation_prompt=False)
+def resurrect(image, password):
+    """Print to stdout a tomb key that's embedded in a JPEG image."""
+    exhume_tomb(image, password)

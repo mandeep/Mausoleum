@@ -54,6 +54,9 @@ With Mausoleum installed, the command line application can be invoked with the f
         construct               Dig, forge, and lock a new tomb 
         enter                   Open an existing tomb
         alter                   Resize an existing tomb
+        mold                    Create a QR code from an existing tomb key
+        etch                    Embed an existing tomb key inside a JPEG image
+        resurrect               Print to stdout the tomb key embedded within the JPEG image
 
     positional arguments:
         name                    Name of the new or existing tomb

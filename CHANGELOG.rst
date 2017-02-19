@@ -15,6 +15,19 @@ Additions
 
 -  Ability to minimize to system tray
 
+0.7.0 - 2017-02-18
+==================
+
+CLI
+---
+
+Added
+~~~~~
+
+-  Ability to engrave tomb key inside QR code via command line
+-  Ability to bury tomb key inside an existing image file via command line
+-  Ability to exhume tomb key from an existing image file via command line
+
 0.6.0 - 2017-02-18
 ==================
 
