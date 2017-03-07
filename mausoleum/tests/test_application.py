@@ -1,3 +1,5 @@
+import pkg_resources
+
 import pytest
 
 from PyQt5.QtCore import Qt
@@ -15,7 +17,8 @@ def window(qtbot):
     new_window = application.Mausoleum()
     qtbot.add_widget(new_window)
     new_window.show()
-    return new_window
+    yield new_window
+    new_window.close()
 
 
 @pytest.fixture
@@ -34,6 +37,13 @@ def key():
 def password():
     """Use test_password as the tomb password to pass to test functions."""
     return 'test_password'
+
+
+@pytest.fixture
+def image_file():
+    """Pass a JPEG file resource as an argument to the unit tests."""
+    file = pkg_resources.resource_filename('mausoleum.tests', 'test.jpg')
+    return file
 
 
 def test_window_title(window):
@@ -95,3 +105,32 @@ def test_resize_page(window, qtbot, name, key, password):
     window.resize_page.key_path.setText(key)
     window.resize_page.key_password.setText(password)
     window.resize_page.size_box.setValue(50)
+    button = window.resize_page.resize_button
+    qtbot.mouseClick(button, Qt.LeftButton)
+
+
+def test_engrave_key(window, qtbot, key):
+    """Test engraving the key inside a QR image."""
+    window.pages.setCurrentIndex(5)
+    window.advanced_page.key_path.setText(key)
+    button = window.advanced_page.engrave_button
+    qtbot.mouseClick(button, Qt.LeftButton)
+
+
+def test_bury_key(window, qtbot, key, image_file, password):
+    """Test burying the key inside the given image file."""
+    window.pages.setCurrentIndex(5)
+    window.advanced_page.key_path.setText(key)
+    window.advanced_page.image_path.setText(image_file)
+    window.advanced_page.key_password.setText(password)
+    button = window.advanced_page.bury_button
+    qtbot.mouseClick(button, Qt.LeftButton)
+
+
+def exhume_bury_key(window, qtbot, image_file, password):
+    """Test exhuming the key from inside the given image file."""
+    window.pages.setCurrentIndex(5)
+    window.advanced_page.image_path.setText(image_file)
+    window.advanced_page.key_password.setText(password)
+    button = window.advanced_page.exhume_button
+    qtbot.mouseClick(button, Qt.LeftButton)

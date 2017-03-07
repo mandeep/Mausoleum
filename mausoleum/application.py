@@ -429,7 +429,7 @@ class ResizeTomb(QWidget):
 
     def select_key_path(self):
         """Select the path of the key to open."""
-        filename, ok = QFileDialog.getOpenFileName(self, 'Tomb Container')
+        filename, ok = QFileDialog.getOpenFileName(self, 'Tomb Key')
 
         if ok:
             self.key_path.setText(filename)
@@ -466,6 +466,112 @@ class ResizeTomb(QWidget):
             self.sudo_password.clear()
 
 
+class AdvancedTomb(QWidget):
+    """Creates the abstract widget to be used as the advanced page."""
+
+    def __init__(self, path, parent=None):
+        """Initialize the advanced page's configuration group."""
+        super(AdvancedTomb, self).__init__(parent)
+
+        self.path = path
+
+        layout = QVBoxLayout()
+
+        advanced_group = QGroupBox('Advanced Tomb Operations')
+
+        self.key_path = QLineEdit()
+        key_path_button = QPushButton('Select Path')
+        key_path_layout = QHBoxLayout()
+        key_path_layout.addWidget(self.key_path)
+        key_path_layout.addWidget(key_path_button)
+
+        self.image_path = QLineEdit()
+        image_path_button = QPushButton('Select Path')
+        image_path_layout = QHBoxLayout()
+        image_path_layout.addWidget(self.image_path)
+        image_path_layout.addWidget(image_path_button)
+
+        self.key_password = QLineEdit()
+        self.key_password.setEchoMode(QLineEdit.Password)
+
+        advanced_layout = QFormLayout()
+        advanced_layout.addRow('Key Path:', key_path_layout)
+        advanced_layout.addRow('Image Path:', image_path_layout)
+        advanced_layout.addRow('Key Password:', self.key_password)
+        advanced_group.setLayout(advanced_layout)
+
+        self.engrave_button = QPushButton('Engrave Tomb')
+        self.engrave_button.setFixedWidth(200)
+        self.bury_button = QPushButton('Bury Tomb')
+        self.bury_button.setFixedWidth(200)
+        self.exhume_button = QPushButton('Exhume Tomb')
+        self.exhume_button.setFixedWidth(200)
+
+        button_layout = QVBoxLayout()
+        button_layout.addWidget(self.engrave_button, alignment=Qt.AlignCenter)
+        button_layout.addWidget(self.bury_button, alignment=Qt.AlignCenter)
+        button_layout.addWidget(self.exhume_button, alignment=Qt.AlignCenter)
+        button_layout.setContentsMargins(25, 25, 25, 25)
+
+        self.message = QLabel()
+
+        layout.addWidget(advanced_group)
+        layout.addLayout(button_layout)
+        layout.addWidget(self.message, alignment=Qt.AlignCenter)
+        layout.addStretch(1)
+
+        self.setLayout(layout)
+
+        key_path_button.clicked.connect(self.select_key_path)
+        image_path_button.clicked.connect(self.select_image_path)
+        self.engrave_button.clicked.connect(self.engrave_selected_key)
+        self.bury_button.clicked.connect(self.bury_selected_key)
+        self.exhume_button.clicked.connect(self.exhume_selected_key)
+
+    def select_key_path(self):
+        """Select the path of the key to open."""
+        filename, ok = QFileDialog.getOpenFileName(self, 'Tomb Key')
+
+        if ok:
+            self.key_path.setText(filename)
+
+    def select_image_path(self):
+        """Select the path of the image to open."""
+        filename, ok = QFileDialog.getOpenFileName(self, 'Image')
+
+        if ok:
+            self.image_path.setText(filename)
+
+    def engrave_selected_key(self):
+        """Engrave the selected key into a QR png using QREncode."""
+        engrave_command = wrapper.engrave_tomb(self.key_path.text())
+
+        if engrave_command is not None:
+            self.message.setText('Key Engraved Successfully')
+            self.key_path.clear()
+
+    def bury_selected_key(self):
+        """Bury the selected key inside the given image using Steghide."""
+        bury_command = wrapper.bury_tomb(self.image_path.text(),
+                                         self.key_path.text(),
+                                         self.key_password.text())
+
+        if bury_command is not None:
+            self.message.setText('Key Buried Successfully')
+            self.key_path.clear()
+            self.image_path.clear()
+            self.key_password.clear()
+
+    def exhume_selected_key(self):
+        """Retrieve a buried key from the given image using Steghide."""
+        exhume_command = wrapper.exhume_tomb(self.image_path.text(), self.key_password.text())
+
+        if exhume_command is not None:
+            self.message.setText('Key Exhumed Successfully')
+            self.image_path.clear()
+            self.key_password.clear()
+
+
 class ListTomb(QWidget):
     """Creates the abstract widget to be used as a list page."""
 
@@ -492,13 +598,13 @@ class ListTomb(QWidget):
         layout.addWidget(list_group)
         self.setLayout(layout)
 
-        self.update_list_button.clicked.connect(self.update_list_items)
+    #     self.update_list_button.clicked.connect(self.update_list_items)
 
-    def update_list_items(self):
-        """Clear the list and add any active tombs."""
-        self.tomb_list.clear()
-        for line in wrapper.list_tombs(self.path):
-            self.tomb_list.addItem(line)
+    # def update_list_items(self):
+    #     """Clear the list and add any active tombs."""
+    #     self.tomb_list.clear()
+    #     for line in wrapper.list_tombs(self.path):
+    #         self.tomb_list.addItem(line)
 
 
 class ConfigTomb(QWidget):
@@ -593,6 +699,7 @@ class Mausoleum(QDialog):
         self.close_page = CloseTomb(self.tomb_current_path)
         self.resize_page = ResizeTomb(self.tomb_current_path)
         self.list_page = ListTomb(self.tomb_current_path)
+        self.advanced_page = AdvancedTomb(self.tomb_current_path)
         self.config_page = ConfigTomb()
 
         self.pages = QTabWidget()
@@ -601,6 +708,7 @@ class Mausoleum(QDialog):
         self.pages.addTab(self.close_page, 'Close')
         self.pages.addTab(self.resize_page, 'Resize')
         self.pages.addTab(self.list_page, 'List')
+        self.pages.addTab(self.advanced_page, 'Advanced')
         self.pages.addTab(self.config_page, 'Config')
 
         dialog_layout = QHBoxLayout()
