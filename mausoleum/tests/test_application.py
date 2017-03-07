@@ -18,7 +18,6 @@ def window(qtbot):
     qtbot.add_widget(new_window)
     new_window.show()
     yield new_window
-    new_window.close()
 
 
 @pytest.fixture

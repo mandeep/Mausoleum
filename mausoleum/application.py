@@ -598,13 +598,13 @@ class ListTomb(QWidget):
         layout.addWidget(list_group)
         self.setLayout(layout)
 
-    #     self.update_list_button.clicked.connect(self.update_list_items)
+        self.update_list_button.clicked.connect(self.update_list_items)
 
-    # def update_list_items(self):
-    #     """Clear the list and add any active tombs."""
-    #     self.tomb_list.clear()
-    #     for line in wrapper.list_tombs(self.path):
-    #         self.tomb_list.addItem(line)
+    def update_list_items(self):
+        """Clear the list and add any active tombs."""
+        self.tomb_list.clear()
+        for line in wrapper.list_tombs(self.path):
+            self.tomb_list.addItem(line)
 
 
 class ConfigTomb(QWidget):
