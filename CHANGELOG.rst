@@ -15,6 +15,18 @@ Additions
 
 -  Ability to minimize to system tray
 
+
+0.8.1 - 2017-03-22
+==================
+
+GUI
+---
+
+Additions
+~~~~~~~~~
+
+-  New screenshot showcasing Advanced tab
+
 0.8.0 - 2017-03-07
 ==================
 
