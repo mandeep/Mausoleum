@@ -15,6 +15,16 @@ Additions
 
 -  Ability to minimize to system tray
 
+0.8.2 - 2017-03-22
+==================
+
+GUI
+---
+
+Fixed
+~~~~~
+-  Fixed issue with changelog not rendering properly 
+
 
 0.8.1 - 2017-03-22
 ==================
