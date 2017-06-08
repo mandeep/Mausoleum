@@ -15,16 +15,21 @@ Additions
 
 -  Ability to minimize to system tray
 
+0.8.3 - 2017-06-07
+==================
+
+-  Replaced Codacity with Scrutinizer
+
 0.8.2 - 2017-03-22
 ==================
 
 GUI
 ---
 
-Fixed
+Fixes
 ~~~~~
--  Fixed issue with changelog not rendering properly 
 
+-  Fixed issue with changelog not rendering properly 
 
 0.8.1 - 2017-03-22
 ==================
@@ -43,8 +48,8 @@ Additions
 GUI
 ---
 
-Added
-~~~~~
+Additions
+~~~~~~~~~
 
 -  Ability to engrave tomb key inside QR code
 -  Ability to bury tomb key inside an existing image file
@@ -56,8 +61,8 @@ Added
 CLI
 ---
 
-Added
-~~~~~
+Additions
+~~~~~~~~~
 
 -  Ability to engrave tomb key inside QR code via command line
 -  Ability to bury tomb key inside an existing image file via command line
@@ -69,8 +74,8 @@ Added
 Wrapper
 -------
 
-Added
-~~~~~
+Additions
+~~~~~~~~~
 
 -  Ability to engrave tomb key inside QR code
 -  Ability to bury tomb key inside an existing image file
@@ -82,7 +87,7 @@ Added
 GUI
 ---
 
-Changed
+Changes
 ~~~~~~~
 
 -  New GUI screenshot
@@ -94,8 +99,8 @@ Changed
 GUI
 ---
 
-Added
-~~~~~
+Additions
+~~~~~~~~~
 
 -  Ability to resize tombs 
 
@@ -105,11 +110,10 @@ Added
 GUI
 ---
 
-Added
-~~~~~
+Additions
+~~~~~~~~~
 
 -  Key path automatically filled if found when opening tomb
-
 
 0.4.1 - 2016-12-30
 ==================
@@ -117,15 +121,15 @@ Added
 Wrapper
 -------
 
-Added
-~~~~~
+Additions
+~~~~~~~~~
 
 -  KDF iterations in forge_tomb function
 
 GUI
 ---
 
-Fixed
+Fixes
 ~~~~~
 
 -  KDF iterations now working
@@ -136,16 +140,16 @@ Fixed
 Wrapper
 -------
 
-Added
-~~~~~
+Additions
+~~~~~~~~~
 
 -  Read only keyword argument to use with open_tomb function
 
 GUI
 ---
 
-Added
-~~~~~
+Additions
+~~~~~~~~~
 
 -  Ability to open Tombs in read only mode
 
@@ -155,8 +159,8 @@ Added
 Wrapper
 -------
 
-Added
-~~~~~
+Additions
+~~~~~~~~~
 
 -  New function construct_tomb that digs, forges, and locks a new tomb container
 
@@ -167,7 +171,7 @@ GUI
 ---
 
 Fixes
-~~~~~~
+~~~~~
 
 -  Settings.toml file now recognized
 
@@ -178,7 +182,7 @@ GUI
 ---
 
 Additions
-~~~~~~~~~~
+~~~~~~~~~
 
 -  Warning message if Tomb installation not found
 
