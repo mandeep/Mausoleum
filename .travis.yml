@@ -2,7 +2,7 @@ after_success:
 - coveralls
 before_install:
 - sudo apt-get update
-- sudo apt-get install -y python3-pyqt5 zsh gnupg cryptsetup pinentry-curses steghide qrencode
+- sudo apt-get install -y zsh gnupg cryptsetup pinentry-curses steghide qrencode
   gawk
 deploy:
   true:
@@ -17,6 +17,7 @@ install:
 - wget https://files.dyne.org/tomb/old-releases/Tomb-2.2.tar.gz
 - tar xvfz Tomb-2.2.tar.gz
 - pushd tomb-2.2 && sudo make install && popd
+- pip3 install pyqt5
 - python setup.py install
 - pip3 install coverage
 - pip3 install coveralls
@@ -29,7 +30,8 @@ language: python
 notifications:
   email: false
 python:
-- 3.4_with_system_site_packages
+- '3.5'
+- '3.6'
 script:
 - py.test -s -v --cov=./
 sudo: required
