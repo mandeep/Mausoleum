@@ -15,6 +15,11 @@ Additions
 
 -  Ability to minimize to system tray
 
+0.8.4 - 2017-07-25
+==================
+
+-  Moved tests directory from the package directory to the project root directory
+
 0.8.3 - 2017-06-07
 ==================
 

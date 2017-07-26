@@ -1,4 +1,4 @@
-import pkg_resources
+import os
 
 from click.testing import CliRunner
 import pytest
@@ -27,7 +27,7 @@ def password():
 @pytest.fixture
 def image_file():
     """Pass a JPEG file resource as an argument to the unit tests."""
-    file = pkg_resources.resource_filename('mausoleum.tests', 'test.jpg')
+    file = os.path.join(os.path.dirname(__file__), 'test.jpg')
     return file
 
 
