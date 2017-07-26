@@ -3,4 +3,4 @@ omit =
     setup.py
     mausoleum/__main__.py
     */__init__.py
-    mausoleum/tests/*
+    tests/*

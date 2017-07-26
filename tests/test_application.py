@@ -1,8 +1,7 @@
-import pkg_resources
-
-import pytest
+import os
 
 from PyQt5.QtCore import Qt
+import pytest
 
 from mausoleum import application
 
@@ -41,7 +40,7 @@ def password():
 @pytest.fixture
 def image_file():
     """Pass a JPEG file resource as an argument to the unit tests."""
-    file = pkg_resources.resource_filename('mausoleum.tests', 'test.jpg')
+    file = os.path.join(os.path.dirname(__file__), 'test.jpg')
     return file
 
 
