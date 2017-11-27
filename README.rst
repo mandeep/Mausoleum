@@ -1,6 +1,6 @@
 .. image:: mausoleum.png
 
-|travis| |coveralls| |dependency| |quality| |pypiversion| |pypistatus| |pythonversion| |pypiformat| |license|
+|travis| |coveralls| |quality| |pypiversion| |pypistatus| |pythonversion| |pypiformat| |license|
 
 * Mausoleum is in maintenance mode with support for Tomb 2.2 due to regressions in user space in later releases of Tomb.
 
@@ -118,8 +118,6 @@ changes. For other changes, please open an issue on the repository's issue track
     :target: https://travis-ci.org/mandeep/Mausoleum
 .. |coveralls| image:: https://img.shields.io/coveralls/mandeep/Mausoleum.svg 
     :target: https://coveralls.io/github/mandeep/Mausoleum
-.. |dependency| image:: https://img.shields.io/librariesio/github/mandeep/Mausoleum.svg
-    :target: https://dependencyci.com/github/mandeep/Mausoleum
 .. |quality| image:: https://img.shields.io/scrutinizer/g/mandeep/Mausoleum.svg
     :target: https://scrutinizer-ci.com/g/mandeep/Mausoleum/
 .. |pypiversion| image:: https://img.shields.io/pypi/v/mausoleum.svg 
