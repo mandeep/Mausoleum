@@ -114,8 +114,8 @@ Contributions
 All contributions are welcome! Feel free to submit a pull request for trivial
 changes. For other changes, please open an issue on the repository's issue tracker.
 
-.. |travis| image:: https://img.shields.io/travis/mandeep/Mausoleum.svg 
-    :target: https://travis-ci.org/mandeep/Mausoleum
+.. |travis| image:: https://img.shields.io/travis/mandeep/Mausoleum/master.svg
+    :target: https://travis-ci.org/mandeep/Mausoleum/
 .. |coveralls| image:: https://img.shields.io/coveralls/mandeep/Mausoleum.svg 
     :target: https://coveralls.io/github/mandeep/Mausoleum
 .. |quality| image:: https://img.shields.io/scrutinizer/g/mandeep/Mausoleum.svg
