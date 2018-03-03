@@ -1,3 +1,4 @@
+import re
 import subprocess
 
 import click
@@ -156,8 +157,9 @@ def list_tombs(path='tomb'):
     try:
         tomb_output = subprocess.check_output([path, 'list', '--no-color'],
                                               stderr=subprocess.STDOUT,
-                                              universal_newlines=True).split('\n')
-        return [line.replace('tomb  .  ', '') for line in tomb_output if 'open on' in line]
+                                              universal_newlines=True)
+        return re.findall(r'\[.*\] open on .*', tomb_output)
+
     except subprocess.CalledProcessError:
         return []
 

@@ -15,6 +15,16 @@ Additions
 
 -  Ability to minimize to system tray
 
+0.8.6 - 2018-03-03
+==================
+
+-  Bring project out of maintenance mode and use Tomb 2.5
+
+0.8.5 - 2017-11-27
+==================
+
+-  Move project into maintenance mode
+
 0.8.4 - 2017-07-25
 ==================
 

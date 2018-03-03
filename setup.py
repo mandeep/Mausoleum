@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='mausoleum',
-    version='0.8.5',
+    version='0.8.6',
     description='A Python GUI, CLI, and wrapper for Tomb',
     author='Mandeep',
     author_email='info@mandeep.xyz',
@@ -25,7 +25,7 @@ setup(
     keywords='Mausoleum',
     classifiers=[
         'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
-        'Development Status :: 7 - Inactive',
+        'Development Status :: 4 - Beta',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
     ]
