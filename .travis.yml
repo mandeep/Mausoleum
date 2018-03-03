@@ -41,4 +41,6 @@ deploy:
   password:
     secure: "Zq9BTLd1Ya/ZKbicIg4uXMcNfVoPX5dN+RnOgDXdRbQDGtB7OO3zmKC8P/KbtyFiI5bUHdilUzRA4rig/PSHY/guztDNmn20GwSowoSAx9jF/ouhhsRypjnA9QJzWuBLQTDmDtU7ETGriNOyxtxP0y/SF5diuwHmhaf8iyxFposIs6TtQenFF2HT5+0AFIn8eWG/+gK17vERkrq+ar1a2dbCwWTarS/z+GnE1hGh9Ym89LHza9ULyiTnMxd30srX17T4Oiq7N8OIY5L4QobtgctMcKH7NArcLwtE10KrPKDB2tjp4+DLBDKXO/jHuhg9LxDeiirgLGWLJwFAGUGhY3wP74tw7B6rVfUGSEDxVktq5FjCZGXmCm4pJuDb/FeHfxJGzhFYvTMwZFhxmnzoHBFQLE6QH9cmzrvPeYQr9KRsICQ+MwKKVul68PKppeRFqPQfcH/wPizULU7+fDdlwdqNjjlHvZFwk6Efc2M4XpTr2qpPMjY68Q7V3Fr0zI1E0AwEIpseLVfhlkqXdygvK50utaUqQEXS21Iu8RBqKKUBUm7DsjgTlIsQrtFnZkbq+R3tdns8NWj1qQ1uEO7XG3QHulmCc/zeay1WUvPVUQ7UrXexqtnvKJJt/FJckvM6QXK/UCsMcknnIrhYFQKX++fPnhEoS1W2q/0+l07ZgrY="
   provider: pypi
+  edge:
+    branch: v1.8.45
   distributions: sdist bdist_wheel
