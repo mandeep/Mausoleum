@@ -1,5 +1,3 @@
-import os
-
 from PyQt5.QtCore import Qt
 import pytest
 
@@ -35,13 +33,6 @@ def key():
 def password():
     """Use test_password as the tomb password to pass to test functions."""
     return 'test_password'
-
-
-@pytest.fixture
-def image_file():
-    """Pass a JPEG file resource as an argument to the unit tests."""
-    file = os.path.join(os.path.dirname(__file__), 'test.jpg')
-    return file
 
 
 def test_window_title(window):

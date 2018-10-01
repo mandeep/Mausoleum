@@ -1,5 +1,3 @@
-import os
-
 from click.testing import CliRunner
 import pytest
 
@@ -22,13 +20,6 @@ def key():
 def password():
     """Use SUPER_SECURE_PASSWORD as the tomb password to pass to test functions."""
     return 'SUPER_SECURE_PASSWORD'
-
-
-@pytest.fixture
-def image_file():
-    """Pass a JPEG file resource as an argument to the unit tests."""
-    file = os.path.join(os.path.dirname(__file__), 'test.jpg')
-    return file
 
 
 def test_dig_tomb(name):
