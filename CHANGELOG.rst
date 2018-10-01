@@ -15,6 +15,12 @@ Additions
 
 -  Ability to minimize to system tray
 
+0.8.7 - 2018-09-30
+==================
+
+-  Run tests in a temporary directory so that artifacts aren't left in the current working directory
+
+
 0.8.6 - 2018-03-03
 ==================
 
@@ -44,7 +50,7 @@ GUI
 Fixes
 ~~~~~
 
--  Fixed issue with changelog not rendering properly 
+-  Fixed issue with changelog not rendering properly
 
 0.8.1 - 2017-03-22
 ==================
@@ -117,7 +123,7 @@ GUI
 Additions
 ~~~~~~~~~
 
--  Ability to resize tombs 
+-  Ability to resize tombs
 
 0.4.2 - 2016-12-31
 ==================
