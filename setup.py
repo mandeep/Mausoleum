@@ -19,7 +19,7 @@ setup(
     },
     install_requires=[
         'appdirs==1.4.3',
-        'click==6.7',
+        'click==7.0',
         'pytoml==0.1.13',
     ],
     keywords='Mausoleum',
