@@ -21,11 +21,11 @@ install:
 - pip install pyqt5
 - pip install coverage
 - pip install coveralls
-- pip install pytest
-- pip install pytest-cov
+- pip install pytest==3.8.1
+- pip install pytest-cov==2.6.0
 - pip install pytest-mock
-- pip install pytest-qt
-- pip install pytest-xvfb
+- pip install pytest-qt==3.2.0
+- pip install pytest-xvfb==1.1.0
 - pip install .
 
 script:
