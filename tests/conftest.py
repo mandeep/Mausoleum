@@ -9,7 +9,7 @@ def tmp_dir(tmpdir_factory):
     directory = tmpdir_factory.mktemp('test')
     os.chdir(str(directory))
     yield directory
-    shutil.rmtree(str(directory))
+    shutil.rmtree(str(directory), ignore_errors=True)
 
 
 @pytest.fixture
