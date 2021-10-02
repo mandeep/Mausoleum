@@ -292,6 +292,13 @@ def enter(name, key, password):
 
 @cli.command()
 @click.argument('name')
+def leave(name):
+    """Close a currently open tomb."""
+    close_tomb(name=name)
+
+
+@cli.command()
+@click.argument('name')
 @click.argument('size')
 @click.argument('key', required=False, default=None)
 @click.option('--password', prompt=True, hide_input=True, confirmation_prompt=False)
@@ -341,3 +348,17 @@ def etch(image, key, password):
 def resurrect(image, password):
     """Print to stdout a tomb key that's embedded in a JPEG image."""
     exhume_tomb(image, password)
+
+
+@cli.command(name='list')
+def list_cmd():
+    """Lists all known tombs."""
+    tombs = list_tombs()
+    for tomb in tombs:
+        print(tomb)
+
+
+@cli.command()
+def escape():
+    """Slams shut all open tombs."""
+    slam_tombs()
