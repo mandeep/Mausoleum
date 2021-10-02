@@ -78,21 +78,11 @@ class CreateTomb(QWidget):
         spinbox_layout.addLayout(kdf_box_layout)
         spinbox_layout.setAlignment(Qt.AlignLeft)
 
-        open_checkbox_layout = QHBoxLayout()
-        open_checkbox_label = QLabel('Open Upon Creation:')
-        self.open_checkbox = QCheckBox()
-        open_checkbox_layout.addWidget(open_checkbox_label)
-        open_checkbox_layout.addWidget(self.open_checkbox)
-
-        random_checkbox_layout = QHBoxLayout()
-        random_checkbox_label = QLabel('Random Integer Key:')
-        self.random_checkbox = QCheckBox()
-        random_checkbox_layout.addWidget(random_checkbox_label)
-        random_checkbox_layout.addWidget(self.random_checkbox)
-
         checkbox_layout = QVBoxLayout()
-        checkbox_layout.addLayout(open_checkbox_layout)
-        checkbox_layout.addLayout(random_checkbox_layout)
+        self.open_checkbox = QCheckBox('Open Upon Creation')
+        self.random_checkbox = QCheckBox('Random Integer Key')
+        checkbox_layout.addWidget(self.open_checkbox)
+        checkbox_layout.addWidget(self.random_checkbox)
         checkbox_layout.setAlignment(Qt.AlignLeft)
 
         parameters_layout = QHBoxLayout()
@@ -217,14 +207,9 @@ class OpenTomb(QWidget):
 
         parameters_group = QGroupBox('Mount Options')
 
-        read_only_layout = QHBoxLayout()
-        read_only_label = QLabel('Read Only:')
-        self.read_only_checkbox = QCheckBox()
-        read_only_layout.addWidget(read_only_label)
-        read_only_layout.addWidget(self.read_only_checkbox)
-
         checkbox_layout = QVBoxLayout()
-        checkbox_layout.addLayout(read_only_layout)
+        self.read_only_checkbox = QCheckBox('Read Only')
+        checkbox_layout.addWidget(self.read_only_checkbox)
         checkbox_layout.setAlignment(Qt.AlignLeft)
 
         parameters_layout = QHBoxLayout()
@@ -383,14 +368,9 @@ class ResizeTomb(QWidget):
         spinbox_layout.addLayout(size_box_layout)
         spinbox_layout.setAlignment(Qt.AlignLeft)
 
-        open_checkbox_layout = QHBoxLayout()
-        open_checkbox_label = QLabel('Open Upon Resize:')
-        self.open_checkbox = QCheckBox()
-        open_checkbox_layout.addWidget(open_checkbox_label)
-        open_checkbox_layout.addWidget(self.open_checkbox)
-
         checkbox_layout = QVBoxLayout()
-        checkbox_layout.addLayout(open_checkbox_layout)
+        self.open_checkbox = QCheckBox('Open Upon Resize')
+        checkbox_layout.addWidget(self.open_checkbox)
         checkbox_layout.setAlignment(Qt.AlignLeft)
 
         parameters_layout = QHBoxLayout()
