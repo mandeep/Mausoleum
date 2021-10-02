@@ -119,12 +119,12 @@ changes. For other changes, please open an issue on the repository's issue track
 .. |quality| image:: https://img.shields.io/scrutinizer/g/mandeep/Mausoleum.svg
     :target: https://scrutinizer-ci.com/g/mandeep/Mausoleum/
 .. |pypiversion| image:: https://img.shields.io/pypi/v/mausoleum.svg 
-    :target: https://pypi.python.org/pypi/mausoleum/
+    :target: https://pypi.org/project/mausoleum/
 .. |pypistatus| image:: https://img.shields.io/pypi/status/mausoleum.svg 
-    :target: https://pypi.python.org/pypi/mausoleum/
+    :target: https://pypi.org/project/mausoleum/
 .. |pythonversion| image:: https://img.shields.io/pypi/pyversions/mausoleum.svg 
-    :target: https://pypi.python.org/pypi/mausoleum/
+    :target: https://pypi.org/project/mausoleum/
 .. |pypiformat| image:: https://img.shields.io/pypi/format/mausoleum.svg
-    :target: https://pypi.python.org/pypi/mausoleum/
+    :target: https://pypi.org/project/mausoleum/
 .. |license| image:: https://img.shields.io/pypi/l/mausoleum.svg
-    :target: https://pypi.python.org/pypi/mausoleum/
+    :target: https://pypi.org/project/mausoleum/
