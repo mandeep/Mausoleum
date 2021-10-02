@@ -62,6 +62,7 @@ class CreateTomb(QWidget):
         self.size_box.setMaximum(999999)
         self.size_box.setMinimum(10)
         self.size_box.setFixedWidth(100)
+        size_box_label.setBuddy(self.size_box)
         size_box_layout.addWidget(size_box_label)
         size_box_layout.addWidget(self.size_box)
         size_box_layout.setSpacing(0)
@@ -70,6 +71,7 @@ class CreateTomb(QWidget):
         kdf_box_label = QLabel('KDF Iterations:')
         self.kdf_box = QSpinBox()
         self.kdf_box.setFixedWidth(100)
+        kdf_box_label.setBuddy(self.kdf_box)
         kdf_box_layout.addWidget(kdf_box_label)
         kdf_box_layout.addWidget(self.kdf_box)
 
@@ -360,6 +362,7 @@ class ResizeTomb(QWidget):
         self.size_box.setMaximum(999999)
         self.size_box.setMinimum(10)
         self.size_box.setFixedWidth(100)
+        size_box_label.setBuddy(self.size_box)
         size_box_layout.addWidget(size_box_label)
         size_box_layout.addWidget(self.size_box)
         size_box_layout.setSpacing(0)
