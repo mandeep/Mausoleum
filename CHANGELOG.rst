@@ -20,7 +20,6 @@ Additions
 
 -  Run tests in a temporary directory so that artifacts aren't left in the current working directory
 
-
 0.8.6 - 2018-03-03
 ==================
 
