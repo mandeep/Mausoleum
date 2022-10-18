@@ -62,6 +62,7 @@ class CreateTomb(QWidget):
         self.size_box.setMaximum(999999)
         self.size_box.setMinimum(10)
         self.size_box.setFixedWidth(100)
+        size_box_label.setBuddy(self.size_box)
         size_box_layout.addWidget(size_box_label)
         size_box_layout.addWidget(self.size_box)
         size_box_layout.setSpacing(0)
@@ -70,6 +71,7 @@ class CreateTomb(QWidget):
         kdf_box_label = QLabel('KDF Iterations:')
         self.kdf_box = QSpinBox()
         self.kdf_box.setFixedWidth(100)
+        kdf_box_label.setBuddy(self.kdf_box)
         kdf_box_layout.addWidget(kdf_box_label)
         kdf_box_layout.addWidget(self.kdf_box)
 
@@ -78,21 +80,11 @@ class CreateTomb(QWidget):
         spinbox_layout.addLayout(kdf_box_layout)
         spinbox_layout.setAlignment(Qt.AlignLeft)
 
-        open_checkbox_layout = QHBoxLayout()
-        open_checkbox_label = QLabel('Open Upon Creation:')
-        self.open_checkbox = QCheckBox()
-        open_checkbox_layout.addWidget(open_checkbox_label)
-        open_checkbox_layout.addWidget(self.open_checkbox)
-
-        random_checkbox_layout = QHBoxLayout()
-        random_checkbox_label = QLabel('Random Integer Key:')
-        self.random_checkbox = QCheckBox()
-        random_checkbox_layout.addWidget(random_checkbox_label)
-        random_checkbox_layout.addWidget(self.random_checkbox)
-
         checkbox_layout = QVBoxLayout()
-        checkbox_layout.addLayout(open_checkbox_layout)
-        checkbox_layout.addLayout(random_checkbox_layout)
+        self.open_checkbox = QCheckBox('Open Upon Creation')
+        self.random_checkbox = QCheckBox('Random Integer Key')
+        checkbox_layout.addWidget(self.open_checkbox)
+        checkbox_layout.addWidget(self.random_checkbox)
         checkbox_layout.setAlignment(Qt.AlignLeft)
 
         parameters_layout = QHBoxLayout()
@@ -217,14 +209,9 @@ class OpenTomb(QWidget):
 
         parameters_group = QGroupBox('Mount Options')
 
-        read_only_layout = QHBoxLayout()
-        read_only_label = QLabel('Read Only:')
-        self.read_only_checkbox = QCheckBox()
-        read_only_layout.addWidget(read_only_label)
-        read_only_layout.addWidget(self.read_only_checkbox)
-
         checkbox_layout = QVBoxLayout()
-        checkbox_layout.addLayout(read_only_layout)
+        self.read_only_checkbox = QCheckBox('Read Only')
+        checkbox_layout.addWidget(self.read_only_checkbox)
         checkbox_layout.setAlignment(Qt.AlignLeft)
 
         parameters_layout = QHBoxLayout()
@@ -375,6 +362,7 @@ class ResizeTomb(QWidget):
         self.size_box.setMaximum(999999)
         self.size_box.setMinimum(10)
         self.size_box.setFixedWidth(100)
+        size_box_label.setBuddy(self.size_box)
         size_box_layout.addWidget(size_box_label)
         size_box_layout.addWidget(self.size_box)
         size_box_layout.setSpacing(0)
@@ -383,14 +371,9 @@ class ResizeTomb(QWidget):
         spinbox_layout.addLayout(size_box_layout)
         spinbox_layout.setAlignment(Qt.AlignLeft)
 
-        open_checkbox_layout = QHBoxLayout()
-        open_checkbox_label = QLabel('Open Upon Resize:')
-        self.open_checkbox = QCheckBox()
-        open_checkbox_layout.addWidget(open_checkbox_label)
-        open_checkbox_layout.addWidget(self.open_checkbox)
-
         checkbox_layout = QVBoxLayout()
-        checkbox_layout.addLayout(open_checkbox_layout)
+        self.open_checkbox = QCheckBox('Open Upon Resize')
+        checkbox_layout.addWidget(self.open_checkbox)
         checkbox_layout.setAlignment(Qt.AlignLeft)
 
         parameters_layout = QHBoxLayout()
@@ -736,3 +719,7 @@ def main():
     window.show()
     window.move(width, height)
     sys.exit(application.exec_())
+
+
+if __name__ == "__main__":
+    main()

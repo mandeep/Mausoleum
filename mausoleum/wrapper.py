@@ -98,7 +98,7 @@ def construct_tomb(name, size, key, password, debug=False):
             lock_tomb(name, key, password)
 
 
-def open_tomb(name, key, password, path='tomb', read_only=False, sudo=None):
+def open_tomb(name, key, password, path='tomb', read_only=False, sudo=None, mountpoint=None):
     """Open a tomb container with the given key.
 
     Positional arguments:
@@ -107,12 +107,15 @@ def open_tomb(name, key, password, path='tomb', read_only=False, sudo=None):
     password -- the password of the container's key
 
     Keyword arguments:
+    mountpoint -- where to mount the tomb
     path -- the path to the tomb executable
     read_only -- mount the tomb as read only
     sudo -- the sudo password of the current admin, default is None
     """
     arguments = ['sudo', '--stdin', path, 'open', '--unsafe',
-                 '--tomb-pwd', password, name, '-k', key]
+                 '--tomb-pwd', password, '-k', key, name]
+    if mountpoint:
+        arguments.append(mountpoint)
     if read_only:
         arguments.extend(['-o', 'ro'])
 
@@ -278,7 +281,8 @@ def construct(name, size, key, password, open):
 @click.argument('name')
 @click.argument('key', required=False, default=None)
 @click.option('--password', prompt=True, hide_input=True, confirmation_prompt=False)
-def enter(name, key, password):
+@click.option('--mountpoint', default=None)
+def enter(name, key, password, mountpoint):
     """Open an existing tomb container.
 
     The default key name is the name of the tomb with .key as the suffix. If the
@@ -287,7 +291,14 @@ def enter(name, key, password):
     if key is None:
         key = '{}.key' .format(name)
 
-    open_tomb(name, key, password)
+    open_tomb(name, key, password, mountpoint=mountpoint)
+
+
+@cli.command()
+@click.argument('name')
+def leave(name):
+    """Close a currently open tomb."""
+    close_tomb(name=name)
 
 
 @cli.command()
@@ -341,3 +352,17 @@ def etch(image, key, password):
 def resurrect(image, password):
     """Print to stdout a tomb key that's embedded in a JPEG image."""
     exhume_tomb(image, password)
+
+
+@cli.command(name='list')
+def list_cmd():
+    """Lists all known tombs."""
+    tombs = list_tombs()
+    for tomb in tombs:
+        print(tomb)
+
+
+@cli.command()
+def escape():
+    """Slams shut all open tombs."""
+    slam_tombs()
