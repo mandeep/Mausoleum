@@ -717,7 +717,7 @@ def main():
     width = (desktop.width() - window.width()) / 2
     height = (desktop.height() - window.height()) / 2
     window.show()
-    window.move(width, height)
+    window.move(int(width), int(height))
     sys.exit(application.exec_())
 
 
