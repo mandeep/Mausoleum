@@ -93,7 +93,8 @@ Wrapper
 Mausoleum may be imported as a module as seen in the following example:
 
 .. code:: python
-    :number-lines: 0
+    :linenos:
+
 
     import mausoleum.wrapper
 
@@ -104,6 +105,7 @@ Mausoleum may be imported as a module as seen in the following example:
         for name in names:
             key = '{}.key' .format(name)
             mausoleum.wrapper.construct_tomb(name, size, key, password)
+
 
 *************
 Contributions
