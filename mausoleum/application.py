@@ -1,5 +1,5 @@
 import os
-import pkg_resources
+import importlib.resources
 import shutil
 import sys
 
@@ -602,7 +602,7 @@ class ConfigTomb(QWidget):
         if not os.path.exists(config_directory):
             os.makedirs(config_directory)
 
-        settings = pkg_resources.resource_filename(__name__, 'settings.toml')
+        settings = importlib.resources.files(__name__) / 'settings.toml'
         with open(settings) as default_config:
             default_config = default_config.read()
 
@@ -671,9 +671,8 @@ class Mausoleum(QDialog):
         super(Mausoleum, self).__init__(parent)
         self.resize(600, 600)
         self.setWindowTitle('Mausoleum')
-        window_icon = pkg_resources.resource_filename('mausoleum.images',
-                                                      'ic_vpn_key_black_48dp_1x.png')
-        self.setWindowIcon(QIcon(window_icon))
+        window_icon = importlib.resources.files('mausoleum.images') / 'ic_vpn_key_black_48dp_1x.png'
+        self.setWindowIcon(QIcon(str(window_icon)))
 
         self.tomb_current_path = ConfigTomb().tomb_path_line.text()
 
