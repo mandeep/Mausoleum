@@ -10,10 +10,19 @@ Unreleased
 GUI
 ---
 
-Additions
-~~~~~~~~~
+0.10.0 - 2024-05-15
+===================
 
--  Ability to minimize to system tray
+- Migrate pkg_resources to importlib.resources for Python 3.12 support
+
+0.9.0 - 2022-10-18
+==================
+
+-  Add missing commands leave and list
+-  Add mountpoint support to enter command
+-  Miscellaneous UI changes
+
+-  Thanks to @djmattyg007 for massive help with this
 
 0.8.7 - 2018-09-30
 ==================

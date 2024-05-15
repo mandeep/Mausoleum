@@ -1,6 +1,6 @@
 .. image:: mausoleum.png
 
-|travis| |coveralls| |quality| |pypiversion| |pypistatus| |pythonversion| |pypiformat| |license|
+|pypiversion| |pypistatus| |pythonversion| |pypiformat| |license|
 
 Mausoleum consists of a command line application and GUI application wrapped around Tomb
 (the Crypto Undertaker). Both applications were created with the intention of making
@@ -112,12 +112,6 @@ Contributions
 All contributions are welcome! Feel free to submit a pull request for trivial
 changes. For other changes, please open an issue on the repository's issue tracker.
 
-.. |travis| image:: https://img.shields.io/travis/mandeep/Mausoleum/master.svg
-    :target: https://travis-ci.org/mandeep/Mausoleum/
-.. |coveralls| image:: https://img.shields.io/coveralls/mandeep/Mausoleum.svg 
-    :target: https://coveralls.io/github/mandeep/Mausoleum
-.. |quality| image:: https://img.shields.io/scrutinizer/g/mandeep/Mausoleum.svg
-    :target: https://scrutinizer-ci.com/g/mandeep/Mausoleum/
 .. |pypiversion| image:: https://img.shields.io/pypi/v/mausoleum.svg 
     :target: https://pypi.org/project/mausoleum/
 .. |pypistatus| image:: https://img.shields.io/pypi/status/mausoleum.svg 
