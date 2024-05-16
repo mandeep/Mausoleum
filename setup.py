@@ -1,12 +1,18 @@
 from setuptools import setup
 
 
+from pathlib import Path
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.rst").read_text()
+
+
 setup(
     name='mausoleum',
-    version='0.10.0',
+    version='0.10.1',
     description='A Python GUI, CLI, and wrapper for Tomb',
+    long_description=long_description,
+    long_description_content_type='text/x-rst',
     author='Mandeep',
-    author_email='info@mandeep.xyz',
     license='GPLv3+',
     url='https://github.com/mandeep/Mausoleum',
     packages=['mausoleum', 'mausoleum.images'],
@@ -25,7 +31,7 @@ setup(
     keywords='Mausoleum',
     classifiers=[
         'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
-        'Development Status :: 4 - Beta',
+        'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
         'Programming Language :: Python :: 3.12',
     ]

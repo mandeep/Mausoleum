@@ -93,7 +93,6 @@ Wrapper
 Mausoleum may be imported as a module as seen in the following example:
 
 .. code:: python
-    :linenos:
 
 
     import mausoleum.wrapper
