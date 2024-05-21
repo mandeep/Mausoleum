@@ -7,13 +7,21 @@ All notable changes to this project will be documented in this file.
 Unreleased
 ==========
 
-GUI
----
+
+0.10.2 - 2024-05-20
+===================
+
+-  Fix issue with Random Integer Key option where the tomb would not be created. This was due to a change in the Tomb API
+
+0.10.1 - 2024-05-16
+===================
+
+-  Fix readability issue with README and PyPI
 
 0.10.0 - 2024-05-15
 ===================
 
-- Migrate pkg_resources to importlib.resources for Python 3.12 support
+-  Migrate pkg_resources to importlib.resources for Python 3.12 support
 
 0.9.0 - 2022-10-18
 ==================

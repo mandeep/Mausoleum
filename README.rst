@@ -1,6 +1,6 @@
 .. image:: mausoleum.png
 
-|pypiversion| |pypistatus| |pythonversion| |pypiformat| |license|
+|pypiversion| |pythonversion| |pypiformat| |license|
 
 Mausoleum consists of a command line application and GUI application wrapped around Tomb
 (the Crypto Undertaker). Both applications were created with the intention of making
@@ -114,8 +114,6 @@ All contributions are welcome! Feel free to submit a pull request for trivial
 changes. For other changes, please open an issue on the repository's issue tracker.
 
 .. |pypiversion| image:: https://img.shields.io/pypi/v/mausoleum.svg 
-    :target: https://pypi.org/project/mausoleum/
-.. |pypistatus| image:: https://img.shields.io/pypi/status/mausoleum.svg 
     :target: https://pypi.org/project/mausoleum/
 .. |pythonversion| image:: https://img.shields.io/pypi/pyversions/mausoleum.svg 
     :target: https://pypi.org/project/mausoleum/

@@ -8,7 +8,7 @@ long_description = (this_directory / "README.rst").read_text()
 
 setup(
     name='mausoleum',
-    version='0.10.1',
+    version='0.10.2',
     description='A Python GUI, CLI, and wrapper for Tomb',
     long_description=long_description,
     long_description_content_type='text/x-rst',

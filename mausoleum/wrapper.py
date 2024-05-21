@@ -33,7 +33,7 @@ def forge_tomb(key, password, path='tomb', kdf=0, sudo=None, debug=False):
     arguments = ['sudo', '--stdin', path, 'forge', '--unsafe', '--tomb-pwd', password, '-k', key]
 
     if debug:
-        arguments.extend(['--ignore-swap', '--use-urandom'])
+        arguments.extend(['--ignore-swap', '--use-random'])
 
     if kdf > 0:
         arguments.extend(['--kdf', str(kdf)])
