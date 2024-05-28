@@ -28,6 +28,12 @@ setup(
         'click==7.0',
         'pytoml==0.1.13',
     ],
+    extras_require={'tests':
+        ['pytest',
+        'pytest-xvfb',
+        'pytest-qt'
+        ]
+    },
     keywords='Mausoleum',
     classifiers=[
         'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
