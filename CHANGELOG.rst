@@ -8,6 +8,11 @@ Unreleased
 ==========
 
 
+0.10.3 - 2024-05-28
+===================
+
+-  Fix issue with importlib referencing the filename of mausoleum instead of the package name
+
 0.10.2 - 2024-05-20
 ===================
 
