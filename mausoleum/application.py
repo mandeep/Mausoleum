@@ -602,7 +602,7 @@ class ConfigTomb(QWidget):
         if not os.path.exists(config_directory):
             os.makedirs(config_directory)
 
-        settings = importlib.resources.files(__name__) / 'settings.toml'
+        settings = importlib.resources.files(__package__) / 'settings.toml'
         with open(settings) as default_config:
             default_config = default_config.read()
 
