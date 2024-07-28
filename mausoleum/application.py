@@ -46,13 +46,14 @@ class CreateTomb(QWidget):
         self.sudo_password = QLineEdit()
         self.sudo_password.setEchoMode(QLineEdit.Password)
 
-        tomb_layout = QFormLayout()
-        tomb_layout.addRow('Tomb Name:', self.tomb_name)
-        tomb_layout.addRow('Key Name:', self.key_name)
-        tomb_layout.addRow('Key Password:', self.key_password)
-        tomb_layout.addRow('Confirm Password:', self.confirm_password)
-        tomb_layout.addRow('Sudo Password:', self.sudo_password)
-        tomb_group.setLayout(tomb_layout)
+        self.tomb_layout = QFormLayout()
+        self.tomb_layout.addRow('Tomb Name:', self.tomb_name)
+        self.tomb_layout.addRow('Key Name:', self.key_name)
+        self.tomb_layout.addRow('Key Password:', self.key_password)
+        self.tomb_layout.addRow('Confirm Password:', self.confirm_password)
+        self.tomb_layout.addRow('Sudo Password:', self.sudo_password)
+
+        tomb_group.setLayout(self.tomb_layout)
 
         parameters_group = QGroupBox('Parameters')
 
@@ -630,8 +631,15 @@ class ConfigTomb(QWidget):
         tomb_path_config_layout.addWidget(self.tomb_path_line)
         tomb_path_config_layout.addWidget(self.tomb_path_button)
 
+        self.sudo_checkbox = QCheckBox('Enable Sudo Password')
+        sudo_layout = QVBoxLayout()
+        sudo_layout.addWidget(self.sudo_checkbox)
+
+        self.sudo_checkbox.setChecked(self.config['configuration'].get('sudo_allowed_in_gui', True))
+
         tomb_path_layout.addLayout(tomb_path_config_layout)
 
+        tomb_path_layout.addLayout(sudo_layout)
         config_box.setLayout(tomb_path_layout)
 
         main_layout = QVBoxLayout()
@@ -675,6 +683,7 @@ class Mausoleum(QDialog):
         self.setWindowIcon(QIcon(str(window_icon)))
 
         self.tomb_current_path = ConfigTomb().tomb_path_line.text()
+        self.sudo_allowed = ConfigTomb().sudo_checkbox.checkState()
 
         self.create_page = CreateTomb(self.tomb_current_path)
         self.open_page = OpenTomb(self.tomb_current_path)
@@ -698,15 +707,37 @@ class Mausoleum(QDialog):
 
         self.setLayout(dialog_layout)
 
+        if self.sudo_allowed:
+            self.create_page.sudo_password.setVisible(True)
+
         self.create_page.create_button.clicked.connect(self.update_list_items)
         self.open_page.open_button.clicked.connect(self.update_list_items)
         self.close_page.close_all_button.clicked.connect(self.update_list_items)
         self.close_page.force_close_button.clicked.connect(self.update_list_items)
         self.resize_page.resize_button.clicked.connect(self.update_list_items)
+        self.config_page.sudo_checkbox.clicked.connect(self.update_sudo)
 
     def update_list_items(self):
         """Update the list of active tombs whenever a tomb is opened or closed."""
         QTimer.singleShot(2000, self.list_page.update_list_items)
+
+    def update_sudo(self, state):
+        """Set the visibility of the Sudo Password QLineEdit based on the config settings.
+
+        In Qt6, setRowVisible(bool) was added. However, since it wasn't backported to Qt5,
+        we have to use addRow and removeRow to achieve the same outcome.
+        """
+        if state:
+            if self.create_page.tomb_layout.rowCount() == 4:
+
+                sudo_password = QLineEdit()
+                sudo_password.setEchoMode(QLineEdit.Password)
+                self.create_page.sudo_password = sudo_password
+                self.create_page.tomb_layout.addRow('Sudo Password:', sudo_password)
+        else:
+            if self.create_page.tomb_layout.rowCount() == 5:
+                self.create_page.tomb_layout.removeRow(4)
+
 
 
 def main():
