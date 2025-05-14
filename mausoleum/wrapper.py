@@ -98,7 +98,7 @@ def construct_tomb(name, size, key, password, debug=False):
             lock_tomb(name, key, password)
 
 
-def open_tomb(name, key, password, path='tomb', read_only=False, sudo=None, mountpoint=None):
+def open_tomb(name, key, password, path='tomb', read_only=False, sudo=None, mountpoint=None, force=False):
     """Open a tomb container with the given key.
 
     Positional arguments:
@@ -114,6 +114,8 @@ def open_tomb(name, key, password, path='tomb', read_only=False, sudo=None, moun
     """
     arguments = ['sudo', '--stdin', path, 'open', '--unsafe',
                  '--tomb-pwd', password, '-k', key, name]
+    if force:
+        arguments.insert(4, '-f')
     if mountpoint:
         arguments.append(mountpoint)
     if read_only:
