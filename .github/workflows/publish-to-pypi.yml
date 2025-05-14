@@ -5,8 +5,12 @@ on:
     types: [created]
 
 jobs:
+  test:
+    name: Run Tests
+    uses: ./.github/workflows/python-tests.yml
   build:
     name: Build Package
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
