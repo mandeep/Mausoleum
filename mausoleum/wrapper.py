@@ -107,10 +107,11 @@ def open_tomb(name, key, password, path='tomb', read_only=False, sudo=None, moun
     password -- the password of the container's key
 
     Keyword arguments:
-    mountpoint -- where to mount the tomb
     path -- the path to the tomb executable
     read_only -- mount the tomb as read only
     sudo -- the sudo password of the current admin, default is None
+    mountpoint -- where to mount the tomb
+    force -- force the tomb to be opened
     """
     arguments = ['sudo', '--stdin', path, 'open', '--unsafe',
                  '--tomb-pwd', password, '-k', key, name]
