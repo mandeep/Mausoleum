@@ -57,7 +57,8 @@ def test_cli_enter(name, password):
 def test_list_tombs(password):
     """Test that opened tombs are discovered."""
     wrapper.construct_tomb('test3.tomb', 20, 'test3.tomb.key', password, debug=True)
-    assert '[test]' in wrapper.list_tombs()[0]
+    wrapper.open_tomb('test3.tomb', 'test3.tomb.key', password, force=True)
+    assert '[test3]' in wrapper.list_tombs()[0]
 
 
 def test_close_tomb():
