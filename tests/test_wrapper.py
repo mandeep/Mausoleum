@@ -54,7 +54,7 @@ def test_cli_enter(name, password):
     assert not result.exception
 
 
-def test_list_tombs():
+def test_list_tombs(password):
     """Test that opened tombs are discovered."""
     wrapper.construct_tomb('test3.tomb', 20, 'test3.tomb.key', password, debug=True)
     assert '[test]' in wrapper.list_tombs()[0]
