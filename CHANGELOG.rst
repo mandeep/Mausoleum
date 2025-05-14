@@ -7,6 +7,17 @@ All notable changes to this project will be documented in this file.
 Unreleased
 ==========
 
+0.11.0 - 2024-07-28
+===================
+
+- Add a setting in the GUI Config Page that allows the user to control whether or not sudo can be entered in the GUI
+  This setting is currently set to True by default, which is the standard behavior. In the future this setting will be set
+  to False and the user will need to enter the sudo password in the terminal
+
+0.10.3 - 2024-05-28
+===================
+
+-  Fix issue with importlib referencing the filename of mausoleum instead of the package name
 
 0.10.2 - 2024-05-20
 ===================
