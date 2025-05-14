@@ -8,7 +8,7 @@ long_description = (this_directory / "README.rst").read_text()
 
 setup(
     name='mausoleum',
-    version='0.11.0',
+    version='0.12.0',
     description='A Python GUI, CLI, and wrapper for Tomb',
     long_description=long_description,
     long_description_content_type='text/x-rst',
@@ -27,6 +27,7 @@ setup(
         'appdirs==1.4.3',
         'click==7.0',
         'pytoml==0.1.13',
+        'pyqt5'
     ],
     extras_require={'tests':
         ['pytest',
@@ -40,5 +41,6 @@ setup(
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
         'Programming Language :: Python :: 3.12',
+        'Programming Language :: Python :: 3.13',
     ]
 )
