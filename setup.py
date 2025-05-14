@@ -1,14 +1,13 @@
 from setuptools import setup
-
-
 from pathlib import Path
+
 this_directory = Path(__file__).parent
 long_description = (this_directory / "README.rst").read_text()
 
 
 setup(
     name='mausoleum',
-    version='0.12.0',
+    use_scm_version={"write_to": "mausoleum/_version.py"},
     description='A Python GUI, CLI, and wrapper for Tomb',
     long_description=long_description,
     long_description_content_type='text/x-rst',
@@ -23,6 +22,7 @@ setup(
             'mausoleum=mausoleum.wrapper:cli'
         ]
     },
+    setup_requires=["setuptools_scm>=8.0"],
     install_requires=[
         'appdirs==1.4.3',
         'click==7.0',

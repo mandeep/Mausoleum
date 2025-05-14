@@ -60,3 +60,6 @@ target/
 
 # Pytest
 *pytest_cache
+
+# setuptools_scm versioning
+_version.py
