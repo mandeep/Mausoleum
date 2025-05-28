@@ -29,10 +29,12 @@ setup(
         'pytoml==0.1.13',
         'pyqt5'
     ],
-    extras_require={'tests':
-        ['pytest',
-        'pytest-xvfb',
-        'pytest-qt'
+    extras_require={
+        'tests': [
+            'pytest',
+            'pytest-cov',
+            'pytest-qt',
+            'pytest-xvfb',
         ]
     },
     keywords='Mausoleum',
