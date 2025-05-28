@@ -32,13 +32,8 @@ def test_forge_tomb(key, password):
     wrapper.forge_tomb(key, password, debug=True)
 
 
-@pytest.mark.xfail()
 def test_lock_tomb(name, key, password):
-    """Test locking the tomb container with the created key.
-
-    This test is marked as xfail as this Travis throws an erroneous
-    error during testing.
-    """
+    """Test locking the tomb container with the created key."""
     wrapper.lock_tomb(name, key, password, debug=True)
 
 
@@ -50,32 +45,30 @@ def test_construct_tomb(name, key, password,):
 def test_cli_enter(name, password):
     """Test the enter CLI command."""
     runner = CliRunner()
-    result = runner.invoke(wrapper.cli, ['enter', name], input=password)
+    result = runner.invoke(wrapper.cli, ['enter', name, '--force'], input=password)
     assert not result.exception
 
 
 def test_list_tombs(password):
     """Test that opened tombs are discovered."""
-    wrapper.construct_tomb('test3.tomb', 20, 'test3.tomb.key', password, debug=True)
-    wrapper.open_tomb('test3.tomb', 'test3.tomb.key', password, force=True)
-    assert '[test3]' in wrapper.list_tombs()[0]
+    assert '[test]' in wrapper.list_tombs()[0]
 
 
 def test_close_tomb():
     """Test closing the created tomb."""
-    wrapper.close_tomb()
+    wrapper.close_tomb(name='test')
     assert wrapper.list_tombs() == []
 
 
 def test_close_all_tombs(name, key, password):
     """Test closing a tomb by opening the created tomb container."""
-    wrapper.open_tomb(name, key, password)
+    wrapper.open_tomb(name, key, password, force=True)
     wrapper.close_tombs()
 
 
 def test_tomb_slam(name, key, password):
     """Test force closing a tomb by opening the create tomb container."""
-    wrapper.open_tomb(name, key, password)
+    wrapper.open_tomb(name, key, password, force=True)
     wrapper.slam_tombs()
 
 
@@ -87,7 +80,7 @@ def test_resize_tomb(name, key, password):
 def test_resize_cli(name, password):
     """Test the resize CLI command."""
     runner = CliRunner()
-    result = runner.invoke(wrapper.cli, ['alter', '--open', name, '30'], input=password)
+    result = runner.invoke(wrapper.cli, ['alter', '--open', '--force', name, '30'], input=password)
     assert not result.exception
 
 
