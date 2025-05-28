@@ -6,17 +6,12 @@ RUN apt-get update && apt-get install -y \
     git \
     xvfb \
     libxkbcommon-x11-0 \
-    libxcb-icccm4 \
-    libxcb-image0 \
-    libxcb-keysyms1 \
-    libxcb-randr0 \
-    libxcb-render-util0 \
-    libxcb-xinerama0 \
-    libxcb-xfixes0 \
-    qtbase5-dev \
-    qt5-qmake \
-    qtbase5-dev-tools \
+    libxcb-* \
+    libglib2.0 \
+    freeglut3-dev \
     tomb \
+    steghide \
+    qrencode \
     python3.12 \
     python3.12-venv \
     python3.12-dev \
@@ -29,6 +24,9 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.12 1 &
 
 # Set working directory
 WORKDIR /app
+
+RUN python3 -m venv /venv
+ENV PATH="/venv/bin:$PATH"
 
 RUN pip install --upgrade pip setuptools wheel
 
