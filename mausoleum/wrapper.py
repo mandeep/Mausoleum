@@ -285,7 +285,8 @@ def construct(name, size, key, password, open):
 @click.argument('key', required=False, default=None)
 @click.option('--password', prompt=True, hide_input=True, confirmation_prompt=False)
 @click.option('--mountpoint', default=None)
-def enter(name, key, password, mountpoint):
+@click.option('--force', is_flag=True)
+def enter(name, key, password, mountpoint, force):
     """Open an existing tomb container.
 
     The default key name is the name of the tomb with .key as the suffix. If the
@@ -294,7 +295,7 @@ def enter(name, key, password, mountpoint):
     if key is None:
         key = '{}.key' .format(name)
 
-    open_tomb(name, key, password, mountpoint=mountpoint)
+    open_tomb(name, key, password, mountpoint=mountpoint, force=force)
 
 
 @cli.command()
@@ -310,7 +311,8 @@ def leave(name):
 @click.argument('key', required=False, default=None)
 @click.option('--password', prompt=True, hide_input=True, confirmation_prompt=False)
 @click.option('--open', is_flag=True, help='Open the tomb after resizing it.')
-def alter(name, size, key, password, open):
+@click.option('--force', is_flag=True)
+def alter(name, size, key, password, open, force):
     """Resize an existing tomb container.
 
     The default key name is the name of the tomb with .key as the suffix. If the
@@ -323,8 +325,10 @@ def alter(name, size, key, password, open):
 
     resize_tomb(name, str(size), key, password)
 
+    if force and not open:
+         raise click.UsageError("Option --force can only be used if --open is also provided.")
     if open:
-        open_tomb(name, key, password)
+        open_tomb(name, key, password, force=force)
 
 
 @cli.command()
