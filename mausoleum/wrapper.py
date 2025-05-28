@@ -80,22 +80,14 @@ def construct_tomb(name, size, key, password, debug=False):
     name -- the name of the container, e.g. secret.tomb
     key -- the name of the container's key, e.g. secret.tomb.key
     password -- the password of the container's key
+    debug -- ignore the swap partition for debugging purposes
     """
     construction = dig_tomb(name, size)
-
-    if key is None:
-        key = '{}.key' .format(name)
-
     if construction == 0:
-
-        if debug:
-            fabrication = forge_tomb(key, password, debug=True)
-
-        else:
-            fabrication = forge_tomb(key, password)
+        fabrication = forge_tomb(key, password, debug=debug)
 
         if fabrication == 0:
-            lock_tomb(name, key, password)
+            lock_tomb(name, key, password, debug=debug)
 
 
 def open_tomb(name, key, password, path='tomb', read_only=False, sudo=None, mountpoint=None, force=False):
@@ -263,9 +255,11 @@ def cli():
 @click.argument('name')
 @click.argument('size')
 @click.argument('key', required=False, default=None)
-@click.password_option()
+@click.option('--password', prompt=True, hide_input=True, confirmation_prompt=False)
 @click.option('--open', is_flag=True, help='Open a tomb after constructing it.')
-def construct(name, size, key, password, open):
+@click.option('--force', is_flag=True, help='Force open a tomb.')
+@click.option('--debug', is_flag=True, help='Ignore the swap partition.')
+def construct(name, size, key, password, open, force, debug):
     """Dig, forge, and lock a new tomb container.
 
     The default key name is the name of the tomb with .key appended as the suffix. If
@@ -274,10 +268,16 @@ def construct(name, size, key, password, open):
 
     To open the container after creation, use the --open flag.
     """
-    construct_tomb(name, size, key, password)
+    if key is None:
+        key = '{}.key' .format(name)
+
+    construct_tomb(name, size, key, password, debug=debug)
+
+    if force and not open:
+        raise click.UsageError("Option --force can only be used if --open is also provided.")
 
     if open:
-        open_tomb(name, key, password)
+        open_tomb(name, key, password, force=force)
 
 
 @cli.command()

@@ -29,7 +29,7 @@ def test_dig_tomb(name):
 
 def test_forge_tomb(key, password):
     """Test creation of a new tomb key for the created tomb container."""
-    wrapper.forge_tomb(key, password, debug=True)
+    wrapper.forge_tomb(key, password, debug=True, kdf=1)
 
 
 def test_lock_tomb(name, key, password):
@@ -59,6 +59,10 @@ def test_close_tomb():
     wrapper.close_tomb(name='test')
     assert wrapper.list_tombs() == []
 
+def test_read_only(name, key, password):
+    """Test opening a tomb in read-only mode."""
+    wrapper.open_tomb(name, key, password, force=True, read_only=True, mountpoint='/media/test/mountpoint')
+
 
 def test_close_all_tombs(name, key, password):
     """Test closing a tomb by opening the created tomb container."""
@@ -81,6 +85,30 @@ def test_resize_cli(name, password):
     """Test the resize CLI command."""
     runner = CliRunner()
     result = runner.invoke(wrapper.cli, ['alter', '--open', '--force', name, '30'], input=password)
+    assert not result.exception
+
+
+def test_cli_construct_and_close(password):
+    """Test the construct CLI command."""
+    runner = CliRunner()
+    result = runner.invoke(wrapper.cli, ['construct', 'test3.tomb', '10', '--open', '--force', '--debug'], input=password)
+    assert not result.exception
+
+    result = runner.invoke(wrapper.cli, ['list'])
+    assert 'test3' in result.output
+
+    result = runner.invoke(wrapper.cli, ['leave', 'test3'])
+    assert not result.exception
+
+
+def test_cli_escape(name, password):
+    runner = CliRunner()
+    result = runner.invoke(wrapper.cli, ['enter', name, '--force'], input=password)
+
+    assert not result.exception
+
+    result = runner.invoke(wrapper.cli, ['escape'])
+
     assert not result.exception
 
 
