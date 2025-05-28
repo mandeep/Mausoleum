@@ -45,4 +45,4 @@ jobs:
         pip install .[tests]
 
     - name: Run tests
-      run: pytest --verbose
+      run: pytest --verbose --capture=no
