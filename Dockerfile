@@ -30,5 +30,10 @@ ENV PATH="/venv/bin:$PATH"
 
 RUN pip install --upgrade pip setuptools wheel
 
-# Default command
+# Copy entrypoint script so that pip install is run as soon as the container starts
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["bash"]
