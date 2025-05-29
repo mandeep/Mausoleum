@@ -24,9 +24,9 @@ setup(
     },
     setup_requires=["setuptools_scm>=8.0"],
     install_requires=[
-        'appdirs==1.4.3',
-        'click==7.0',
-        'pytoml==0.1.13',
+        'appdirs',
+        'click',
+        'pytoml',
         'pyqt5'
     ],
     extras_require={
