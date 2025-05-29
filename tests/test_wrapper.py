@@ -119,15 +119,16 @@ def test_cli_mold(key):
     assert not result.exception
 
 
-def test_cli_etch(image_file, key, password):
-    """Test the etch CLI command which uses the bury function."""
+def test_cli_etch_and_resurrect(image_file, key, password):
+    """Test the etch CLI command which uses the bury function.
+
+    This tests two things: the embedding of a key inside an image and the extraction
+    of a key from that image
+    """
     runner = CliRunner()
+
     result = runner.invoke(wrapper.cli, ['etch', image_file, key], input=password)
     assert not result.exception
 
-
-def test_cli_resurrect(image_file, password):
-    """Test the resurrect CLI command which uses the exhume function."""
-    runner = CliRunner()
     result = runner.invoke(wrapper.cli, ['resurrect', image_file], input=password)
     assert not result.exception
