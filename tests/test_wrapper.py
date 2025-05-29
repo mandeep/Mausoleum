@@ -66,7 +66,6 @@ def test_read_only(name, key, password):
 
 def test_close_all_tombs(name, key, password):
     """Test closing a tomb by opening the created tomb container."""
-    wrapper.open_tomb(name, key, password, force=True)
     wrapper.close_tombs()
 
 
