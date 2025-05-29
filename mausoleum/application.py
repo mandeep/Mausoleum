@@ -22,6 +22,7 @@ class CreateTomb(QWidget):
         super(CreateTomb, self).__init__(parent)
 
         self.path = path
+        self.debug = False
 
         layout = QVBoxLayout()
 
@@ -83,10 +84,8 @@ class CreateTomb(QWidget):
 
         checkbox_layout = QVBoxLayout()
         self.open_checkbox = QCheckBox('Open Upon Creation')
-        self.ignore_swap_checkbox = QCheckBox('Ignore Swap Partition')
         self.random_checkbox = QCheckBox('Random Integer Key')
         checkbox_layout.addWidget(self.open_checkbox)
-        checkbox_layout.addWidget(self.ignore_swap_checkbox)
         checkbox_layout.addWidget(self.random_checkbox)
         checkbox_layout.setAlignment(Qt.AlignLeft)
 
@@ -153,7 +152,7 @@ class CreateTomb(QWidget):
                                                      self.key_name.text(),
                                                      self.key_password.text(),
                                                      self.path,
-                                                     debug=self.ignore_swap_checkbox.isChecked(),
+                                                     debug=self.debug,
                                                      sudo=self.sudo_password.text())
 
                     if open_command[0] is not None:
@@ -173,6 +172,7 @@ class OpenTomb(QWidget):
         super(OpenTomb, self).__init__(parent)
 
         self.path = path
+        self.debug = False
 
         layout = QVBoxLayout()
 
@@ -215,9 +215,7 @@ class OpenTomb(QWidget):
 
         checkbox_layout = QHBoxLayout()
         self.read_only_checkbox = QCheckBox('Read Only')
-        self.ignore_swap_checkbox = QCheckBox('Ignore Swap Partition')
         checkbox_layout.addWidget(self.read_only_checkbox)
-        checkbox_layout.addWidget(self.ignore_swap_checkbox)
         checkbox_layout.setAlignment(Qt.AlignLeft)
 
         parameters_layout = QHBoxLayout()
@@ -273,7 +271,7 @@ class OpenTomb(QWidget):
                                          self.key_password.text(),
                                          self.path,
                                          read_only=self.read_only_checkbox.isChecked(),
-                                         debug=self.ignore_swap_checkbox.isChecked(),
+                                         debug=self.debug,
                                          sudo=self.sudo_password.text())
         if open_command[0] is not None:
             self.message.setText('Tomb Opened Successfully')
