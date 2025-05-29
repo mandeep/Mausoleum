@@ -195,12 +195,12 @@ class OpenTomb(QWidget):
         self.sudo_password = QLineEdit()
         self.sudo_password.setEchoMode(QLineEdit.Password)
 
-        open_layout = QFormLayout()
-        open_layout.addRow('Tomb Path:', tomb_path_layout)
-        open_layout.addRow('Key Path:', key_path_layout)
-        open_layout.addRow('Key Password:', self.key_password)
-        open_layout.addRow('Sudo Password:', self.sudo_password)
-        open_group.setLayout(open_layout)
+        self.open_layout = QFormLayout()
+        self.open_layout.addRow('Tomb Path:', tomb_path_layout)
+        self.open_layout.addRow('Key Path:', key_path_layout)
+        self.open_layout.addRow('Key Password:', self.key_password)
+        self.open_layout.addRow('Sudo Password:', self.sudo_password)
+        open_group.setLayout(self.open_layout)
 
         self.open_button = QPushButton('Open Tomb')
         self.open_button.setFixedWidth(200)
@@ -345,12 +345,12 @@ class ResizeTomb(QWidget):
         self.sudo_password = QLineEdit()
         self.sudo_password.setEchoMode(QLineEdit.Password)
 
-        resize_layout = QFormLayout()
-        resize_layout.addRow('Tomb Path:', tomb_path_layout)
-        resize_layout.addRow('Key Path:', key_path_layout)
-        resize_layout.addRow('Key Password:', self.key_password)
-        resize_layout.addRow('Sudo Password:', self.sudo_password)
-        resize_group.setLayout(resize_layout)
+        self.resize_layout = QFormLayout()
+        self.resize_layout.addRow('Tomb Path:', tomb_path_layout)
+        self.resize_layout.addRow('Key Path:', key_path_layout)
+        self.resize_layout.addRow('Key Password:', self.key_password)
+        self.resize_layout.addRow('Sudo Password:', self.sudo_password)
+        resize_group.setLayout(self.resize_layout)
 
         self.resize_button = QPushButton('Resize Tomb')
         self.resize_button.setFixedWidth(200)
@@ -688,8 +688,8 @@ class Mausoleum(QDialog):
         window_icon = importlib.resources.files('mausoleum.images') / 'ic_vpn_key_black_48dp_1x.png'
         self.setWindowIcon(QIcon(str(window_icon)))
 
-        self.tomb_current_path = ConfigTomb().tomb_path_line.text()
-        self.sudo_allowed = ConfigTomb().sudo_checkbox.checkState()
+        self.config_page = ConfigTomb()
+        self.tomb_current_path = self.config_page.tomb_path_line.text()
 
         self.create_page = CreateTomb(self.tomb_current_path)
         self.open_page = OpenTomb(self.tomb_current_path)
@@ -697,7 +697,6 @@ class Mausoleum(QDialog):
         self.resize_page = ResizeTomb(self.tomb_current_path)
         self.list_page = ListTomb(self.tomb_current_path)
         self.advanced_page = AdvancedTomb(self.tomb_current_path)
-        self.config_page = ConfigTomb()
 
         self.pages = QTabWidget()
         self.pages.addTab(self.create_page, 'Create')
@@ -713,8 +712,7 @@ class Mausoleum(QDialog):
 
         self.setLayout(dialog_layout)
 
-        if self.sudo_allowed:
-            self.create_page.sudo_password.setVisible(True)
+        self.update_settings()
 
         self.create_page.create_button.clicked.connect(self.update_list_items)
         self.open_page.open_button.clicked.connect(self.update_list_items)
@@ -727,6 +725,14 @@ class Mausoleum(QDialog):
         """Update the list of active tombs whenever a tomb is opened or closed."""
         QTimer.singleShot(2000, self.list_page.update_list_items)
 
+    def update_settings(self):
+        """Update the GUI settings based on what the user has defined in the config.
+
+        At startup, the user's preferences will be set in the GUI. Any time there is
+        a new option added to the config page, it should be added here.
+        """
+        self.update_sudo(self.config_page.sudo_checkbox.checkState())
+
     def update_sudo(self, state):
         """Set the visibility of the Sudo Password QLineEdit based on the config settings.
 
@@ -735,15 +741,39 @@ class Mausoleum(QDialog):
         """
         if state:
             if self.create_page.tomb_layout.rowCount() == 4:
-
                 sudo_password = QLineEdit()
                 sudo_password.setEchoMode(QLineEdit.Password)
                 self.create_page.sudo_password = sudo_password
                 self.create_page.tomb_layout.addRow('Sudo Password:', sudo_password)
+
+            if self.open_page.open_layout.rowCount() == 3:
+                sudo_password = QLineEdit()
+                sudo_password.setEchoMode(QLineEdit.Password)
+                self.open_page.sudo_password = sudo_password
+                self.open_page.open_layout.addRow('Sudo Password:', sudo_password)
+
+            if self.resize_page.resize_layout.rowCount() == 3:
+                sudo_password = QLineEdit()
+                sudo_password.setEchoMode(QLineEdit.Password)
+                self.resize_page.sudo_password = sudo_password
+                self.resize_page.resize_layout.addRow('Sudo Password:', sudo_password)
+
+            self.config_page.config['configuration']['sudo_allowed_in_gui'] = True
+
+            with open(self.config_page.user_config_file, 'w') as config_file:
+                pytoml.dump(self.config_page.config, config_file)
         else:
             if self.create_page.tomb_layout.rowCount() == 5:
                 self.create_page.tomb_layout.removeRow(4)
+            if self.open_page.open_layout.rowCount() == 4:
+                self.open_page.open_layout.removeRow(3)
+            if self.resize_page.resize_layout.rowCount() == 4:
+                self.resize_page.resize_layout.removeRow(3)
 
+            self.config_page.config['configuration']['sudo_allowed_in_gui'] = False
+
+            with open(self.config_page.user_config_file, 'w') as config_file:
+                pytoml.dump(self.config_page.config, config_file)
 
 
 def main():
