@@ -29,16 +29,12 @@ class CreateTomb(QWidget):
         tomb_group = QGroupBox('Create Tomb')
 
         self.tomb_name = QLineEdit()
-        tomb_name_button = QPushButton('Select Path')
         tomb_name_layout = QHBoxLayout()
         tomb_name_layout.addWidget(self.tomb_name)
-        tomb_name_layout.addWidget(tomb_name_button)
 
         self.key_name = QLineEdit()
-        key_name_button = QPushButton('Select Path')
         key_name_layout = QHBoxLayout()
         key_name_layout.addWidget(self.key_name)
-        key_name_layout.addWidget(key_name_button)
 
         self.key_password = QLineEdit()
         self.key_password.setEchoMode(QLineEdit.Password)
@@ -600,6 +596,7 @@ class ListTomb(QWidget):
 class ConfigTomb(QWidget):
     """Creates the abstract widget to be used as a config page."""
     sudo_state_changed = pyqtSignal(bool)
+    tomb_path_changed = pyqtSignal(str)
 
     def __init__(self, parent=None):
         """Initialize the config page's configuration group."""
@@ -615,7 +612,7 @@ class ConfigTomb(QWidget):
             default_config = default_config.read()
 
         self.user_config_file = os.path.join(config_directory, 'settings.toml')
-        if not os.path.isfile(self.user_config_file):
+        if not os.path.isfile(self.user_config_file) or os.stat(self.user_config_file).st_size == 0:
             with open(self.user_config_file, 'a') as new_config_file:
                 new_config_file.write(default_config)
 
@@ -629,7 +626,7 @@ class ConfigTomb(QWidget):
         self.tomb_path_line.setReadOnly(True)
         self.tomb_path_button = QPushButton('Select Path')
 
-        self.tomb_path_button.clicked.connect(lambda: self.select_tomb_install_path(self.config))
+        self.tomb_path_button.clicked.connect(self.select_tomb_install_path)
 
         tomb_path_layout = QVBoxLayout()
 
@@ -657,18 +654,20 @@ class ConfigTomb(QWidget):
 
         self.set_tomb_path(self.config)
 
-    def select_tomb_install_path(self, config):
+    def select_tomb_install_path(self):
         """Select Tomb's installation path."""
         tomb_install_path = QFileDialog.getExistingDirectory(
                             self, 'Select Tomb Installation Path')
 
-        if tomb_install_path:
+        if tomb_install_path and os.path.isfile(tomb_install_path):
             self.tomb_path_line.setText(tomb_install_path)
 
-            config['configuration']['path'] = tomb_install_path
+            self.config['configuration']['path'] = tomb_install_path
 
             with open(self.user_config_file, 'w') as conffile:
-                pytoml.dump(conffile, config)
+                pytoml.dump(conffile, self.config)
+
+            self.tomb_path_changed.emit(tomb_install_path)
 
     def set_tomb_path(self, config):
         """Set Tomb's current installation path."""
@@ -726,6 +725,7 @@ class Mausoleum(QDialog):
         self.close_page.force_close_button.clicked.connect(self.update_list_items)
         self.resize_page.resize_button.clicked.connect(self.update_list_items)
         self.config_page.sudo_state_changed.connect(self.update_sudo)
+        self.config_page.tomb_path_changed.connect(self.update_tomb_path)
 
     def update_list_items(self):
         """Update the list of active tombs whenever a tomb is opened or closed."""
@@ -780,6 +780,18 @@ class Mausoleum(QDialog):
 
             with open(self.config_page.user_config_file, 'w') as config_file:
                 pytoml.dump(self.config_page.config, config_file)
+
+    def update_tomb_path(self, new_path):
+        """Use the new tomb path that the user submits."""
+
+        self.tomb_current_path = new_path
+
+        self.create_page.path = new_path
+        self.open_page.path = new_path
+        self.close_page.path = new_path
+        self.resize_page.path = new_path
+        self.list_page.path = new_path
+        self.advanced_page.path = new_path
 
 
 def main():
