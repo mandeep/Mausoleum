@@ -4,7 +4,7 @@ import shutil
 import sys
 
 from appdirs import AppDirs
-from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtCore import pyqtSignal, Qt, QTimer
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QApplication, QCheckBox, QDesktopWidget, QDialog, QFileDialog,
                              QFormLayout, QGroupBox, QHBoxLayout, QLabel, QLineEdit, QListWidget,
@@ -599,6 +599,7 @@ class ListTomb(QWidget):
 
 class ConfigTomb(QWidget):
     """Creates the abstract widget to be used as a config page."""
+    sudo_state_changed = pyqtSignal(bool)
 
     def __init__(self, parent=None):
         """Initialize the config page's configuration group."""
@@ -642,6 +643,7 @@ class ConfigTomb(QWidget):
         sudo_layout.addWidget(self.sudo_checkbox)
 
         self.sudo_checkbox.setChecked(self.config['configuration'].get('sudo_allowed_in_gui', True))
+        self.sudo_checkbox.stateChanged.connect(self.emit_sudo_state)
 
         tomb_path_layout.addLayout(tomb_path_config_layout)
 
@@ -675,6 +677,10 @@ class ConfigTomb(QWidget):
             self.tomb_path_line.setText(current_tomb_path)
         else:
             self.tomb_path_line.setText(shutil.which('tomb'))
+
+    def emit_sudo_state(self):
+        """Emit a signal to change all pages that use a Sudo Password."""
+        self.sudo_state_changed.emit(self.sudo_checkbox.isChecked())
 
 
 class Mausoleum(QDialog):
@@ -719,7 +725,7 @@ class Mausoleum(QDialog):
         self.close_page.close_all_button.clicked.connect(self.update_list_items)
         self.close_page.force_close_button.clicked.connect(self.update_list_items)
         self.resize_page.resize_button.clicked.connect(self.update_list_items)
-        self.config_page.sudo_checkbox.clicked.connect(self.update_sudo)
+        self.config_page.sudo_state_changed.connect(self.update_sudo)
 
     def update_list_items(self):
         """Update the list of active tombs whenever a tomb is opened or closed."""

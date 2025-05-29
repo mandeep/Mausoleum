@@ -109,6 +109,19 @@ def test_close_page_force_close_resize(window, qtbot):
     qtbot.mouseClick(button, Qt.LeftButton)
 
 
+def test_sudo_checkbox(window):
+    """Test that the sudo checkbox correctly adds/removes the sudo lineedit."""
+    window.config_page.sudo_checkbox.setChecked(False)
+    assert window.create_page.tomb_layout.rowCount() == 4
+    assert window.open_page.open_layout.rowCount() == 3
+    assert window.resize_page.resize_layout.rowCount() == 3
+
+    window.config_page.sudo_checkbox.setChecked(True)
+    assert window.create_page.tomb_layout.rowCount() == 5
+    assert window.open_page.open_layout.rowCount() == 4
+    assert window.resize_page.resize_layout.rowCount() == 4
+
+
 def test_engrave_key(window, qtbot, key):
     """Test engraving the key inside a QR image."""
     window.pages.setCurrentIndex(5)
