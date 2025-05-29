@@ -9,7 +9,6 @@ it easier for users to interact with Tomb.
 
 .. image:: https://raw.githubusercontent.com/mandeep/Mausoleum/master/screenshot.png
    :alt: Screenshot
-   :align: center
 
 ************
 Installation
