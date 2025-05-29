@@ -1,4 +1,5 @@
-.. image:: https://github.com/mandeep/Mausoleum/blob/master/mausoleum.png
+.. image:: https://raw.githubusercontent.com/mandeep/Mausoleum/master/mausoleum.png
+   :alt: Mausoleum Logo
 
 |build| |pypiversion| |pythonversion| |pypiformat| |license|
 
@@ -6,8 +7,9 @@ Mausoleum consists of a command line application and GUI application wrapped aro
 (the Crypto Undertaker). Both applications were created with the intention of making
 it easier for users to interact with Tomb.
 
-.. image:: https://github.com/mandeep/Mausoleum/blob/master/screenshot.png
-    :align: center
+.. image:: https://raw.githubusercontent.com/mandeep/Mausoleum/master/screenshot.png
+   :alt: Screenshot
+   :align: center
 
 ************
 Installation
