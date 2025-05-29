@@ -215,7 +215,7 @@ class OpenTomb(QWidget):
 
         checkbox_layout = QHBoxLayout()
         self.read_only_checkbox = QCheckBox('Read Only')
-        self.ignore_swap_checkbox = QCheckBox('Force Open')
+        self.ignore_swap_checkbox = QCheckBox('Ignore Swap Partition')
         checkbox_layout.addWidget(self.read_only_checkbox)
         checkbox_layout.addWidget(self.ignore_swap_checkbox)
         checkbox_layout.setAlignment(Qt.AlignLeft)
