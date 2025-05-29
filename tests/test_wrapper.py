@@ -45,7 +45,7 @@ def test_construct_tomb(name, key, password,):
 def test_cli_enter(name, password):
     """Test the enter CLI command."""
     runner = CliRunner()
-    result = runner.invoke(wrapper.cli, ['enter', name, '--force'], input=password)
+    result = runner.invoke(wrapper.cli, ['enter', name, '--debug'], input=password)
     assert not result.exception
 
 
@@ -61,7 +61,7 @@ def test_close_tomb():
 
 def test_read_only(name, key, password):
     """Test opening a tomb in read-only mode."""
-    wrapper.open_tomb(name, key, password, force=True, read_only=True, mountpoint='/media/test/mountpoint')
+    wrapper.open_tomb(name, key, password, debug=True, read_only=True, mountpoint='/media/test/mountpoint')
 
 
 def test_close_all_tombs(name, key, password):
@@ -71,7 +71,7 @@ def test_close_all_tombs(name, key, password):
 
 def test_tomb_slam(name, key, password):
     """Test force closing a tomb by opening the create tomb container."""
-    wrapper.open_tomb(name, key, password, force=True)
+    wrapper.open_tomb(name, key, password, debug=True)
     wrapper.slam_tombs()
 
 
@@ -83,14 +83,14 @@ def test_resize_tomb(name, key, password):
 def test_resize_cli(name, password):
     """Test the resize CLI command."""
     runner = CliRunner()
-    result = runner.invoke(wrapper.cli, ['alter', '--open', '--force', name, '30'], input=password)
+    result = runner.invoke(wrapper.cli, ['alter', '--open', '--debug', name, '30'], input=password)
     assert not result.exception
 
 
 def test_cli_construct_and_close(password):
     """Test the construct CLI command."""
     runner = CliRunner()
-    result = runner.invoke(wrapper.cli, ['construct', 'test3.tomb', '10', '--open', '--force', '--debug'], input=password)
+    result = runner.invoke(wrapper.cli, ['construct', 'test3.tomb', '10', '--open', '--debug'], input=password)
     assert not result.exception
 
     result = runner.invoke(wrapper.cli, ['list'])
@@ -102,7 +102,7 @@ def test_cli_construct_and_close(password):
 
 def test_cli_escape(name, password):
     runner = CliRunner()
-    result = runner.invoke(wrapper.cli, ['enter', name, '--force'], input=password)
+    result = runner.invoke(wrapper.cli, ['enter', name, '--debug'], input=password)
 
     assert not result.exception
 

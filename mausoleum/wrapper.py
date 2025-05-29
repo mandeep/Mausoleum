@@ -90,7 +90,7 @@ def construct_tomb(name, size, key, password, debug=False):
             lock_tomb(name, key, password, debug=debug)
 
 
-def open_tomb(name, key, password, path='tomb', read_only=False, sudo=None, mountpoint=None, force=False):
+def open_tomb(name, key, password, path='tomb', read_only=False, sudo=None, mountpoint=None, debug=False):
     """Open a tomb container with the given key.
 
     Positional arguments:
@@ -103,12 +103,12 @@ def open_tomb(name, key, password, path='tomb', read_only=False, sudo=None, moun
     read_only -- mount the tomb as read only
     sudo -- the sudo password of the current admin, default is None
     mountpoint -- where to mount the tomb
-    force -- force the tomb to be opened
+    debug -- ignore the swap partitions for testing purposes
     """
     arguments = ['sudo', '--stdin', path, 'open', '--unsafe',
                  '--tomb-pwd', password, '-k', key, name]
-    if force:
-        arguments.insert(4, '-f')
+    if debug:
+        arguments.insert(4, '--ignore-swap')
     if mountpoint:
         arguments.append(mountpoint)
     if read_only:
@@ -257,9 +257,8 @@ def cli():
 @click.argument('key', required=False, default=None)
 @click.option('--password', prompt=True, hide_input=True, confirmation_prompt=False)
 @click.option('--open', is_flag=True, help='Open a tomb after constructing it.')
-@click.option('--force', is_flag=True, help='Force open a tomb.')
 @click.option('--debug', is_flag=True, help='Ignore the swap partition.')
-def construct(name, size, key, password, open, force, debug):
+def construct(name, size, key, password, open, debug):
     """Dig, forge, and lock a new tomb container.
 
     The default key name is the name of the tomb with .key appended as the suffix. If
@@ -273,11 +272,8 @@ def construct(name, size, key, password, open, force, debug):
 
     construct_tomb(name, size, key, password, debug=debug)
 
-    if force and not open:
-        raise click.UsageError("Option --force can only be used if --open is also provided.")
-
     if open:
-        open_tomb(name, key, password, force=force)
+        open_tomb(name, key, password, debug=debug)
 
 
 @cli.command()
@@ -285,8 +281,8 @@ def construct(name, size, key, password, open, force, debug):
 @click.argument('key', required=False, default=None)
 @click.option('--password', prompt=True, hide_input=True, confirmation_prompt=False)
 @click.option('--mountpoint', default=None)
-@click.option('--force', is_flag=True)
-def enter(name, key, password, mountpoint, force):
+@click.option('--debug', is_flag=True)
+def enter(name, key, password, mountpoint, debug):
     """Open an existing tomb container.
 
     The default key name is the name of the tomb with .key as the suffix. If the
@@ -295,7 +291,7 @@ def enter(name, key, password, mountpoint, force):
     if key is None:
         key = '{}.key' .format(name)
 
-    open_tomb(name, key, password, mountpoint=mountpoint, force=force)
+    open_tomb(name, key, password, mountpoint=mountpoint, debug=debug)
 
 
 @cli.command()
@@ -311,8 +307,8 @@ def leave(name):
 @click.argument('key', required=False, default=None)
 @click.option('--password', prompt=True, hide_input=True, confirmation_prompt=False)
 @click.option('--open', is_flag=True, help='Open the tomb after resizing it.')
-@click.option('--force', is_flag=True)
-def alter(name, size, key, password, open, force):
+@click.option('--debug', is_flag=True)
+def alter(name, size, key, password, open, debug):
     """Resize an existing tomb container.
 
     The default key name is the name of the tomb with .key as the suffix. If the
@@ -325,10 +321,8 @@ def alter(name, size, key, password, open, force):
 
     resize_tomb(name, str(size), key, password)
 
-    if force and not open:
-         raise click.UsageError("Option --force can only be used if --open is also provided.")
     if open:
-        open_tomb(name, key, password, force=force)
+        open_tomb(name, key, password, debug=debug)
 
 
 @cli.command()
