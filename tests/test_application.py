@@ -96,7 +96,16 @@ def test_resize_page(window, qtbot, name, key, password):
     window.resize_page.key_path.setText(key)
     window.resize_page.key_password.setText(password)
     window.resize_page.size_box.setValue(50)
+    window.resize_page.open_checkbox.setChecked(True)
+    window.resize_page.debug = True
     button = window.resize_page.resize_button
+    qtbot.mouseClick(button, Qt.LeftButton)
+
+
+def test_close_page_force_close_resize(window, qtbot):
+    """Test the Force Close Tombs on the Close tab."""
+    window.pages.setCurrentIndex(2)
+    button = window.close_page.force_close_button
     qtbot.mouseClick(button, Qt.LeftButton)
 
 

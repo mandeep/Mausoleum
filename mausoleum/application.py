@@ -321,6 +321,7 @@ class ResizeTomb(QWidget):
         super(ResizeTomb, self).__init__(parent)
 
         self.path = path
+        self.debug = False
 
         layout = QVBoxLayout()
 
@@ -443,7 +444,8 @@ class ResizeTomb(QWidget):
                                                      self.key_path.text(),
                                                      self.key_password.text(),
                                                      self.path,
-                                                     sudo=self.sudo_password.text())
+                                                     sudo=self.sudo_password.text(),
+                                                     debug=self.debug)
 
                     if open_command[0] is not None:
                         self.message.setText('Tomb Opened Successfully')
