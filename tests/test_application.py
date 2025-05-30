@@ -1,4 +1,7 @@
+import os
+
 from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QFileDialog
 import pytest
 
 from mausoleum import application
@@ -82,6 +85,120 @@ def test_open_page(window, qtbot, name, key, password):
     assert window.open_page.message.text() == 'Tomb Opened Successfully'
 
 
+def test_open_dialog(window, qtbot, monkeypatch):
+    """Test the Set Tomb Path dialog on the Open page."""
+    button = window.open_page.tomb_path_button
+    
+    def fake_get_open_file_name(*args, **kwargs):
+        return ("/path/to/test/tomb", "All Files (*.*)")
+    
+    monkeypatch.setattr(QFileDialog, "getOpenFileName", fake_get_open_file_name)
+
+    qtbot.mouseClick(button, Qt.LeftButton)
+
+    assert window.open_page.tomb_path.text() == "/path/to/test/tomb"
+
+
+def test_resize_dialog(window, qtbot, monkeypatch):
+    """Test the Set Tomb Path dialog on the Resize page."""
+    button = window.resize_page.tomb_path_button
+    
+    def fake_get_open_file_name(*args, **kwargs):
+        return ("/path/to/test/tomb", "All Files (*.*)")
+    
+    monkeypatch.setattr(QFileDialog, "getOpenFileName", fake_get_open_file_name)
+
+    qtbot.mouseClick(button, Qt.LeftButton)
+
+    assert window.resize_page.tomb_path.text() == "/path/to/test/tomb"
+
+
+def test_open_key_path(window, qtbot, monkeypatch):
+    """Test the Select Key dialog on the Open page."""
+    button = window.open_page.key_path_button
+    
+    def fake_get_open_file_name(*args, **kwargs):
+        return ("/path/to/test/test.tomb.key", "All Files (*.*)")
+    
+    monkeypatch.setattr(QFileDialog, "getOpenFileName", fake_get_open_file_name)
+
+    qtbot.mouseClick(button, Qt.LeftButton)
+
+    assert window.open_page.key_path.text() == "/path/to/test/test.tomb.key"
+
+
+def test_resize_key_path(window, qtbot, monkeypatch):
+    """Test the Select Key dialog on the Resize page."""
+    button = window.resize_page.key_path_button
+    
+    def fake_get_open_file_name(*args, **kwargs):
+        return ("/path/to/test/test.tomb.key", "All Files (*.*)")
+    
+    monkeypatch.setattr(QFileDialog, "getOpenFileName", fake_get_open_file_name)
+
+    qtbot.mouseClick(button, Qt.LeftButton)
+
+    assert window.resize_page.key_path.text() == "/path/to/test/test.tomb.key"
+
+
+def test_list_items(window, qtbot, monkeypatch):
+    """Test the Update List Items on the List page."""
+    button = window.list_page.update_list_button
+    qtbot.mouseClick(button, Qt.LeftButton)
+
+
+def test_advanced_key_path(window, qtbot, monkeypatch):
+    """Test the Select Key dialog on the Advanced page."""
+    button = window.advanced_page.key_path_button
+    
+    def fake_get_open_file_name(*args, **kwargs):
+        return ("/path/to/test/test.tomb.key", "All Files (*.*)")
+    
+    monkeypatch.setattr(QFileDialog, "getOpenFileName", fake_get_open_file_name)
+
+    qtbot.mouseClick(button, Qt.LeftButton)
+
+    assert window.advanced_page.key_path.text() == "/path/to/test/test.tomb.key"
+
+
+def test_image_path(window, qtbot, monkeypatch):
+    """Test the Select Image dialog on the Advanced page."""
+    button = window.advanced_page.image_path_button
+    
+    def fake_get_open_file_name(*args, **kwargs):
+        return ("/path/to/test/test.jpg", "All Files (*.*)")
+    
+    monkeypatch.setattr(QFileDialog, "getOpenFileName", fake_get_open_file_name)
+
+    qtbot.mouseClick(button, Qt.LeftButton)
+
+    assert window.advanced_page.image_path.text() == "/path/to/test/test.jpg"
+
+
+def test_install_path(window, qtbot, monkeypatch, tmp_path):
+    """Test the Tomb Install Path dialog on the Config page."""
+    fake_file = tmp_path / 'tomb'
+    fake_file.write_text("fake binary content")
+
+    widget = window.config_page
+
+    # Monkeypatch QFileDialog to return the directory containing the fake file
+    monkeypatch.setattr(QFileDialog, "getExistingDirectory", lambda *args, **kwargs: str(tmp_path))
+
+    # Monkeypatch os.path.isfile to simulate the expected file check
+    monkeypatch.setattr(os.path, "isfile", lambda path: path == str(tmp_path))
+
+    # Optionally, monkeypatch config writing if needed
+    monkeypatch.setattr(widget, "user_config_file", tmp_path / "config.toml")
+
+    # Spy on signal (optional)
+    with qtbot.waitSignal(widget.tomb_path_changed, timeout=1000) as blocker:
+        widget.select_tomb_install_path()
+
+    assert widget.tomb_path_line.text() == str(tmp_path)
+    assert blocker.args == [str(tmp_path)]
+
+
 def test_close_page_force_close(window, qtbot):
     """Test the Force Close Tombs on the Close tab."""
     window.pages.setCurrentIndex(2)
@@ -130,7 +247,7 @@ def test_engrave_key(window, qtbot, key):
     qtbot.mouseClick(button, Qt.LeftButton)
 
 
-def test_bury_key(window, qtbot, key, image_file, password):
+def test_exhume_bury_key(window, qtbot, key, image_file, password):
     """Test burying the key inside the given image file."""
     window.pages.setCurrentIndex(5)
     window.advanced_page.key_path.setText(key)
@@ -139,9 +256,6 @@ def test_bury_key(window, qtbot, key, image_file, password):
     button = window.advanced_page.bury_button
     qtbot.mouseClick(button, Qt.LeftButton)
 
-
-def exhume_bury_key(window, qtbot, image_file, password):
-    """Test exhuming the key from inside the given image file."""
     window.pages.setCurrentIndex(5)
     window.advanced_page.image_path.setText(image_file)
     window.advanced_page.key_password.setText(password)

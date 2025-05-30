@@ -175,16 +175,16 @@ class OpenTomb(QWidget):
         open_group = QGroupBox('Open Tomb')
 
         self.tomb_path = QLineEdit()
-        tomb_path_button = QPushButton('Select Path')
+        self.tomb_path_button = QPushButton('Select Path')
         tomb_path_layout = QHBoxLayout()
         tomb_path_layout.addWidget(self.tomb_path)
-        tomb_path_layout.addWidget(tomb_path_button)
+        tomb_path_layout.addWidget(self.tomb_path_button)
 
         self.key_path = QLineEdit()
-        key_path_button = QPushButton('Select Path')
+        self.key_path_button = QPushButton('Select Path')
         key_path_layout = QHBoxLayout()
         key_path_layout.addWidget(self.key_path)
-        key_path_layout.addWidget(key_path_button)
+        key_path_layout.addWidget(self.key_path_button)
 
         self.key_password = QLineEdit()
         self.key_password.setEchoMode(QLineEdit.Password)
@@ -228,8 +228,8 @@ class OpenTomb(QWidget):
 
         self.setLayout(layout)
 
-        tomb_path_button.clicked.connect(self.select_tomb_path)
-        key_path_button.clicked.connect(self.select_key_path)
+        self.tomb_path_button.clicked.connect(self.select_tomb_path)
+        self.key_path_button.clicked.connect(self.select_key_path)
         self.open_button.clicked.connect(self.open_selected_tomb)
 
     def select_tomb_path(self):
@@ -324,16 +324,16 @@ class ResizeTomb(QWidget):
         resize_group = QGroupBox('Resize Tomb')
 
         self.tomb_path = QLineEdit()
-        tomb_path_button = QPushButton('Select Path')
+        self.tomb_path_button = QPushButton('Select Path')
         tomb_path_layout = QHBoxLayout()
         tomb_path_layout.addWidget(self.tomb_path)
-        tomb_path_layout.addWidget(tomb_path_button)
+        tomb_path_layout.addWidget(self.tomb_path_button)
 
         self.key_path = QLineEdit()
-        key_path_button = QPushButton('Select Path')
+        self.key_path_button = QPushButton('Select Path')
         key_path_layout = QHBoxLayout()
         key_path_layout.addWidget(self.key_path)
-        key_path_layout.addWidget(key_path_button)
+        key_path_layout.addWidget(self.key_path_button)
 
         self.key_password = QLineEdit()
         self.key_password.setEchoMode(QLineEdit.Password)
@@ -392,8 +392,8 @@ class ResizeTomb(QWidget):
 
         self.setLayout(layout)
 
-        tomb_path_button.clicked.connect(self.select_tomb_path)
-        key_path_button.clicked.connect(self.select_key_path)
+        self.tomb_path_button.clicked.connect(self.select_tomb_path)
+        self.key_path_button.clicked.connect(self.select_key_path)
         self.resize_button.clicked.connect(self.resize_selected_tomb)
 
     def select_tomb_path(self):
@@ -466,16 +466,16 @@ class AdvancedTomb(QWidget):
         advanced_group = QGroupBox('Advanced Tomb Operations')
 
         self.key_path = QLineEdit()
-        key_path_button = QPushButton('Select Path')
+        self.key_path_button = QPushButton('Select Path')
         key_path_layout = QHBoxLayout()
         key_path_layout.addWidget(self.key_path)
-        key_path_layout.addWidget(key_path_button)
+        key_path_layout.addWidget(self.key_path_button)
 
         self.image_path = QLineEdit()
-        image_path_button = QPushButton('Select Path')
+        self.image_path_button = QPushButton('Select Path')
         image_path_layout = QHBoxLayout()
         image_path_layout.addWidget(self.image_path)
-        image_path_layout.addWidget(image_path_button)
+        image_path_layout.addWidget(self.image_path_button)
 
         self.key_password = QLineEdit()
         self.key_password.setEchoMode(QLineEdit.Password)
@@ -508,8 +508,8 @@ class AdvancedTomb(QWidget):
 
         self.setLayout(layout)
 
-        key_path_button.clicked.connect(self.select_key_path)
-        image_path_button.clicked.connect(self.select_image_path)
+        self.key_path_button.clicked.connect(self.select_key_path)
+        self.image_path_button.clicked.connect(self.select_image_path)
         self.engrave_button.clicked.connect(self.engrave_selected_key)
         self.bury_button.clicked.connect(self.bury_selected_key)
         self.exhume_button.clicked.connect(self.exhume_selected_key)
@@ -664,8 +664,8 @@ class ConfigTomb(QWidget):
 
             self.config['configuration']['path'] = tomb_install_path
 
-            with open(self.user_config_file, 'w') as conffile:
-                pytoml.dump(conffile, self.config)
+            with open(self.user_config_file, 'w') as config_file:
+                pytoml.dump(self.config, config_file)
 
             self.tomb_path_changed.emit(tomb_install_path)
 
