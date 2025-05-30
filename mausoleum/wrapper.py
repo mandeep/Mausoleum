@@ -187,7 +187,7 @@ def slam_tombs(path='tomb'):
     Keyword argument:
     path -- the path to the tomb executable
     """
-    return subprocess.call([path, 'slam'])
+    return subprocess.call([path, 'slam', 'all'])
 
 
 def engrave_tomb(key, path='tomb'):
