@@ -357,10 +357,12 @@ def resurrect(image, password):
 
 @cli.command(name='list')
 def list_cmd():
-    """Lists all known tombs."""
+    """Lists all opened tombs."""
     tombs = list_tombs()
     for tomb in tombs:
-        print(tomb)
+        click.echo(tomb)
+    else:
+        click.echo("The cryptkeeper found no opened tombs.")
 
 
 @cli.command()
