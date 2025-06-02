@@ -1,5 +1,8 @@
 services:
   mausoleum:
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: mausoleum
     working_dir: /app
     volumes:
