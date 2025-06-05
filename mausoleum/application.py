@@ -596,6 +596,7 @@ class ListTomb(QWidget):
 class ConfigTomb(QWidget):
     """Creates the abstract widget to be used as a config page."""
     sudo_state_changed = pyqtSignal(bool)
+    swap_state_changed = pyqtSignal(bool)
     tomb_path_changed = pyqtSignal(str)
 
     def __init__(self, parent=None):
@@ -636,15 +637,19 @@ class ConfigTomb(QWidget):
         tomb_path_config_layout.addWidget(self.tomb_path_button)
 
         self.sudo_checkbox = QCheckBox('Enable Sudo Password')
-        sudo_layout = QVBoxLayout()
-        sudo_layout.addWidget(self.sudo_checkbox)
+        self.ignore_swap_checkbox = QCheckBox('Ignore Swap Partition')
+        options_layout = QHBoxLayout()
+        options_layout.addWidget(self.sudo_checkbox)
+        options_layout.addWidget(self.ignore_swap_checkbox)
 
         self.sudo_checkbox.setChecked(self.config['configuration'].get('sudo_allowed_in_gui', True))
         self.sudo_checkbox.stateChanged.connect(self.emit_sudo_state)
 
+        self.ignore_swap_checkbox.stateChanged.connect(self.emit_swap_state)
+
         tomb_path_layout.addLayout(tomb_path_config_layout)
 
-        tomb_path_layout.addLayout(sudo_layout)
+        tomb_path_layout.addLayout(options_layout)
         config_box.setLayout(tomb_path_layout)
 
         main_layout = QVBoxLayout()
@@ -680,6 +685,10 @@ class ConfigTomb(QWidget):
     def emit_sudo_state(self):
         """Emit a signal to change all pages that use a Sudo Password."""
         self.sudo_state_changed.emit(self.sudo_checkbox.isChecked())
+
+    def emit_swap_state(self):
+        """Emit a signal to ignore the swap partition when opening a tomb."""
+        self.swap_state_changed.emit(self.ignore_swap_checkbox.isChecked())
 
 
 class Mausoleum(QDialog):
@@ -725,6 +734,7 @@ class Mausoleum(QDialog):
         self.close_page.force_close_button.clicked.connect(self.update_list_items)
         self.resize_page.resize_button.clicked.connect(self.update_list_items)
         self.config_page.sudo_state_changed.connect(self.update_sudo)
+        self.config_page.swap_state_changed.connect(self.update_swap)
         self.config_page.tomb_path_changed.connect(self.update_tomb_path)
 
     def update_list_items(self):
@@ -780,6 +790,17 @@ class Mausoleum(QDialog):
 
             with open(self.config_page.user_config_file, 'w') as config_file:
                 pytoml.dump(self.config_page.config, config_file)
+
+    def update_swap(self, state):
+        """Update the debug flag on relevant pages so that swap partitions are ignored."""
+        if state:
+            self.create_page.debug = True
+            self.open_page.debug = True
+            self.resize_page.debug = True
+        else:
+            self.create_page.debug = False
+            self.open_page.debug = False
+            self.resize_page.debug = False
 
     def update_tomb_path(self, new_path):
         """Use the new tomb path that the user submits."""

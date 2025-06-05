@@ -239,6 +239,19 @@ def test_sudo_checkbox(window):
     assert window.resize_page.resize_layout.rowCount() == 4
 
 
+def test_swap_checkbox(window):
+    """Test that the ignore swap checkbox correctly sets the debug flag on pages."""
+    window.config_page.ignore_swap_checkbox.setChecked(True)
+    assert window.create_page.debug is True
+    assert window.open_page.debug is True
+    assert window.resize_page.debug is True
+
+    window.config_page.ignore_swap_checkbox.setChecked(False)
+    assert window.create_page.debug is False
+    assert window.open_page.debug is False
+    assert window.resize_page.debug is False
+
+
 def test_engrave_key(window, qtbot, key):
     """Test engraving the key inside a QR image."""
     window.pages.setCurrentIndex(5)
