@@ -15,8 +15,7 @@ Installation
 ************
 
 As Mausoleum is purely a wrapper for Tomb, it requires Tomb to be installed locally. For Tomb installation
-details, please see: https://www.dyne.org/software/tomb/. The Mausoleum GUI application requires PyQt5
-to be installed locally. For PyQt5 installation instructions, please visit: https://www.riverbankcomputing.com/software/pyqt/download5.
+details, please see: https://www.dyne.org/software/tomb/.
 
 With your environment set, the following command may be used to install Mausoleum::
 
