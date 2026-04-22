@@ -11,21 +11,15 @@ def password():
 
 
 @pytest.fixture(scope='session')
-def temp_dir(tmp_path_factory):
-    """Session-scoped working directory for tomb files."""
-    return tmp_path_factory.mktemp("tombs")
-
-
-@pytest.fixture(scope='session')
-def name(temp_dir):
+def name():
     """Use test.tomb as the tomb name to pass to test functions."""
-    return str(temp_dir / 'test.tomb')
+    return 'test.tomb'
 
 
 @pytest.fixture(scope='session')
-def key(temp_dir):
+def key():
     """Use test.tomb.key as the tomb key name to pass to test functions."""
-    return str(temp_dir / 'test.tomb.key')
+    return 'test.tomb.key'
 
 
 @pytest.fixture(scope='session')
@@ -39,10 +33,10 @@ def tomb(name, key, password):
 
 
 @pytest.fixture(scope='session')
-def second_tomb(temp_dir, password):
+def second_tomb(password):
     """Another tomb to use in case multiple tombs are needed for a test."""
-    tomb_path = str(temp_dir / 'test2.tomb')
-    key_path = str(temp_dir / 'test2.tomb.key')
+    tomb_path = 'test2.tomb'
+    key_path = 'test2.tomb.key'
 
     wrapper.construct_tomb(tomb_path, 20, key_path, password, debug=True)
 
