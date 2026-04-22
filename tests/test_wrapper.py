@@ -62,17 +62,22 @@ def test_close_tomb():
 def test_read_only(name, key, password):
     """Test opening a tomb in read-only mode."""
     wrapper.open_tomb(name, key, password, debug=True, read_only=True, mountpoint='/media/test/mountpoint')
+    assert '[test]' in wrapper.list_tombs()[0]
 
 
-def test_close_all_tombs(name, key, password):
+def test_close_all_tombs():
     """Test closing a tomb by opening the created tomb container."""
     wrapper.close_tombs()
+    assert wrapper.list_tombs() == []
 
 
 def test_tomb_slam(name, key, password):
     """Test force closing a tomb by opening the create tomb container."""
     wrapper.open_tomb(name, key, password, debug=True)
+    assert '[test]' in wrapper.list_tombs()[0]
+
     wrapper.slam_tombs()
+    assert wrapper.list_tombs() == []
 
 
 def test_resize_tomb(name, key, password):
@@ -85,6 +90,8 @@ def test_resize_cli(name, password):
     runner = CliRunner()
     result = runner.invoke(wrapper.cli, ['alter', '--open', '--debug', name, '200'], input=password)
     assert not result.exception
+
+    wrapper.close_tombs()
 
 
 def test_cli_construct_and_close(password):
