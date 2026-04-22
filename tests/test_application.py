@@ -212,7 +212,7 @@ def test_resize_page(window, qtbot, name, key, password):
     window.resize_page.tomb_path.setText(name)
     window.resize_page.key_path.setText(key)
     window.resize_page.key_password.setText(password)
-    window.resize_page.size_box.setValue(50)
+    window.resize_page.size_box.setValue(200)
     window.resize_page.open_checkbox.setChecked(True)
     window.resize_page.debug = True
     button = window.resize_page.resize_button
