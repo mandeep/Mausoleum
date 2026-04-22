@@ -23,6 +23,7 @@ jobs:
           - { tomb-version: '2.13', python-version: '3.14' }
           # Cross-version tomb check on a single Python
           - { tomb-version: '2.9',  python-version: '3.12' }
+          - { tomb-version: '2.10',  python-version: '3.12' }
           - { tomb-version: '2.11', python-version: '3.12' }
           - { tomb-version: '2.12', python-version: '3.12' }
 
