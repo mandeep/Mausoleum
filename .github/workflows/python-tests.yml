@@ -9,12 +9,22 @@ on:
 
 jobs:
   test:
-    name: Run Tests (Python ${{ matrix.python-version }})
+    name: Run Tests (tomb ${{ matrix.tomb-version }}, Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
     strategy:
-      matrix:
-        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
       fail-fast: false
+      matrix:
+        include:
+          # Full Python matrix on latest tomb
+          - { tomb-version: '2.13', python-version: '3.10' }
+          - { tomb-version: '2.13', python-version: '3.11' }
+          - { tomb-version: '2.13', python-version: '3.12' }
+          - { tomb-version: '2.13', python-version: '3.13' }
+          - { tomb-version: '2.13', python-version: '3.14' }
+          # Cross-version tomb check on a single Python
+          - { tomb-version: '2.9',  python-version: '3.12' }
+          - { tomb-version: '2.11', python-version: '3.12' }
+          - { tomb-version: '2.12', python-version: '3.12' }
 
     steps:
     - name: Checkout code
@@ -23,7 +33,18 @@ jobs:
     - name: Install system dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y xvfb libxkbcommon-x11-0 libxcb-* freeglut3-dev libglib2.0 tomb steghide qrencode
+        sudo apt-get install -y \
+          xvfb libxkbcommon-x11-0 libxcb-* freeglut3-dev libglib2.0 \
+          steghide qrencode \
+          zsh cryptsetup gnupg pinentry-curses make
+
+    - name: Install tomb ${{ matrix.tomb-version }} from source
+      run: |
+        git clone https://github.com/dyne/Tomb.git /tmp/tomb-src
+        cd /tmp/tomb-src
+        git checkout v${{ matrix.tomb-version }}
+        sudo make install
+        tomb -v | head -1
 
     - name: Set up Python
       uses: actions/setup-python@v5
