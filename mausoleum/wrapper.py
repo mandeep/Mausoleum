@@ -4,6 +4,24 @@ import subprocess
 import click
 
 
+def find_tomb_version(path='tomb'):
+    """Find the installed version of tomb.
+
+    Useful for deciding how to handle backwards compatibility with older versions
+    of tomb.
+    """
+    arguments = ['sudo', '--stdin', path, '-v']
+    result = subprocess.run(arguments, capture_output=True, text=True)
+
+    if result:
+        match = re.search(r"Tomb\s+(\d+)\.(\d+)(?:\.(\d+))?", result.stdout)
+        if match:
+            major, minor, patch = match.group(1), match.group(2), match.group(3)
+            return (int(major), int(minor), int(patch))
+
+    return (0, 0, 0)
+
+
 def dig_tomb(name, size, path='tomb'):
     """Dig a new tomb container.
 
@@ -36,7 +54,12 @@ def forge_tomb(key, password, path='tomb', kdf=0, sudo=None, debug=False):
         arguments.extend(['--ignore-swap', '--use-random'])
 
     if kdf > 0:
-        arguments.extend(['--kdf', str(kdf)])
+        version = find_tomb_version()
+
+        if version < (2, 12, 0):
+            arguments.extend(['--kdf', str(kdf)])
+        else:
+            arguments.extend(['--kdf', 'pbkdf2', '--kdfiter', 'kdf'])
 
     if sudo is not None:
         forge_command = subprocess.Popen(arguments, stdin=subprocess.PIPE,
