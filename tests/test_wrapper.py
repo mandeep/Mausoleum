@@ -4,59 +4,61 @@ import pytest
 from mausoleum import wrapper
 
 
-@pytest.fixture
-def name():
-    """Use test.tomb as the tomb name to pass to test functions."""
-    return 'test.tomb'
-
-
-@pytest.fixture
-def key():
-    """Use test.tomb.key as the tomb key name to pass to test functions."""
-    return 'test.tomb.key'
-
-
-@pytest.fixture
+@pytest.fixture(scope='session')
 def password():
     """Use SUPER_SECURE_PASSWORD as the tomb password to pass to test functions."""
     return 'SUPER_SECURE_PASSWORD'
 
 
-def test_dig_tomb(name):
-    """Test creation of a new tomb container with a size of 10mb."""
+@pytest.fixture(scope='session')
+def temp_dir(tmp_path_factory):
+    """Session-scoped working directory for tomb files."""
+    return tmp_path_factory.mktemp("tombs")
+
+
+@pytest.fixture(scope='session')
+def name(temp_dir):
+    """Use test.tomb as the tomb name to pass to test functions."""
+    return str(temp_dir / 'test.tomb')
+
+
+@pytest.fixture(scope='session')
+def key(temp_dir):
+    """Use test.tomb.key as the tomb key name to pass to test functions."""
+    return str(temp_dir / 'test.tomb.key')
+
+
+@pytest.fixture(scope='session')
+def tomb(name, key, password):
+    """Setup the test.tomb so that other functions can use it."""
     wrapper.dig_tomb(name, 10)
-
-
-def test_forge_tomb(key, password):
-    """Test creation of a new tomb key for the created tomb container."""
     wrapper.forge_tomb(key, password, debug=True, kdf=1)
-
-
-def test_lock_tomb(name, key, password):
-    """Test locking the tomb container with the created key."""
     wrapper.lock_tomb(name, key, password, debug=True)
 
-
-def test_construct_tomb(name, key, password,):
-    """Test constructing a new tomb container."""
-    wrapper.construct_tomb('test2.tomb', 20, 'test2.tomb.key', password, debug=True)
+    return name
 
 
-def test_cli_enter(name, password):
+@pytest.fixture(scope='session')
+def second_tomb(temp_dir, password):
+    """Another tomb to use in case multiple tombs are needed for a test."""
+    tomb_path = str(temp_dir / 'test2.tomb')
+    key_path = str(temp_dir / 'test2.tomb.key')
+
+    wrapper.construct_tomb(tomb_path, 20, key_path, password, debug=True)
+
+    return (tomb_path, key_path)
+
+
+def test_cli_enter(tomb, password):
     """Test the enter CLI command."""
     runner = CliRunner()
-    result = runner.invoke(wrapper.cli, ['enter', name, '--debug'], input=password)
+    result = runner.invoke(wrapper.cli, ['enter', tomb, '--debug'], input=password)
     assert not result.exception
 
-
-def test_list_tombs(password):
-    """Test that opened tombs are discovered."""
     assert '[test]' in wrapper.list_tombs()[0]
 
-
-def test_close_tomb():
-    """Test closing the created tomb."""
     wrapper.close_tomb(name='test')
+
     assert wrapper.list_tombs() == []
 
 def test_read_only(name, key, password):
@@ -64,34 +66,47 @@ def test_read_only(name, key, password):
     wrapper.open_tomb(name, key, password, debug=True, read_only=True, mountpoint='/media/test/mountpoint')
     assert '[test]' in wrapper.list_tombs()[0]
 
+    wrapper.close_tomb(name='test')
 
-def test_close_all_tombs():
-    """Test closing a tomb by opening the created tomb container."""
+
+def test_close_all_tombs(tomb, second_tomb, key, password):
+    """Test closing multiple tombs."""
+    wrapper.open_tomb(tomb, key, password, debug=True)
+    wrapper.open_tomb(second_tomb[0], second_tomb[1], password, debug=True)
+
+    assert len(wrapper.list_tombs()) == 2
+
     wrapper.close_tombs()
+
     assert wrapper.list_tombs() == []
 
 
-def test_tomb_slam(name, key, password):
-    """Test force closing a tomb by opening the create tomb container."""
-    wrapper.open_tomb(name, key, password, debug=True)
+def test_tomb_slam(tomb, key, password):
+    """Test force closing a tomb."""
+    wrapper.open_tomb(tomb, key, password, debug=True)
     assert '[test]' in wrapper.list_tombs()[0]
 
     wrapper.slam_tombs()
+
     assert wrapper.list_tombs() == []
 
 
-def test_resize_tomb(name, key, password):
-    """Test resizing the created tomb to 20mb."""
-    wrapper.resize_tomb(name, 20, key, password)
+def test_resize_tomb(tomb, key, password):
+    """Test resizing the created tomb to 200mb."""
+    wrapper.resize_tomb(tomb, 200, key, password)
 
 
-def test_resize_cli(name, password):
+def test_resize_cli_and_open(tomb, password):
     """Test the resize CLI command."""
     runner = CliRunner()
-    result = runner.invoke(wrapper.cli, ['alter', '--open', '--debug', name, '200'], input=password)
+    result = runner.invoke(wrapper.cli, ['alter', '--open', '--debug', tomb, '200'], input=password)
     assert not result.exception
 
-    wrapper.close_tombs()
+    result = runner.invoke(wrapper.cli, ['list'])
+    assert 'test' in result.output
+
+    result = runner.invoke(wrapper.cli, ['leave', 'test'])
+    assert not result.exception
 
 
 def test_cli_construct_and_close(password):
@@ -107,9 +122,10 @@ def test_cli_construct_and_close(password):
     assert not result.exception
 
 
-def test_cli_escape(name, password):
+def test_cli_escape(tomb, password):
+    """Test the escape CLI command."""
     runner = CliRunner()
-    result = runner.invoke(wrapper.cli, ['enter', name, '--debug'], input=password)
+    result = runner.invoke(wrapper.cli, ['enter', tomb, '--debug'], input=password)
 
     assert not result.exception
 
@@ -129,7 +145,7 @@ def test_cli_etch_and_resurrect(image_file, key, password):
     """Test the etch CLI command which uses the bury function.
 
     This tests two things: the embedding of a key inside an image and the extraction
-    of a key from that image
+    of a key from that image.
     """
     runner = CliRunner()
 
