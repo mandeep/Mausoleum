@@ -7,6 +7,63 @@ All notable changes to this project will be documented in this file.
 Unreleased
 ==========
 
+
+0.16.1 - 2026-04-21
+===================
+
+- Fix argument used for --kdfiter on new versions of tomb
+
+0.16.0 - 2026-04-21
+===================
+
+- Add handling of tomb's new --kdf and --kdfiter options
+kdf defaults to pbkdf2 that way the user can still pass an iteration number no matter the version of tomb.
+
+0.15.0 - 2025-06-11
+===================
+
+- Add option to ignore swap partition to the Config page of the GUI application
+
+0.14.0 - 2025-06-02
+===================
+
+- Remove option to ignore swap partitions when using the GUI application
+- Fix escape CLI command due to change in tomb API
+- Add message to stdout when list command finds no opened tombs
+
+0.13.3 - 2025-05-28
+===================
+
+- Fixed README so that it shows on PyPI
+
+0.13.2 - 2025-05-28
+===================
+
+- Remove pinned versions from setup.py allowing for newer versions
+
+0.13.1 - 2025-05-28
+===================
+
+- Fix construct tomb test that was hanging
+
+0.13.0 - 2025-05-28
+===================
+
+- Add Force flag to GUI and CLI for opening a tomb
+- Fix tests so that they can be run when swap partitions are not off
+
+0.12.1 - 2025-05-14
+===================
+
+- Add automatic versioning on publish
+
+0.12.0 - 2025-05-14
+===================
+
+- Add new Force flag to wrapper for opening a tomb
+- Github Actions now used to run tests
+- Docker files added to run tests locally
+
 0.11.0 - 2024-07-28
 ===================
 
