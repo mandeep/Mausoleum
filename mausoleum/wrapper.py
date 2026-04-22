@@ -59,7 +59,7 @@ def forge_tomb(key, password, path='tomb', kdf=0, sudo=None, debug=False):
         if version < (2, 12, 0):
             arguments.extend(['--kdf', str(kdf)])
         else:
-            arguments.extend(['--kdf', 'pbkdf2', '--kdfiter', 'kdf'])
+            arguments.extend(['--kdf', 'pbkdf2', '--kdfiter', str(kdf)])
 
     if sudo is not None:
         forge_command = subprocess.Popen(arguments, stdin=subprocess.PIPE,
