@@ -183,10 +183,10 @@ def test_install_path(window, qtbot, monkeypatch, tmp_path):
     widget = window.config_page
 
     # Monkeypatch QFileDialog to return the directory containing the fake file
-    monkeypatch.setattr(QFileDialog, "getExistingDirectory", lambda *args, **kwargs: str(tmp_path))
+    monkeypatch.setattr(QFileDialog, "getOpenFileName", lambda *args, **kwargs: (str(fake_file), ''))
 
     # Monkeypatch os.path.isfile to simulate the expected file check
-    monkeypatch.setattr(os.path, "isfile", lambda path: path == str(tmp_path))
+    monkeypatch.setattr(os.path, "isfile", lambda path: path == str(fake_file))
 
     # Optionally, monkeypatch config writing if needed
     monkeypatch.setattr(widget, "user_config_file", tmp_path / "config.toml")
@@ -195,8 +195,8 @@ def test_install_path(window, qtbot, monkeypatch, tmp_path):
     with qtbot.waitSignal(widget.tomb_path_changed, timeout=1000) as blocker:
         widget.select_tomb_install_path()
 
-    assert widget.tomb_path_line.text() == str(tmp_path)
-    assert blocker.args == [str(tmp_path)]
+    assert widget.tomb_path_line.text() == str(fake_file)
+    assert blocker.args == [str(fake_file)]
 
 
 def test_close_page_force_close(window, qtbot):
