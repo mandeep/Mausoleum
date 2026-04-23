@@ -7,6 +7,11 @@ All notable changes to this project will be documented in this file.
 Unreleased
 ==========
 
+0.16.2 - 2026-04-22
+===================
+
+- Fix bug with sudo and debug flags in GUI application
+
 
 0.16.1 - 2026-04-21
 ===================
