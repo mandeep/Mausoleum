@@ -13,7 +13,6 @@ import pytoml
 
 from mausoleum import wrapper
 
-
 class CreateTomb(QWidget):
     """Creates the abstract widget to be used as a create page."""
 
@@ -130,14 +129,14 @@ class CreateTomb(QWidget):
                                                self.key_password.text(),
                                                self.path,
                                                kdf=self.kdf_box.value(),
-                                               sudo=self.sudo_password.text(),
-                                               debug=self.random_checkbox.isChecked())
+                                               sudo=sudo_text(self.sudo_password),
+                                               debug=self.debug)
 
             lock_command = wrapper.lock_tomb(self.tomb_name.text(),
                                              self.key_name.text(),
                                              self.key_password.text(),
                                              self.path,
-                                             sudo=self.sudo_password.text())
+                                             sudo=sudo_text(self.sudo_password))
 
             if (dig_command == 0 and forge_command[0] is not None and
                     lock_command[0] is not None):
@@ -149,7 +148,7 @@ class CreateTomb(QWidget):
                                                      self.key_password.text(),
                                                      self.path,
                                                      debug=self.debug,
-                                                     sudo=self.sudo_password.text())
+                                                     sudo=sudo_text(self.sudo_password))
 
                     if open_command[0] is not None:
                         self.message.setText('Tomb Opened Successfully')
@@ -268,13 +267,14 @@ class OpenTomb(QWidget):
                                          self.path,
                                          read_only=self.read_only_checkbox.isChecked(),
                                          debug=self.debug,
-                                         sudo=self.sudo_password.text())
+                                         sudo=sudo_text(self.sudo_password))
         if open_command[0] is not None:
             self.message.setText('Tomb Opened Successfully')
             self.tomb_path.clear()
             self.key_path.clear()
             self.key_password.clear()
-            self.sudo_password.clear()
+            if self.sudo_password is not None:
+                self.sudo_password.clear()
 
 
 class CloseTomb(QWidget):
@@ -431,7 +431,7 @@ class ResizeTomb(QWidget):
                                              self.key_path.text(),
                                              self.key_password.text(),
                                              self.path,
-                                             sudo=self.sudo_password.text())
+                                             sudo=sudo_text(self.sudo_password))
         if resize_command[0] is not None:
             self.message.setText('Tomb Resized Successfully')
 
@@ -440,7 +440,7 @@ class ResizeTomb(QWidget):
                                                      self.key_path.text(),
                                                      self.key_password.text(),
                                                      self.path,
-                                                     sudo=self.sudo_password.text(),
+                                                     sudo=sudo_text(self.sudo_password),
                                                      debug=self.debug)
 
                     if open_command[0] is not None:
@@ -449,7 +449,8 @@ class ResizeTomb(QWidget):
             self.tomb_path.clear()
             self.key_path.clear()
             self.key_password.clear()
-            self.sudo_password.clear()
+            if self.sudo_password is not None:
+                self.sudo_password.clear()
 
 
 class AdvancedTomb(QWidget):
@@ -661,7 +662,7 @@ class ConfigTomb(QWidget):
 
     def select_tomb_install_path(self):
         """Select Tomb's installation path."""
-        tomb_install_path = QFileDialog.getExistingDirectory(
+        tomb_install_path, _ = QFileDialog.getOpenFileName(
                             self, 'Select Tomb Installation Path')
 
         if tomb_install_path and os.path.isfile(tomb_install_path):
@@ -677,7 +678,7 @@ class ConfigTomb(QWidget):
     def set_tomb_path(self, config):
         """Set Tomb's current installation path."""
         current_tomb_path = config['configuration']['path']
-        if os.path.isdir(current_tomb_path):
+        if os.path.isfile(current_tomb_path):
             self.tomb_path_line.setText(current_tomb_path)
         else:
             self.tomb_path_line.setText(shutil.which('tomb'))
@@ -781,10 +782,13 @@ class Mausoleum(QDialog):
         else:
             if self.create_page.tomb_layout.rowCount() == 5:
                 self.create_page.tomb_layout.removeRow(4)
+                self.create_page.sudo_password = None
             if self.open_page.open_layout.rowCount() == 4:
                 self.open_page.open_layout.removeRow(3)
+                self.open_page.sudo_password = None
             if self.resize_page.resize_layout.rowCount() == 4:
                 self.resize_page.resize_layout.removeRow(3)
+                self.resize_page.sudo_password = None
 
             self.config_page.config['configuration']['sudo_allowed_in_gui'] = False
 
@@ -813,6 +817,11 @@ class Mausoleum(QDialog):
         self.resize_page.path = new_path
         self.list_page.path = new_path
         self.advanced_page.path = new_path
+
+
+def sudo_text(line_edit):
+    """Return the text from a sudo_password QLineEdit, or '' if it was removed."""
+    return line_edit.text() if line_edit is not None else ''
 
 
 def main():
